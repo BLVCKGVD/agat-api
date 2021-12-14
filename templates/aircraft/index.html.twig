@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Список ВС{% endblock %}
+
+{% block body %}
+{%if role=='admin' %}
+<div class="row">
+    <a class="col-12  btn btn-primary" href="aircrafts/create">+</a>
+</div>
+{%endif %}
+<table class="table table-hover table-bordered mt-4">
+<thead>
+    <th>ID</th>
+    <th>Тип ВС</th>
+    <th>Категория ВС</th>
+    <th>Бортовой номер</th>
+    <th>Дата выпуска</th>
+</thead>
+<tbody>
+{% for a in aircrafts %}
+
+<tr class="table table-border" onclick="window.location='/'">
+    <td>{{ a.getId}}</td>
+    <td>{{ a.getAcType}}</td>
+    <td>{{ a.getAcCategory}}</td>
+    <td>{{ a.getBoardNum}}</td>
+    <td>{{ a.getReleaseDate|date('d.m.Y')}}</td>
+</tr>
+</a>
+{% endfor %}
+</tbody>
+</table>
+
+{% endblock %}
+

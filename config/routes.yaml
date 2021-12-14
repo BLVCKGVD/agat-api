@@ -19,3 +19,11 @@ employees_page:
 exit:
     path: /exit
     controller: App\Controller\ExitController::index
+
+aircrafts_page:
+    path: /aircrafts
+    controller: App\Controller\AircraftController::index    
+
+aircraft_create:
+    path: /aircrafts/create
+    controller: App\Controller\AircraftController::create

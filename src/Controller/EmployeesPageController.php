@@ -16,17 +16,17 @@ class EmployeesPageController extends AbstractController
 {
     public function auth(ManagerRegistry $doctrine,Request $request): Response
     {
-        // $entityManager = $this->getDoctrine()->getManager();
-        // $user = new Users();
-        // $user->setFio('Шульженко Антон Геннадьевич');
-        // $pass = password_hash("Anton75669", PASSWORD_DEFAULT);
-        // $user->setPassword($pass);
-        // $user->setLogin('angen');
-        // print($pass);
-        // $user->setRole("admin");
-        // $entityManager->persist($user);
+        //  $entityManager = $this->getDoctrine()->getManager();
+        //  $user = new Users();
+        //  $user->setFio('Шульженко Антон');
+        //  $pass = password_hash("Anton75669", PASSWORD_DEFAULT);
+        //  $user->setPassword($pass);
+        //  $user->setLogin('anton');
+        //  print($pass);
+        //  $user->setRole("user");
+        //  $entityManager->persist($user);
 
-        // $entityManager->flush();
+        //  $entityManager->flush();
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user);
 
@@ -44,9 +44,10 @@ class EmployeesPageController extends AbstractController
             if(password_verify($user->getPassword(), $pass_hash))
             {
             print 'Password verified';
-            setcookie("role", $user->getRole(), time()+3600*24*14);
+            
             setcookie("login", $user->getLogin(), time()+3600*24*14);
             setcookie("password", $user->getPassword(), time()+3600*24*14);
+            setcookie("role", $found->getRole(), time()+3600*24*14);
             return $this->redirect('/employees');
             } else{
                 return $this->render('employees_page/authtorization.html.twig', [
@@ -86,10 +87,12 @@ class EmployeesPageController extends AbstractController
                 'login' => $_COOKIE['login'],
             ]);
             $pass_hash = $found->getPassword(); 
+
             
             
             if(password_verify($_COOKIE['password'], $pass_hash))
             {
+                
                 return $this->render('employees_page/index.html.twig', [
                     'controller_name' => 'EmployeesPageController',
                 ]);
