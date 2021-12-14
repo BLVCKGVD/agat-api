@@ -1,0 +1,21 @@
+main_page:
+    path: /
+    controller: App\Controller\MainPageController::index
+
+contacts_page:
+    path: /contacts
+    controller: App\Controller\ContactsPageController::index
+
+authtorization:
+    
+    path: /auth
+    controller: App\Controller\EmployeesPageController::auth
+    
+
+employees_page:
+    path: /employees
+    controller: App\Controller\EmployeesPageController::index
+
+exit:
+    path: /exit
+    controller: App\Controller\ExitController::index
