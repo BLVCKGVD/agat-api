@@ -1,5 +1,123 @@
+{% extends 'base_without_header.html.twig' %}
 {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+{% endblock %}
+{% block body %}
+    <body>
+    <div class="row justify-content-center">
+        <button class="btn btn-secondary mb-2" id="back" onclick="window.location='/aircrafts'">Вернуться</button>
+        <div class="col-xs-7 col-md-6">
+            {{ form_start(form) }}
+            <div class="form-group row mb-4">
+                <div class="col">
+                    {{ form_row(form.ac_type) }}
+                </div>
+                <div class="col">
+                    {{ form_row(form.ac_category) }}
+                </div>
+            </div>
 
-{{form(form)}}
+            <div class="form-group row mb-0 ">
+                <div class="col">
+                    {{ form_label(form.board_num) }}
+                    <div class="text-danger mb-0">{{ form_errors(form.board_num) }}</div>
+                    <div class="mt-0">{{ form_widget(form.board_num) }}</div>
+                </div>
+                <div class="col">
+                    {{ form_label(form.max_takeoff_weight) }}
+                    {{ form_widget(form.max_takeoff_weight) }}
+                    <div class="text-secondary">{{ form_help(form.max_takeoff_weight) }}</div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-4 ">
+                <div class="col">
+                    {{ form_label(form.factory_num) }}
+                    <div class="text-danger mb-0">{{ form_errors(form.factory_num) }}</div>
+                    <div class="mt-0">{{ form_widget(form.factory_num) }}</div>
+                </div>
+                <div class="col">
+                    {{ form_row(form.factory_made_by) }}
+                </div>
+            </div>
+
+            <div class="form-group row mb-4 ">
+                <div class="col form-control pt-4 me-3 border border-primary border-2">
+
+                    {{ form_label(form.release_date) }}
+                    {{ form_widget(form.release_date) }}
+                    {{ form_label(form.last_repair_date) }}
+                    {{ form_widget(form.last_repair_date) }}
+                    {{ form_label(form.repairs_count) }}
+                    {{ form_widget(form.repairs_count) }}
+                </div>
+                <div class="col form-control border border-primary border-2">
+                    {{ form_label(form.assigned_res) }}
+                    {{ form_widget(form.assigned_res) }}
+                    <div class="text-secondary">{{ form_help(form.assigned_res) }}</div>
+                    {{ form_label(form.assigned_exp_date) }}
+                    {{ form_widget(form.assigned_exp_date) }}
+                    <div class="text-secondary">{{ form_help(form.assigned_exp_date) }}</div>
+                </div>
+            </div>
+            <div class="form-group row mb-4">
+                <div class="col form-control me-3 border border-primary border-2">
+                    {{ form_label(form.overhaul_res) }}
+                    {{ form_widget(form.overhaul_res) }}
+                    <div class="text-secondary">{{ form_help(form.overhaul_res) }}</div>
+                    {{ form_label(form.overhaul_exp_date) }}
+                    {{ form_widget(form.overhaul_exp_date) }}
+                    <div class="text-secondary">{{ form_help(form.overhaul_exp_date) }}</div>
+                </div>
+                <div class="col form-control border border-primary border-2">
+
+                    {{ form_label(form.construction_weight) }}
+                    {{ form_widget(form.construction_weight) }}
+                    <div class="text-secondary mb-0">{{ form_help(form.construction_weight) }}</div>
+
+                    <div class="col-6">{{ form_label(form.centering) }}{{ form_widget(form.centering) }}</div>
+
+                </div>
+            </div>
+            <div class="form-group row mb-4 ">
+                <div class="col form-control border border-primary border-2 me-3">
+                    <div class="mb-2">{{ form_label(form.fin_periodic_mt) }}:</div>
+                    {{ form_row(form.fin_form) }}
+                    {{ form_row(form.fin_res) }}
+                    {{ form_row(form.fin_term) }}
+                    {{ form_row(form.mt_made_by) }}
+                </div>
+                <div class="col form-control border border-primary border-2">
+                    <div class="mb-1">{{ form_row(form.lg_sert) }}</div>
+                    <br>
+                    {{ form_row(form.lg_date) }}
+                    {{ form_row(form.lg_exp_date) }}
+                    <br>
+                    {{ form_row(form.lg_given) }}
+                </div>
+            </div>
+            <div class=" col-6 form-group row mb-4 ">
+                <div class="col-6 form-control border border-primary border-2">
+                    {{ form_row(form.reg_sert) }}
+                    <br>
+                    {{ form_row(form.reg_sert_date) }}
+                </div>
+
+            </div>
+
+
+            {{ form_widget(form.save) }}
+            <div style="display: none">
+                {{ form_rest(form) }}
+            </div>
+            {{ form_errors(form) }}
+            {{ form_end(form) }}
+
+        </div>
+
+    </div>
+{% endblock %}
+
+    
+
+

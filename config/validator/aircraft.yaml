@@ -1,0 +1,30 @@
+App\Entity\Aircraft:
+  constraints:
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: board_num
+    - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: factory_num
+  properties:
+    factory_num:
+      - NotBlank: ~
+      - Length:
+          min: 2
+          max: 12
+          minMessage: "Поле должно быть минимум из {{ limit }} символов"
+          maxMessage: "Поле должно быть максимум из {{ limit }} символов"
+    board_num:
+      - NotBlank: ~
+      - Length:
+          min: 8
+          max: 8
+          exactMessage: "Поле должно быть из {{ limit }} символов"
+    lg_sert:
+      - NotBlank: ~
+      - Length:
+          min: 10
+          max: 10
+          exactMessage: "Поле должно быть из {{ limit }} символов"
+    reg_sert:
+      - NotBlank: ~
+      - Length:
+          min: 4
+          max: 4
+          exactMessage: "Поле должно быть из {{ limit }} символов"

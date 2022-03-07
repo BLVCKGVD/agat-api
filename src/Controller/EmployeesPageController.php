@@ -48,6 +48,7 @@ class EmployeesPageController extends AbstractController
             setcookie("login", $user->getLogin(), time()+3600*24*14);
             setcookie("password", $user->getPassword(), time()+3600*24*14);
             setcookie("role", $found->getRole(), time()+3600*24*14);
+            setcookie("FIO", $found->getFIO(), time()+3600*24*14);
             return $this->redirect('/employees');
             } else{
                 return $this->render('employees_page/authtorization.html.twig', [
@@ -95,6 +96,9 @@ class EmployeesPageController extends AbstractController
                 
                 return $this->render('employees_page/index.html.twig', [
                     'controller_name' => 'EmployeesPageController',
+                    'FIO' => $_COOKIE['FIO'],
+                    'login' => $_COOKIE['login'],
+                    'role' => $_COOKIE['role']
                 ]);
             }
             

@@ -2,27 +2,34 @@
 
 namespace App\Repository;
 
-use App\Entity\Aircraft;
+use App\Entity\AircraftOperating;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Aircraft|null find($id, $lockMode = null, $lockVersion = null)
- * @method Aircraft|null findOneBy(array $criteria, array $orderBy = null)
- * @method Aircraft[]    findAll()
- * @method Aircraft[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AircraftOperating|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AircraftOperating|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AircraftOperating[]    findAll()
+ * @method AircraftOperating[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AircraftRepository extends ServiceEntityRepository
+class AircraftOperatingRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Aircraft::class);
+        parent::__construct($registry, AircraftOperating::class);
     }
 
-
+    public function getLastAircraftOperating($aircraft)
+    {
+        return $this->findOneBy([
+            'aircraft' => $aircraft
+        ],[
+            'id'=>'DESC'
+        ]);
+    }
 
     // /**
-    //  * @return Aircraft[] Returns an array of Aircraft objects
+    //  * @return AircraftOperating[] Returns an array of AircraftOperating objects
     //  */
     /*
     public function findByExampleField($value)
@@ -39,7 +46,7 @@ class AircraftRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Aircraft
+    public function findOneBySomeField($value): ?AircraftOperating
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')
@@ -49,5 +56,4 @@ class AircraftRepository extends ServiceEntityRepository
         ;
     }
     */
-    
 }

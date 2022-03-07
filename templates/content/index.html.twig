@@ -1,0 +1,18 @@
+{% extends 'base_without_header.html.twig' %}
+
+{% block title %}Страницы{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <button class="btn btn-secondary mb-2" id="back" onclick="window.location='/employees'">Вернуться</button>
+        <center><h3>Доступные для редактирования страницы</h3></center>
+    <ul class="list-group pe-0">
+        {% for c in content %}
+        <li class="list-group-item list-group-item-action" onclick="window.location='content/edit/{{ c.page }}'">{{ c.page|trans }}</li>
+        {% endfor %}
+    </ul>
+
+
+    </div>
+{% endblock %}
+

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AircraftRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -10,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Aircraft
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -23,12 +26,12 @@ class Aircraft
     private $board_num;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=12)
      */
     private $factory_num;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=12, nullable=true)
      */
     private $serial_num;
 
@@ -53,7 +56,7 @@ class Aircraft
     private $assigned_res;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="date")
      */
     private $assigned_exp_date;
 
@@ -63,7 +66,7 @@ class Aircraft
     private $overhaul_res;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="date")
      */
     private $overhaul_exp_date;
 
@@ -78,7 +81,7 @@ class Aircraft
     private $operator;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $owner;
 
@@ -212,10 +215,21 @@ class Aircraft
      */
     private $special_marks;
 
+
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $total_res;
+    private $lg_given;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AircraftOperating::class, mappedBy="aircraft", orphanRemoval=true,cascade={"persist"}))
+     */
+    private $aircraftOperating;
+
+    public function __construct()
+    {
+        $this->aircraftOperating = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -306,12 +320,12 @@ class Aircraft
         return $this;
     }
 
-    public function getAssignedExpDate(): ?int
+    public function getAssignedExpDate(): ?\DateTimeInterface
     {
         return $this->assigned_exp_date;
     }
 
-    public function setAssignedExpDate(int $assigned_exp_date): self
+    public function setAssignedExpDate(?\DateTimeInterface $assigned_exp_date): self
     {
         $this->assigned_exp_date = $assigned_exp_date;
 
@@ -330,12 +344,12 @@ class Aircraft
         return $this;
     }
 
-    public function getOverhaulExpDate(): ?int
+    public function getOverhaulExpDate(): ?\DateTimeInterface
     {
         return $this->overhaul_exp_date;
     }
 
-    public function setOverhaulExpDate(int $overhaul_exp_date): self
+    public function setOverhaulExpDate(?\DateTimeInterface $overhaul_exp_date): self
     {
         $this->overhaul_exp_date = $overhaul_exp_date;
 
@@ -690,14 +704,45 @@ class Aircraft
         return $this;
     }
 
-    public function getTotalRes(): ?int
+
+    public function getLgGiven(): ?string
     {
-        return $this->total_res;
+        return $this->lg_given;
     }
 
-    public function setTotalRes(int $total_res): self
+    public function setLgGiven(string $lg_given): self
     {
-        $this->total_res = $total_res;
+        $this->lg_given = $lg_given;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AircraftOperating[]
+     */
+    public function getAircraftOperating(): Collection
+    {
+        return $this->aircraftOperating;
+    }
+
+    public function addAircraftOperating(AircraftOperating $aircraftOperating): self
+    {
+        if (!$this->aircraftOperating->contains($aircraftOperating)) {
+            $this->aircraftOperating[] = $aircraftOperating;
+            $aircraftOperating->setAircraft($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAircraftOperating(AircraftOperating $aircraftOperating): self
+    {
+        if ($this->aircraftOperating->removeElement($aircraftOperating)) {
+            // set the owning side to null (unless already changed)
+            if ($aircraftOperating->getAircraft() === $this) {
+                $aircraftOperating->setAircraft(null);
+            }
+        }
 
         return $this;
     }

@@ -1,10 +1,17 @@
-main_page:
+main:
     path: /
-    controller: App\Controller\MainPageController::index
+    controller: App\Controller\MainPageController::redir
+content:
+    path: /content
+    controller: App\Controller\ContentController::index
 
-contacts_page:
-    path: /contacts
-    controller: App\Controller\ContactsPageController::index
+content_edit:
+    path: /content/edit/{page}
+    controller: App\Controller\ContentController::edit
+
+page:
+    path: /page/{page}
+    controller: App\Controller\ContentController::getContent
 
 authtorization:
     
@@ -24,6 +31,21 @@ aircrafts_page:
     path: /aircrafts
     controller: App\Controller\AircraftController::index    
 
+download:
+    path: /aircrafts/download/{id}/{fileName}
+    controller: App\Controller\AircraftController::testWord
+
 aircraft_create:
     path: /aircrafts/create
     controller: App\Controller\AircraftController::create
+
+aircraft_edit:
+    path: /aircrafts/edit/{id}
+    controller: App\Controller\AircraftController::edit
+aircraft_info:
+    path: /aircrafts/{id}
+    controller: App\Controller\AircraftController::info
+
+aircraft_delete:
+    path: /aircrafts/delete/{id}
+    controller: App\Controller\AircraftController::delete    

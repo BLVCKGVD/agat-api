@@ -3,33 +3,350 @@
 {% block title %}Список ВС{% endblock %}
 
 {% block body %}
-{%if role=='admin' %}
-<div class="row">
-    <a class="col-12  btn btn-primary" href="aircrafts/create">+</a>
-</div>
-{%endif %}
-<table class="table table-hover table-bordered mt-4">
-<thead>
-    <th>ID</th>
-    <th>Тип ВС</th>
-    <th>Категория ВС</th>
-    <th>Бортовой номер</th>
-    <th>Дата выпуска</th>
-</thead>
-<tbody>
-{% for a in aircrafts %}
+    {% if role=='admin' %}
+        <div class="row">
+            <a class="col-12  btn btn-primary mb-2" href="aircrafts/create">+</a>
+        </div>
+    {% endif %}
+    <div class="row">
+        <button class="btn btn-primary mb-2" id="tableBuilderBtn" onclick="displaySpan()">Настройка вывода таблицы
+        </button>
+        <div id="form" style="display:none;">
+            {{ form_start(tableBuilderForm) }}
+            {{ form_widget(tableBuilderForm.save) }}
+            <span class=" overflow-auto col-12" style="display: none; max-height: 200px" id='tableBuilder'>
 
-<tr class="table table-border" onclick="window.location='/'">
-    <td>{{ a.getId}}</td>
-    <td>{{ a.getAcType}}</td>
-    <td>{{ a.getAcCategory}}</td>
-    <td>{{ a.getBoardNum}}</td>
-    <td>{{ a.getReleaseDate|date('d.m.Y')}}</td>
-</tr>
-</a>
-{% endfor %}
-</tbody>
-</table>
+
+
+        <div class="col-12 ">
+
+
+            <div class="col-12 form-check form-switch ms-auto me-auto ">
+
+                {{ form_rest(tableBuilderForm) }}
+
+            </div>
+
+
+
+
+
+
+
+
+        </div>
+
+        {{ form_end(tableBuilderForm) }}
+
+    </span>
+        </div>
+
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered overflow-x-scroll w-100 ">
+            <thead>
+            <th>ID</th>
+            {% if data.ac_type==1 %}
+                <th>Тип ВС</th>
+            {% endif %}
+
+            {% if data.board_num==1 %}
+                <th>Бортовой номер</th>
+            {% endif %}
+            {% if data.factory_num==1 %}
+                <th>Заводской номер</th>
+            {% endif %}
+
+            {% if data.release_date==1 %}
+                <th>Дата выпуска</th>
+            {% endif %}
+
+            {% if data.last_repair_date==1 %}
+                <th>Дата последнего ремонта</th>
+            {% endif %}
+
+            {% if data.lg_date==1 %}
+                <th>Дата ЛГ</th>
+            {% endif %}
+
+            {% if data.ac_category==1 %}
+                <th>Категория ВС</th>
+            {% endif %}
+
+            {% if data.serial_num==1 %}
+                <th>Серийный номер</th>
+            {% endif %}
+
+            {% if data.repairs_count==1 %}
+                <th>Кол-во ремонтов</th>
+            {% endif %}
+
+            {% if data.assigned_res==1 %}
+                <th>Назначенный ресурс</th>
+            {% endif %}
+
+            {% if data.assigned_exp_date==1 %}
+                <th>Назначенный срок</th>
+            {% endif %}
+
+            {% if data.overhaul_res==1 %}
+                <th>Межремонтный ресурс</th>
+            {% endif %}
+
+            {% if data.fin_periodic_mt==1 %}
+                <th>Заключительное периодическое ТО</th>
+            {% endif %}
+
+            {% if data.overhaul_exp_date==1 %}
+                <th>Межремонтный срок</th>
+            {% endif %}
+
+            {% if data.res_renew_num==1 %}
+                <th>№ продления</th>
+            {% endif %}
+
+            {% if data.operator==1 %}
+                <th>Эксплуатант</th>
+            {% endif %}
+
+            {% if data.owner==1 %}
+                <th>Владелец</th>
+            {% endif %}
+
+            {% if data.rent_doc_num==1 %}
+                <th>№ договора об аренде</th>
+            {% endif %}
+
+            {% if data.rent_exp_date==1 %}
+                <th>Срок аренды</th>
+            {% endif %}
+
+            {% if data.vsu_num==1 %}
+                <th>Номер ВСУ</th>
+            {% endif %}
+
+            {% if data.construction_weight==1 %}
+                <th>Вес конструкции</th>
+            {% endif %}
+
+            {% if data.centering==1 %}
+                <th>Центровка</th>
+            {% endif %}
+
+            {% if data.max_takeoff_weight==1 %}
+                <th>Макс. взлетный вес</th>
+            {% endif %}
+
+            {% if data.mt_made_by==1 %}
+                <th>ТО выполнено</th>
+            {% endif %}
+
+            {% if data.lg_sert==1 %}
+                <th>№ ЛГ серт.</th>
+            {% endif %}
+
+            {% if data.lg_exp_date==1 %}
+                <th>Срок серт. ЛГ</th>
+            {% endif %}
+
+            {% if data.reg_sert==1 %}
+                <th>№ регистрационного серт.</th>
+            {% endif %}
+
+
+            {% if data.reg_sert_date==1 %}
+                <th>Дата рег. серт.</th>
+            {% endif %}
+
+            {% if data.extension_reason==1 %}
+                <th>Причина продления рес.</th>
+            {% endif %}
+
+            {% if data.last_arz==1 %}
+                <th>Последний АРЗ</th>
+            {% endif %}
+
+            {% if data.arz_appointment==1 %}
+                <th>Назначение АРЗ</th>
+            {% endif %}
+
+            {% if data.factory_made_by==1 %}
+                <th>Завод изготовитель</th>
+            {% endif %}
+
+
+
+            </thead>
+            <tbody style="overflow-y: auto">
+            {% for a in aircrafts %}
+
+                <tr class="" onclick="window.location='aircrafts/{{ a.getId }}'">
+                    <td>{{ a.getId }}</td>
+
+                    {% if data.ac_type==1 %}
+
+                        <td>{{ a.getAcType }}</td>
+                    {% endif %}
+
+                    {% if data.board_num==1 %}
+                        <td>{{ a.getBoardNum }}</td>
+                    {% endif %}
+
+                    {% if data.factory_num==1 %}
+                        <td>{{ a.getFactoryNum }}</td>
+                    {% endif %}
+
+                    {% if data.release_date==1 %}
+                        <td>{{ a.getReleaseDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.last_repair_date==1 %}
+                        <td>{{ a.getLastRepairDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.lg_date==1 %}
+                        <td>{{ a.getLgDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.ac_category==1 %}
+                        <td>{{ a.getAcCategory }}</td>
+                    {% endif %}
+
+                    {% if data.serial_num==1 %}
+                        <td>{{ a.getSerialNum }}</td>
+                    {% endif %}
+
+                    {% if data.repairs_count==1 %}
+                        <td>{{ a.getRepairsCount }}</td>
+                    {% endif %}
+
+                    {% if data.assigned_res==1 %}
+                        <td>{{ a.getAssignedRes }}</td>
+                    {% endif %}
+
+                    {% if data.assigned_exp_date==1 %}
+                        <td>{{ a.getAssignedExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.overhaul_res==1 %}
+                        <td>{{ a.getOverhaulRes }}</td>
+                    {% endif %}
+
+                    {% if data.fin_periodic_mt==1 %}
+                        <td>{{ a.getFinPeriodicMt }}</td>
+                    {% endif %}
+
+                    {% if data.overhaul_exp_date==1 %}
+                        <td>{{ a.getOverhaulExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.res_renew_num==1 %}
+                        <td>{{ a.getResRenewNum }}</td>
+                    {% endif %}
+
+                    {% if data.operator==1 %}
+                        <td>{{ a.getOperator }}</td>
+                    {% endif %}
+
+                    {% if data.owner==1 %}
+                        <td>{{ a.getOwner }}</td>
+                    {% endif %}
+
+                    {% if data.rent_doc_num==1 %}
+                        <td>{{ a.getRentDocNum }}</td>
+                    {% endif %}
+
+                    {% if data.rent_exp_date==1 %}
+                        <td>{{ a.getRentExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.vsu_num==1 %}
+                        <td>{{ a.getVsuNum }}</td>
+                    {% endif %}
+
+                    {% if data.construction_weight==1 %}
+                        <td>{{ a.getConstructionWeight }}</td>
+                    {% endif %}
+
+                    {% if data.centering==1 %}
+                        <td>{{ a.getCentering }}</td>
+                    {% endif %}
+
+                    {% if data.max_takeoff_weight==1 %}
+                        <td>{{ a.getMaxTakeoffWeight }}</td>
+                    {% endif %}
+
+                    {% if data.mt_made_by==1 %}
+                        <td>{{ a.getMtMadeBy }}</td>
+                    {% endif %}
+
+                    {% if data.lg_sert==1 %}
+                        <td>{{ a.getLgSert }}</td>
+                    {% endif %}
+
+                    {% if data.lg_exp_date==1 %}
+                        <td>{{ a.getLgExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.reg_sert==1 %}
+                        <td>{{ a.getRegSert }}</td>
+                    {% endif %}
+
+
+                    {% if data.reg_sert_date==1 %}
+                        <td>{{ a.getRegSertDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.extension_reason==1 %}
+                        <td>{{ a.getExtensionReason }}</td>
+                    {% endif %}
+
+                    {% if data.last_arz==1 %}
+                        <td>{{ a.getLastArz|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.arz_appointment==1 %}
+                        <td>{{ a.getArzAppointment }}</td>
+                    {% endif %}
+
+                    {% if data.factory_made_by==1 %}
+                        <td>{{ a.getFactoryMadeBy }}</td>
+                    {% endif %}
+
+                </tr>
+
+
+
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <script type="text/javascript">
+
+
+        function displaySpan() {
+            var tableBuilder = document.getElementById("tableBuilder");
+            var tableBuilderBtn = document.getElementById("tableBuilderBtn");
+            var form = document.getElementById("form");
+            if (tableBuilder.style.display == "none") {
+                tableBuilder.style.display = "block";
+                tableBuilderBtn.innerHTML = "Закрыть настройки вывода таблицы";
+                form.style.display = "block";
+
+            } else {
+                tableBuilder.style.display = "none";
+                tableBuilderBtn.innerHTML = "Настройка вывода таблицы";
+                form.style.display = "none";
+
+            }
+        }
+
+    </script>
 
 {% endblock %}
+
+
 

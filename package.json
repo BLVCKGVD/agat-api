@@ -17,5 +17,9 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "bootstrap-icons": "^1.8.1",
+        "mdb-ui-kit": "^3.10.1"
     }
 }

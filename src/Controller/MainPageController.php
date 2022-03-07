@@ -15,4 +15,8 @@ class MainPageController extends AbstractController
             'controller_name' => 'MainPageController',
         ]);
     }
+    public function redir()
+    {
+        return $this->redirect('page/main_page');
+    }
 }

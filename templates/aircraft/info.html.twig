@@ -1,0 +1,269 @@
+{% extends 'base_without_header.html.twig' %}
+{% block title %}Информация о {{ aircraft.getBoardNum }}{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <center>
+            <h3>Информация о ВС</h3>
+        </center>
+        <button class="btn btn-secondary mb-2" id="back" onclick="window.location='/aircrafts'">Вернуться</button>
+        <button class="btn btn-primary mb-2" id="addResBtn" onclick="displaySpan()">Добавить наработку
+        </button>
+        <div id="form" style="display:none;">
+            <span class=" overflow-auto col-12" style="display: none; max-height: 200px" id='addRes'>
+        <div class="col-12 ">
+
+            <div class="col-6 ms-auto me-auto ">
+                {{ form_start(addRes) }}
+                {{ form_label(addRes.add) }}
+                {{ form_widget(addRes.add) }}
+                <div class="text-secondary">{{ form_help(addRes.add) }}</div>
+                {{ form_end(addRes) }}
+            </div>
+
+        </div>
+
+    </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <ul class="list-group col-12 fs-5">
+
+                <li class="list-group-item">Тип ВС: <b>{{ aircraft.getAcType }}</b></li>
+                <li class="list-group-item">Бортовой номер: <b>{{ aircraft.getBoardNum }}</b></li>
+                <li class="list-group-item">Заводской номер: <b>{{ aircraft.getFactoryNum() }}</b></li>
+
+                {% if aircraft.getReleaseDate != null %}
+                    <li class="list-group-item">Дата выпуска: <b>{{ aircraft.getReleaseDate()|date('d.m.Y') }}</b></li>
+                {% endif %}
+                {% if aircraft.getLastRepairDate != null %}
+                    <li class="list-group-item">Дата последнего
+                        ремонта: <b>{{ aircraft.getLastRepairDate()|date('d.m.Y') }}</b></li>
+                {% endif %}
+                <li class="list-group-item"> Количество ремонтов: <b>{{ aircraft.getRepairsCount() }}</b></li>
+                {% if lastOperating.totalRes >= aircraft.getAssignedRes() %}
+                    <li class="list-group-item list-group-item-danger">
+                        Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
+                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.totalRes/aircraft.getAssignedRes()*100>=80.0 and lastOperating.totalRes/aircraft.getAssignedRes()*100<100.0 %}
+                    <li class="list-group-item list-group-item-warning">
+                        Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
+                            %</b> |
+                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.totalRes/aircraft.getAssignedRes()*100<80.0 %}
+                    <li class="list-group-item list-group-item-success">
+                        Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
+                            %</b> |
+                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if aircraft.getAssignedExpDate != null %}
+                    {% if aircraft.getAssignedExpDate <= date() %}
+                        <li class="list-group-item list-group-item-danger"> Назначенный срок службы
+                            до: <b>{{ aircraft.getAssignedExpDate|date('d.m.Y') }}</b> | <b>Истек</b>
+                        </li>
+                    {% endif %}
+                    {% if aircraft.getAssignedExpDate >= date('-30days') and aircraft.getAssignedExpDate <= date('+30days') %}
+                        <li class="list-group-item list-group-item-warning"> Назначенный срок службы
+                            до: <b>{{ aircraft.getAssignedExpDate|date('d.m.Y') }}</b> | <b>Осталось меньше 30 дней</b>
+                        </li>
+                    {% endif %}
+                    {% if aircraft.getAssignedExpDate > date('+30days') %}
+                        <li class="list-group-item list-group-item-success"> Назначенный срок службы
+                            до: <b>{{ aircraft.getAssignedExpDate|date('d.m.Y') }}</b></li>
+                    {% endif %}
+                {% endif %}
+                {% if lastOperating.overhaulRes >= aircraft.getOverhaulRes() %}
+                    <li class="list-group-item list-group-item-danger">
+                        Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
+                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.getOverhaulRes }}
+                            ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.overhaulRes/aircraft.getOverhaulRes()*100>=80.0 and lastOperating.getOverhaulRes/aircraft.getOverhaulRes()*100<100.0 %}
+                    <li class="list-group-item list-group-item-warning">
+                        Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
+                            %</b> |
+                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.overhaulRes/aircraft.getOverhaulRes()*100<80.0 %}
+                    <li class="list-group-item list-group-item-success">
+                        Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
+                            %</b> |
+                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if aircraft.getOverhaulExpDate != null %}
+                    {% if aircraft.getOverhaulExpDate <= date() %}
+                        <li class="list-group-item list-group-item-danger"> Межремонтный срок службы
+                            до: <b>{{ aircraft.getOverhaulExpDate|date('d.m.Y') }}</b> | <b>Истек</b>
+                        </li>
+                    {% endif %}
+                    {% if aircraft.getOverhaulExpDate >= date('-30days') and aircraft.getOverhaulExpDate <= date('+30days') %}
+                        <li class="list-group-item list-group-item-warning"> Межремонтный срок службы
+                            до: <b>{{ aircraft.getOverhaulExpDate|date('d.m.Y') }}</b> | <b>Осталось меньше 30 дней</b>
+                        </li>
+                    {% endif %}
+                    {% if aircraft.getOverhaulExpDate > date('+30days') %}
+                        <li class="list-group-item list-group-item-success"> Межремонтный срок службы
+                            до: <b>{{ aircraft.getOverhaulExpDate|date('d.m.Y') }}</b></li>
+                    {% endif %}
+                {% endif %}
+                <!--<h3>{{ aircraft.getResRenewNum }}</h3>
+                <h3>{{ aircraft.getOperator }}</h3>
+                <h3>{{ aircraft.getOwner }}</h3>
+                <h3>{{ aircraft.getRentDocNum }}</h3>
+                {% if aircraft.getRentDocDate != null %}
+                    <h3>{{ aircraft.getRentDocDate|date('d.m.Y') }}</h3>
+                {% endif %}
+                {% if aircraft.getRentExpDate != null %}}
+                    <h3>{{ aircraft.getRentExpDate|date('d.m.Y') }}</h3>
+                {% endif %}
+                <h3>{{ aircraft.getVsuNum }}</h3> -->
+                <li class="list-group-item">Вес конструкции: <b>{{ aircraft.getConstructionWeight }}</b></li>
+                <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }}</b></li>
+                <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }}</b></li>
+                <li class="list-group-item">Заключительное периодическое ТО: <b>{{ aircraft.getFinPeriodicMt }}</b></li>
+                <li class="list-group-item">ТО выполнено: <b>{{ aircraft.getMtMadeBy }}</b></li>
+                <li class="list-group-item">Сертификат Летной годности(ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
+                {% if aircraft.getLgDate != null %}
+                    <li class="list-group-item">Дата выдачи сертификата Летной
+                        годности(ЛГ): <b>{{ aircraft.getLgDate|date('d.m.Y') }}</b></li>
+                {% endif %}
+                {% if aircraft.getLgExpDate != null %}
+                    {% if aircraft.getLgExpDate <= date() %}
+                        <li class="list-group-item list-group-item-danger"> Срок службы сертификата Летной годности(ЛГ)
+                            до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b> | <b>Истек</b>
+                        </li>
+                    {% endif %}
+                    {% if aircraft.getLgExpDate >= date('-30days') and aircraft.getLgExpDate <= date('+30days') %}
+                        <li class="list-group-item list-group-item-warning"> Срок службы сертификата Летной годности(ЛГ)
+                            до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b> | <b>Осталось меньше 30 дней</b>
+                        </li>
+                    {% endif %}
+                    {% if aircraft.getLgExpDate > date('+30days') %}
+                        <li class="list-group-item list-group-item-success"> Срок службы сертификата Летной годности(ЛГ)
+                            до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b></li>
+                    {% endif %}
+                {% endif %}
+                <li class="list-group-item">Сертификат о регистрации: <b>{{ aircraft.getRegSert }}</b></li>
+                {% if aircraft.getRegSertDate != null %}
+                    <li class="list-group-item">Дата регистрации: <b>{{ aircraft.getRegSertDate|date('d.m.Y') }}</b>
+                    </li>
+                {% endif %}
+                <li class="list-group-item">Категория ВС: <b>{{ aircraft.getAcCategory }}</b></li>
+                <!--<h3>{{ aircraft.getExtensionReason }}</h3>
+                <h3>{{ aircraft.getLastArz }}</h3>
+                <h3>{{ aircraft.getArzAppointment }}</h3>-->
+                <li class="list-group-item">Завод изготовитель: <b>{{ aircraft.getFactoryMadeBy }}</b></li>
+                <!--<h3>{{ aircraft.getSpecialMarks }}</h3>-->
+            </ul>
+        </div>
+    </div>
+    {% if role=='admin' %}
+        <div class="row">
+            <a class="col-12 btn btn-danger mb-2" href="/aircrafts/delete/{{ aircraft.getId }}"
+               onclick="return confirm('Вы уверены, что хотите удалить {{ aircraft.getBoardNum }}?')">Удалить</a>
+        </div>
+    {% endif %}
+    <div class="row">
+        <button class="btn col-12 btn-success mb-2 d-block" id="downloadBtn" onclick="displayDownload()">
+            Скачать отчет
+        </button>
+    </div>
+    <span id="download" style="display: none">
+        <div class="row justify-content-center">
+            <center>
+                <div class="col-6">
+                    <button class="btn btn-primary mb-2" onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
+                        Отчет по форме: ИФ-12-ОН
+                    </button>
+                    <button class="btn btn-primary mb-2"  onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
+                        Отчет по форме: ИФ-19-ОН
+                    </button>
+                </div>
+            </center>
+        </div>
+    </span>
+    <div class="row">
+        <button class="btn col-12 btn-secondary mb-2 d-block" id="AddHistoryBtn" onclick="displayHistory()">Показать
+            историю добавления наработки
+        </button>
+    </div>
+    <span id="AddHistory" style="display: none">
+    <ul class="list-group">
+    {% for ao in aircraftOperating|reverse %}
+        <li class="list-group-item">{{ ao.addedBy }} | Дата добавления: {{ ao.getCreateDate|date('d.m.y H:m:s') }} |
+            Наработка: {{ ao.getTotalRes }}
+        </li>
+    {% endfor %}
+    </ul>
+    </span>
+    <script type="text/javascript">
+        function displaySpan() {
+            var addRes = document.getElementById("addRes");
+            var addResBtn = document.getElementById("addResBtn");
+            var form = document.getElementById("form");
+            if (addRes.style.display === "none") {
+                addRes.style.display = "block";
+                addResBtn.innerHTML = "Закрыть";
+                form.style.display = "block";
+
+            } else {
+                addRes.style.display = "none";
+                addResBtn.innerHTML = "Добавить наработку";
+                form.style.display = "none";
+
+            }
+        }
+
+        function displayDownload() {
+            var download = document.getElementById("download");
+            var downloadBtn = document.getElementById("downloadBtn");
+
+            if (download.style.display === "none") {
+                download.style.display = "block";
+                downloadBtn.innerHTML = "Закрыть";
+
+            } else {
+                download.style.display = "none";
+                downloadBtn.innerHTML = "Скачать отчет";
+            }
+        }
+
+        function displayHistory() {
+            var AddHistory = document.getElementById("AddHistory");
+            var AddHistorysBtn = document.getElementById("AddHistoryBtn");
+
+            if (AddHistory.style.display === "none") {
+                AddHistory.style.display = "block";
+                AddHistorysBtn.innerHTML = "Закрыть историю добавления наработки";
+
+            } else {
+                AddHistory.style.display = "none";
+                AddHistorysBtn.innerHTML = "Показать историю добавления наработки";
+            }
+        }
+
+    </script>
+{% endblock %}
+
+
+
+
