@@ -1,8 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_employees.html.twig' %}
 
 {% block title %}Список ВС{% endblock %}
 
 {% block body %}
+    <div class="topnav overflow-x-scroll">
+        <a class="" href="/employees">Домашняя страница</a>
+        <a class="active" href="/aircrafts">Список ВС</a>
+        {% if role == 'admin' %}
+            <a class="" href="/content" >Страницы</a>
+        {% endif %}
+        <a class="float-end" href="/exit">Выйти</a>
+    </div>
+    <h2 class="text-center mt-5">Список воздушных судов</h2>
+    <div class="container mt-5">
     {% if role=='admin' %}
         <div class="row">
             <a class="col-12  btn btn-primary mb-2" href="aircrafts/create">+</a>
@@ -11,41 +21,33 @@
     <div class="row">
         <button class="btn btn-primary mb-2" id="tableBuilderBtn" onclick="displaySpan()">Настройка вывода таблицы
         </button>
-        <div id="form" style="display:none;">
+        <div id="form" class="" style="display:none;">
             {{ form_start(tableBuilderForm) }}
             {{ form_widget(tableBuilderForm.save) }}
-            <span class=" overflow-auto col-12" style="display: none; max-height: 200px" id='tableBuilder'>
+            <center>
+            <span class="overflow-auto col-6 mt-2" style="display: none; max-height: 200px" id='tableBuilder'>
 
 
 
-        <div class="col-12 ">
+        <div class="col-12">
 
 
             <div class="col-12 form-check form-switch ms-auto me-auto ">
 
                 {{ form_rest(tableBuilderForm) }}
-
             </div>
-
-
-
-
-
-
-
-
         </div>
 
         {{ form_end(tableBuilderForm) }}
 
     </span>
+            </center>
         </div>
 
     </div>
     <div class="table-responsive">
         <table class="table table-hover table-bordered overflow-x-scroll w-100 ">
             <thead>
-            <th>ID</th>
             {% if data.ac_type==1 %}
                 <th>Тип ВС</th>
             {% endif %}
@@ -181,7 +183,6 @@
             {% for a in aircrafts %}
 
                 <tr class="" onclick="window.location='aircrafts/{{ a.getId }}'">
-                    <td>{{ a.getId }}</td>
 
                     {% if data.ac_type==1 %}
 
@@ -320,6 +321,7 @@
             {% endfor %}
             </tbody>
         </table>
+    </div>
     </div>
 
 

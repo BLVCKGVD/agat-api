@@ -28,6 +28,7 @@ class ContentController extends AbstractController
         return $this->render('content/index.html.twig', [
             'controller_name' => 'ContentController',
             'content' => $content,
+            'role' => $_COOKIE['role'],
         ]);
     }
     public function getContent($page)

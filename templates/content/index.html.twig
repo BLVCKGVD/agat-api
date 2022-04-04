@@ -1,10 +1,19 @@
-{% extends 'base_without_header.html.twig' %}
+{% extends 'base_employees.html.twig' %}
 
 {% block title %}Страницы{% endblock %}
 
 {% block body %}
+
+    <div class="topnav overflow-x-scroll">
+        <a class="" href="/employees">Домашняя страница</a>
+        <a class="" href="/aircrafts">Список ВС</a>
+        {% if role == 'admin' %}
+            <a class="active" href="/content" >Страницы</a>
+        {% endif %}
+        <a class="float-end" href="/exit">Выйти</a>
+    </div>
+    <div class="container mt-5">
     <div class="row">
-        <button class="btn btn-secondary mb-2" id="back" onclick="window.location='/employees'">Вернуться</button>
         <center><h3>Доступные для редактирования страницы</h3></center>
     <ul class="list-group pe-0">
         {% for c in content %}
@@ -13,6 +22,7 @@
     </ul>
 
 
+    </div>
     </div>
 {% endblock %}
 

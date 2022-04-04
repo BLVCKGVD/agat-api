@@ -12,7 +12,7 @@
         <button class="btn btn-primary mb-2" id="addResBtn" onclick="displaySpan()">Добавить наработку
         </button>
         <div id="form" style="display:none;">
-            <span class=" overflow-auto col-12" style="display: none; max-height: 200px" id='addRes'>
+            <span class=" overflow-auto col-12 mb-5" style="display: none; max-height: 200px" id='addRes'>
         <div class="col-12 ">
 
             <div class="col-6 ms-auto me-auto ">
@@ -27,9 +27,32 @@
 
     </span>
         </div>
+
+    </div>
+
+    <div class="row">
+        <button class="btn btn-primary mb-2" id="addRepBtn" onclick="displayRep()">Добавить ремонт
+        </button>
+        <div id="form1" style="display:none;">
+            <span class=" overflow-auto col-12 mb-5" style="display: none; max-height: 350px" id='addRep'>
+        <div class="col-12 ">
+
+            <div class="col-6 ms-auto me-auto ">
+                {{ form_start(addRep) }}
+                {{ form_label(addRep.add) }}
+                {{ form_widget(addRep.add) }}
+                <div class="text-secondary">{{ form_help(addRep.add) }}</div>
+                {{ form_end(addRep) }}
+            </div>
+
+        </div>
+
+    </span>
+        </div>
+
     </div>
     <div class="row">
-        <div class="col-12">
+        <div class="col-lg-7 col-md-12">
             <ul class="list-group col-12 fs-5">
 
                 <li class="list-group-item">Тип ВС: <b>{{ aircraft.getAcType }}</b></li>
@@ -54,8 +77,9 @@
                     <li class="list-group-item list-group-item-warning">
                         Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
                         Остаточный
-                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
-                            %</b> |
+                        ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
+                            %)</b> |
                         Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
@@ -63,8 +87,9 @@
                     <li class="list-group-item list-group-item-success">
                         Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
                         Остаточный
-                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
-                            %</b> |
+                        ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
+                            %)</b> |
                         Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
@@ -95,8 +120,9 @@
                     <li class="list-group-item list-group-item-warning">
                         Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
                         Остаточный
-                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
-                            %</b> |
+                        ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
+                            %)</b> |
                         Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
                     </li>
                 {% endif %}
@@ -104,8 +130,9 @@
                     <li class="list-group-item list-group-item-success">
                         Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
                         Остаточный
-                        ресурс: <b>{{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
-                            %</b> |
+                        ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
+                            %)</b> |
                         Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
                     </li>
                 {% endif %}
@@ -175,6 +202,43 @@
                 <!--<h3>{{ aircraft.getSpecialMarks }}</h3>-->
             </ul>
         </div>
+        <div class="col-lg-5 col-md-12">
+            <button class="col-12 mt-2 btn btn-outline-primary mb-2" id="EngBtn" onclick="displayEng()">Двигатели
+            </button>
+            <span class="col-12" id="Eng" style="display: none;">
+            <ul class="list-group col-12 fs-5">
+
+                <li class="list-group-item">
+                    C11056723 | Model-17
+                    <a class="float-end ms-2">
+                        <img style="height: 20px; " src="{{ asset('build/images/bin.png') }}">
+                    </a>
+                    <a class="float-end">
+                        <img style="height: 20px; " src="{{ asset('build/images/open.png') }}">
+                    </a>
+                </li>
+            </ul>
+            <center>
+                <button class="col-10 mt-2 btn btn-success mb-2">+</button>
+            </center>
+        </span>
+
+            <button class="col-12 btn btn-outline-primary mt-2 mb-2" id="PartsBtn" onclick="displayParts()">
+                Комплектующие
+            </button>
+            <span class="col-12 mb-2" id="Parts" style="display:none;">
+
+            <ul class="list-group col-12 fs-5">
+
+                <li class="list-group-item">Тип ВС: <b>{{ aircraft.getAcType }}</b></li>
+                <li class="list-group-item">Бортовой номер: <b>{{ aircraft.getBoardNum }}</b></li>
+                <li class="list-group-item">Заводской номер: <b>{{ aircraft.getFactoryNum() }}</b></li>
+            </ul>
+            <center>
+                <button class="col-10 mt-2 btn btn-success mb-2">+</button>
+            </center>
+        </span>
+        </div>
     </div>
     {% if role=='admin' %}
         <div class="row">
@@ -191,10 +255,12 @@
         <div class="row justify-content-center">
             <center>
                 <div class="col-6">
-                    <button class="btn btn-primary mb-2" onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
+                    <button class="btn btn-primary mb-2"
+                            onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
                         Отчет по форме: ИФ-12-ОН
                     </button>
-                    <button class="btn btn-primary mb-2"  onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
+                    <button class="btn btn-primary mb-2"
+                            onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
                         Отчет по форме: ИФ-19-ОН
                     </button>
                 </div>
@@ -209,12 +275,14 @@
     <span id="AddHistory" style="display: none">
     <ul class="list-group">
     {% for ao in aircraftOperating|reverse %}
-        <li class="list-group-item">{{ ao.addedBy }} | Дата добавления: {{ ao.getCreateDate|date('d.m.y H:m:s') }} |
+        <li class="list-group-item">{{ ao.addedBy }} | Дата добавления: {{ ao.getCreateDate|date('d.m.y') }} |
             Наработка: {{ ao.getTotalRes }}
         </li>
     {% endfor %}
     </ul>
     </span>
+    </div>
+
     <script type="text/javascript">
         function displaySpan() {
             var addRes = document.getElementById("addRes");
@@ -223,11 +291,32 @@
             if (addRes.style.display === "none") {
                 addRes.style.display = "block";
                 addResBtn.innerHTML = "Закрыть";
+                addRep.style.display = "none";
+                addRepBtn.innerHTML = "Добавить ремонт";
                 form.style.display = "block";
 
             } else {
                 addRes.style.display = "none";
                 addResBtn.innerHTML = "Добавить наработку";
+                form.style.display = "none";
+
+            }
+        }
+
+        function displayRep() {
+            var addRep = document.getElementById("addRep");
+            var addRepBtn = document.getElementById("addRepBtn");
+            var form = document.getElementById("form1");
+            if (addRep.style.display === "none") {
+                addRep.style.display = "block";
+                addRes.style.display = "none";
+                addResBtn.innerHTML = "Добавить наработку";
+                addRepBtn.innerHTML = "Закрыть";
+                form1.style.display = "block";
+
+            } else {
+                addRep.style.display = "none";
+                addRepBtn.innerHTML = "Добавить ремонт";
                 form.style.display = "none";
 
             }
@@ -258,6 +347,34 @@
             } else {
                 AddHistory.style.display = "none";
                 AddHistorysBtn.innerHTML = "Показать историю добавления наработки";
+            }
+        }
+
+        function displayEng() {
+            var Eng = document.getElementById("Eng");
+            var EngBtn = document.getElementById("EngBtn");
+
+            if (Eng.style.display === "none") {
+                Eng.style.display = "block";
+                EngBtn.innerHTML = "Закрыть";
+
+            } else {
+                Eng.style.display = "none";
+                EngBtn.innerHTML = "Двигатели";
+            }
+        }
+
+        function displayParts() {
+            var Parts = document.getElementById("Parts");
+            var PartsBtn = document.getElementById("PartsBtn");
+
+            if (Parts.style.display === "none") {
+                Parts.style.display = "block";
+                PartsBtn.innerHTML = "Закрыть";
+
+            } else {
+                Parts.style.display = "none";
+                PartsBtn.innerHTML = "Комплектующие";
             }
         }
 

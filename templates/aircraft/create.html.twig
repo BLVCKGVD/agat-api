@@ -8,7 +8,8 @@
         <button class="btn btn-secondary mb-2" id="back" onclick="window.location='/aircrafts'">Вернуться</button>
         <div class="col-xs-7 col-md-6">
             {{ form_start(form) }}
-            <div class="form-group row mb-4">
+            <div>
+            <div class="form-group row mb-4 ">
                 <div class="col">
                     {{ form_row(form.ac_type) }}
                 </div>
@@ -40,6 +41,7 @@
                     {{ form_row(form.factory_made_by) }}
                 </div>
             </div>
+
 
             <div class="form-group row mb-4 ">
                 <div class="col form-control pt-4 me-3 border border-primary border-2">
@@ -118,6 +120,4 @@
     </div>
 {% endblock %}
 
-    
-
-
+    </div>

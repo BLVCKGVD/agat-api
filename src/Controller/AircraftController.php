@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Controller\CookiesController;
 use App\Entity\AircraftOperating;
+use App\Entity\Aircraft;
+use App\Form\AddRepType;
 use App\Form\AddResType;
 use App\Form\TableBuilderType;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,7 +18,6 @@ use Symfony\Component\HttpFoundation\File\Stream;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Aircraft;
 use App\Form\AircraftType;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Repository\AircraftRepository;
@@ -147,6 +148,8 @@ class AircraftController extends AbstractController
 
         $form = $this->createForm(AddResType::class);
         $form->handleRequest($request);
+        $formRep = $this->createForm(AddRepType::class);
+        $formRep->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -162,11 +165,39 @@ class AircraftController extends AbstractController
             return $this->redirect($request->getUri());
 
         }
+        if ($formRep->isSubmitted() && $formRep->isValid()) {
+            $new_operating = new AircraftOperating();
+            $new_operating
+                ->setTotalRes($operating->getTotalRes())
+                ->setOverhaulRes(0)
+                ->setAircraft($aircraft)
+                ->setCreateDate(new \DateTime())
+                ->setAddedBy($_COOKIE['FIO']);
+            $repair_date = new \DateTime;
+            $repair_date->format('YYYY-MM-DD');
+            $repair_date = $formRep->get('repair_date')->getData();
+            $overhaul_exp_date = new \DateTime();
+            $overhaul_exp_date->format('YYYY-MM-DD');
+            $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
+            $overhaul_exp_date->modify('+' . $formRep->get('overhaul_exp_date')->getData() . 'years');
+            $aircraft
+                ->setOverhaulRes($formRep->get('add')->getData())
+                ->setOverhaulExpDate($overhaul_exp_date)
+                ->setRepairsCount($aircraft->getRepairsCount() + 1)
+                ->setLastRepairDate($repair_date);
+
+            $this->entityManager->persist($aircraft);
+            $this->entityManager->persist($new_operating);
+            $this->entityManager->flush();
+            return $this->redirect($request->getUri());
+
+        }
         return $this->render('aircraft/info.html.twig', [
             'controller_name' => 'AircraftController',
             'aircraft' => $aircraft,
             'lastOperating' => $operating,
             'addRes' => $form->createView(),
+            'addRep' => $formRep->createView(),
             'aircraftOperating' => $aircraft->getAircraftOperating(),
             'role' => $role,
 
