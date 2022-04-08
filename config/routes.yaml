@@ -13,8 +13,7 @@ page:
     path: /page/{page}
     controller: App\Controller\ContentController::getContent
 
-authtorization:
-    
+authtorization:    
     path: /login
     controller: App\Controller\EmployeesPageController::auth
     

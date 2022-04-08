@@ -14,6 +14,6 @@ class ExitController extends AbstractController
         setcookie('login',null,time()-3600);
         setcookie('password',null,time()-3600);
         setcookie('role',null,time()-3600);
-        return $this->redirect('/login');
+        return $this->redirectToRoute('authtorization');
     }
 }
