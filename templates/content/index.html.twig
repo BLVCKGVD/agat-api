@@ -5,12 +5,21 @@
 {% block body %}
 
     <div class="topnav overflow-x-scroll">
-        <a class="" href="/employees">Домашняя страница</a>
-        <a class="" href="/aircrafts">Список ВС</a>
+        <a class="d-none d-md-inline" href="/employees">Домашняя страница</a>
+        <a class="home d-inline d-md-none" href="/employees">
+            <img  height="25px" class="home2"  src="{{ asset('build/images/home-black.png') }}">
+            <img class="home1" height="25px" src="{{ asset('build/images/home.png') }}">
+        </a>
+        <a class="d-none d-md-inline" href="/aircrafts">Список ВС</a>
+        <a class="airplane d-inline d-md-none" href="/aircrafts">
+            <img class="airplane2" height="25px" src="{{ asset('build/images/airplane-black.png') }}">
+            <img class="airplane1" height="25px" src="{{ asset('build/images/airplane.png') }}">
+        </a>
         {% if role == 'admin' %}
-            <a class="active" href="/content" >Страницы</a>
+            <a class="active d-none d-md-inline" href="/content" >Страницы</a>
+            <a class="active d-inline d-md-none" href="/content"><img  height="25px" class="d-inline"  src="{{ asset('build/images/pages-black.png') }}"></a>
         {% endif %}
-        <a class="float-end" href="/exit">Выйти</a>
+        <a class="float-end exit" href="/exit">Выйти</a>
     </div>
     <div class="container mt-5">
     <div class="row">

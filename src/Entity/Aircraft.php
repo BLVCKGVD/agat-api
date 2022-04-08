@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AircraftRepository;
+use App\Repository\AircraftOperatingRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

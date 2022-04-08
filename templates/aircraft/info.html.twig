@@ -109,33 +109,33 @@
                             до: <b>{{ aircraft.getAssignedExpDate|date('d.m.Y') }}</b></li>
                     {% endif %}
                 {% endif %}
-                {% if lastOperating.overhaulRes >= aircraft.getOverhaulRes() %}
-                    <li class="list-group-item list-group-item-danger">
-                        Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
-                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.getOverhaulRes }}
-                            ч.</b>
-                    </li>
-                {% endif %}
-                {% if lastOperating.overhaulRes/aircraft.getOverhaulRes()*100>=80.0 and lastOperating.getOverhaulRes/aircraft.getOverhaulRes()*100<100.0 %}
-                    <li class="list-group-item list-group-item-warning">
-                        Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
-                        Остаточный
-                        ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
-                            ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
-                            %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
-                    </li>
-                {% endif %}
-                {% if lastOperating.overhaulRes/aircraft.getOverhaulRes()*100<80.0 %}
-                    <li class="list-group-item list-group-item-success">
-                        Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
-                        Остаточный
-                        ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
-                            ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
-                            %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
-                    </li>
-                {% endif %}
+                    {% if lastOperating.overhaulRes >= aircraft.getOverhaulRes() %}
+                        <li class="list-group-item list-group-item-danger">
+                            Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
+                            ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.getOverhaulRes }}
+                                ч.</b>
+                        </li>
+                    {% endif %}
+                    {% if lastOperating.overhaulRes/aircraft.getOverhaulRes()*100>=80.0 and lastOperating.getOverhaulRes/aircraft.getOverhaulRes()*100<100.0 %}
+                        <li class="list-group-item list-group-item-warning">
+                            Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
+                            Остаточный
+                            ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
+                                ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
+                                %)</b> |
+                            Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                        </li>
+                    {% endif %}
+                    {% if lastOperating.overhaulRes/aircraft.getOverhaulRes()*100<80.0 %}
+                        <li class="list-group-item list-group-item-success">
+                            Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
+                            Остаточный
+                            ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
+                                ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
+                                %)</b> |
+                            Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                        </li>
+                    {% endif %}
                 {% if aircraft.getOverhaulExpDate != null %}
                     {% if aircraft.getOverhaulExpDate <= date() %}
                         <li class="list-group-item list-group-item-danger"> Межремонтный срок службы

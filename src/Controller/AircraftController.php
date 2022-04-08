@@ -10,6 +10,7 @@ use App\Form\AddResType;
 use App\Form\TableBuilderType;
 use Doctrine\Common\Collections\ArrayCollection;
 use PhpOffice\PhpWord\IOFactory;
+use App\Repository\AircraftOperatingRepository;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

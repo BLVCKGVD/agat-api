@@ -11,8 +11,13 @@ import './styles/bootstrap.min.css';
 import './images/logo.jpg';
 import './images/bin.png';
 import './images/open.png';
-import './styles/header.css'
-
+import './styles/header.css';
+import './images/home.png';
+import './images/airplane.png';
+import './images/pages.png';
+import './images/home-black.png';
+import './images/airplane-black.png';
+import './images/pages-black.png';
 
 // start the Stimulus application
 import './bootstrap';
