@@ -8,7 +8,7 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 import './styles/bootstrap.min.css';
-import './images/logo.jpg';
+import './images/logo.png';
 import './images/bin.png';
 import './images/open.png';
 import './styles/header.css';

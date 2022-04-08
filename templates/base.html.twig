@@ -11,33 +11,56 @@
     <link rel="js" href="assets">
     <title>{%block title%}База{%endblock%}</title>
 </head>
-
+<style>
+    .link:hover {
+        background-color: #f8f9fa;
+        color: black;
+    }
+    .link {
+        color: #f8f9fa;
+        text-align: center;
+        font-size: 17px;
+        padding: 29.75px 29.75px;
+        vertical-align: center;
+    }
+    .photo
+    {
+        filter: brightness(0) invert(1);
+    }
+    .photodiv:hover{
+        background-color: #f8f9fa;
+    }
+    .photo:hover{
+        background-color: #f8f9fa;
+        filter: none;
+    }
+</style>
 <body>
-    <div class="container bg-light">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="row">
-            
-            
-                <div class="col-md-3 col-sm-6 col-xs-7">
-                    <a href="/" style="max-width:inherit" >
-                        <img src="{{ asset('build/images/logo.jpg') }}" class="img-fluid" style="max-width:inherit" >
+<div class="row w-100 m-0" style="">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary w-100 p-0" style="">
+
+            <div class="col-12">
+                <div class="photodiv d-flex
+                 justify-content-center
+                 d-lg-inline
+                 justify-content-lg-start
+
+                 ">
+                    <a href="/">
+                        <img height="85px" class="photo d-inline ps-4 pe-4" src="{{ asset('build/images/logo.png') }}" style=" " >
                     </a>
                 </div>
-             
-             
-             
-                <div class="col-9"> 
-                <div class="d-flex align-items-center justify-content-end" style="height:100%">
-                    
-                    <a href="/page/contacts" class="d-inline-flex p-2 text-decoration-none border-end border-primary">Контакты</a>
-                    <a href="/employees" class="d-inline-flex p-2 text-decoration-none ">Для сотрудников</a>
-                    
+                <div class="float-lg-end float-none" style="">
+                    <a class="link d-block float-lg-start text-decoration-none" id="contacts" href="/page/contacts">Контакты</a>
+                    <a class="link d-block float-lg-start  text-decoration-none" id="employees" href="/employees">Для сотрудников</a>
                 </div>
+
             </div>
-        </div>
+
     </nav>
 </div>
-<div class="container bg-light mt-3">
+
+<div class="container-lg">
 {% block body %}
 
 {% endblock %}
