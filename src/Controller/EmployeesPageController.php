@@ -102,7 +102,7 @@ class EmployeesPageController extends AbstractController
                 ]);
             }
             
-    } return $this->redirect('/auth');
+    } return $this->redirectToRoute('authtorization');
     
     
 }
