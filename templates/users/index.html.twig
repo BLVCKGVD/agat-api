@@ -1,0 +1,69 @@
+{% extends 'base_employees.html.twig' %}
+
+{% block title %}Страницы{% endblock %}
+
+{% block body %}
+
+    <div class="topnav overflow-x-scroll">
+        <a class="d-none d-md-inline" href="/employees">Домашняя страница</a>
+        <a class="home d-inline d-md-none" href="/employees">
+            <img  height="25px" class="home2"  src="{{ asset('build/images/home-black.png') }}">
+            <img class="home1" height="25px" src="{{ asset('build/images/home.png') }}">
+        </a>
+        <a class="d-none d-md-inline" href="/aircrafts">Список ВС</a>
+        <a class="airplane d-inline d-md-none" href="/aircrafts">
+            <img class="airplane2" height="25px" src="{{ asset('build/images/airplane-black.png') }}">
+            <img class="airplane1" height="25px" src="{{ asset('build/images/airplane.png') }}">
+        </a>
+        {% if role == 'admin' %}
+            <a class="d-none d-md-inline" href="/content" >Страницы</a>
+            <a class="d-inline d-md-none" href="/content"><img  height="25px" class="d-inline"  src="{{ asset('build/images/pages-black.png') }}"></a>
+            <a class="active d-none d-md-inline" href="/users" >Пользователи</a>
+            <a class="active users d-inline d-md-none" href="/users" >
+                <img class="d-inline" height="25px" src="{{ asset('build/images/users-black.png') }}">
+            </a>
+        {% endif %}
+        <a class="float-end exit" href="/exit">Выйти</a>
+    </div>
+    <div class="container mt-5">
+        <div class="row">
+            <center><h3>Список пользователей</h3></center>
+
+            <ul class="list-group pe-0">
+                {% for u in users %}
+                    <li class="list-group-item list-group-item-action" onclick="window.location='content/edit/'">
+                        <div class="d-block d-lg-inline col-lg-auto col-12 text-center text-lg-start mb-lg-0 mb-2">
+                            {{u.getFIO}}
+                        </div>
+                        {% if u.getRole == 'admin' %}
+                            <div class="d-block d-lg-inline float-lg-end bg-success rounded-2 ps-2 pe-2 mb-2 mb-lg-0">
+                                <center>
+                                    <p class="m-0">Администратор</p>
+                                </center>
+
+                            </div>
+                        {% endif %}
+                        {% if u.getRole != 'admin' %}
+                            <div class="d-block d-lg-inline float-lg-end bg-success rounded-2 ps-2 pe-2 mb-2 mb-lg-0">
+                                <center>
+                                    <p class="m-0">Пользователь</p>
+                                </center>
+
+                            </div>
+                        {% endif %}
+                        {% if u.getLogin == login %}
+                            <div class="d-block d-lg-inline float-lg-end bg-danger rounded-2 ps-2 pe-2 me-lg-2">
+                                <center>
+                                    <p class="m-0">Вы</p>
+                                </center>
+
+                            </div>
+                        {% endif %}
+                {% endfor %}
+            </ul>
+
+
+        </div>
+    </div>
+{% endblock %}
+
