@@ -44,9 +44,15 @@ class Users
      */
     private $relatedUser;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserLogs::class, mappedBy="employee_add")
+     */
+    private $userLogs;
+
     public function __construct()
     {
         $this->relatedUser = new ArrayCollection();
+        $this->userLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,6 +132,36 @@ class Users
             // set the owning side to null (unless already changed)
             if ($relatedUser->getEmployee() === $this) {
                 $relatedUser->setEmployee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserLogs>
+     */
+    public function getUserLogs(): Collection
+    {
+        return $this->userLogs;
+    }
+
+    public function addUserLog(UserLogs $userLog): self
+    {
+        if (!$this->userLogs->contains($userLog)) {
+            $this->userLogs[] = $userLog;
+            $userLog->setEmployeeAdd($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserLog(UserLogs $userLog): self
+    {
+        if ($this->userLogs->removeElement($userLog)) {
+            // set the owning side to null (unless already changed)
+            if ($userLog->getEmployeeAdd() === $this) {
+                $userLog->setEmployeeAdd(null);
             }
         }
 

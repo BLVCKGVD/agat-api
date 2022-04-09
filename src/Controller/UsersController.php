@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\UserLogs;
 use App\Entity\Users;
 
+use App\Form\AddUserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,5 +81,78 @@ class UsersController extends AbstractController
         }
         $this->entityManager->flush();
         return $this->redirect('/users/'.$user->getId());
+    }
+    public function create(Request $request)
+    {
+        if (isset($_COOKIE['role']) && $_COOKIE['role']!= 'admin') {
+            return $this->redirectToRoute('employees_page');
+        }
+        $user = new Users();
+        $form = $this->createForm(AddUserType::class,$user);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            if ($this->getDoctrine()->getRepository(Users::class)->findBy([
+                'login'=>$form->get('login')->getData(),
+            ]) != null)
+            {
+                return $this->render('users/create.html.twig', [
+                    'controller_name' => 'UsersController',
+                    'form' => $form->createView(),
+                    'login_error'=>"Пользователь с таким логином существует",
+                    'error'=>"",
+                    'login' => $_COOKIE['login'],
+                    'role' => $_COOKIE['role'],
+                ]);
+            }
+            if($form->get('password')->getData() != $form->get('password2')->getData())
+            {
+                return $this->render('users/create.html.twig', [
+                    'controller_name' => 'UsersController',
+                    'form' => $form->createView(),
+                    'login_error'=>"",
+                    'error'=>"Пароли не совпадают",
+                    'login' => $_COOKIE['login'],
+                    'role' => $_COOKIE['role'],
+                    ]);
+            }
+
+            $user->setPassword(password_hash($form->get('password')->getData(), PASSWORD_DEFAULT))
+                ->setFIO($form->get('FIO')->getData())
+                ->setLogin($form->get('login')->getData());
+            if ($form->get('roles')->getData()){
+                $user->setRole($form->get('roles')->getData());
+            } else {
+                $user->setRole('user');
+            }
+            $this->getDoctrine()->getManager()->persist($user);
+            $userLogs = new UserLogs();
+            $userLogs->setEmployee(
+                $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                    'login'=>$_COOKIE['login']
+                ])
+            )
+                ->setAction(
+                    "Добавил пользователя")
+                ->setEmployeeAdd($user)
+                ->setFIO($user->getFIO())
+                ->setDate(new \DateTime());
+            $this->getDoctrine()->getManager()->persist($userLogs);
+            $this->getDoctrine()->getManager()->flush();
+            $this->getDoctrine()->getManager()->flush();
+            return $this->redirectToRoute('users');
+
+
+        }
+        return $this->render('users/create.html.twig', [
+            'controller_name' => 'UsersController',
+            'form' => $form->createView(),
+            'error'=>"",
+            'login_error'=>"",
+            'login' => $_COOKIE['login'],
+            'role' => $_COOKIE['role'],
+
+        ]);
+
     }
 }

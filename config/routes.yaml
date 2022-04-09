@@ -11,6 +11,9 @@ users:
 user:
     path: /users/{id}
     controller: App\Controller\UsersController::get
+userCreate:
+    path: /user/create
+    controller: App\Controller\UsersController::create
 userlogsdel:
     path: /userlogs/delete/{id}
     controller: App\Controller\UsersController::delLogs

@@ -48,6 +48,16 @@ class UserLogs
      */
     private $status;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $FIO;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="userLogs")
+     */
+    private $employee_add;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +131,30 @@ class UserLogs
     public function setStatus(?string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getFIO(): ?string
+    {
+        return $this->FIO;
+    }
+
+    public function setFIO(?string $FIO): self
+    {
+        $this->FIO = $FIO;
+
+        return $this;
+    }
+
+    public function getEmployeeAdd(): ?Users
+    {
+        return $this->employee_add;
+    }
+
+    public function setEmployeeAdd(?Users $employee_add): self
+    {
+        $this->employee_add = $employee_add;
 
         return $this;
     }

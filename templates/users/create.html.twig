@@ -1,0 +1,33 @@
+{% extends 'base_without_header.html.twig' %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+{% block body %}
+<body>
+<div class="row justify-content-center">
+    <button class="btn btn-secondary mb-2" id="back" onclick="window.location='/users'">Вернуться</button>
+    <div class="col-12 col-md-7 col-lg-5">
+        {{ form_start(form) }}
+        {{ form_label(form.login) }}
+        {{ form_errors(form.login) }}
+        {% if login_error != null or login_error != '' %}
+            <li>
+                {{ login_error }}
+            </li>
+        {% endif %}
+        {{ form_widget(form.login) }}
+
+        {{ form_row(form.FIO) }}
+        {% if login == 'angen' or login =='kuzmin' %}
+            {{ form_row(form.roles) }}
+        {% endif %}
+        {{ form_row(form.password) }}
+        {{ form_row(form.password2) }}
+        {{ form_row(form.submit) }}
+        {% do form.roles.setRendered %}
+        {{ form_end(form) }}
+        <center class="text-danger mt-1">{{ error }}</center>
+    </div>
+</div>
+{% endblock %}
+

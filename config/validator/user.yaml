@@ -1,0 +1,13 @@
+App\Entity\Users:
+    properties:
+        login:
+            - NotBlank: ~
+            - Length:
+                  min: 2
+                  minMessage: "Логин должен быть минимум из {{ limit }} символов"
+
+        password:
+            - NotBlank: ~
+            - Length:
+                  min: 6
+                  minMessage: "Пароль должен быть больше 6 символов"

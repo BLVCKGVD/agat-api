@@ -42,7 +42,19 @@
                     </li>
 
                 {% endif %}
-                {% if l.getAircraft == null %}
+                {% if l.getEmployeeAdd != null %}
+                <li class="list-group-item">
+                        {{ l.getAction }}
+                        <a href="/users/{{l.getEmployeeAdd.getId}}" class="text-primary text-decoration-none">
+                            {{ l.getFIO }}
+                        </a>
+                        <p class="m-0 d-block d-lg-inline float-lg-end text-secondary">
+                            {{ l.getDate|date('d.m.Y H:i') }}
+                        </p>
+                    </li>
+
+            {% endif %}
+                {% if l.getAircraft == null and l.getEmployeeAdd == null  %}
                     {% if l.getStatus == 'secondary' %}
                         <li class="list-group-item text-secondary">
                         {{ l.getAction }}
@@ -71,7 +83,7 @@
 
                 <a class="btn btn-danger mb-2" href="/userlogs/delete/{{user.getId}}"
                     onclick="return confirm('Вы уверены, что хотите удалить действия пользователя {{ user.getLogin }}?')">
-                Удалить</a>
+                Удалить действия</a>
             {% endif %}
         </div>
 

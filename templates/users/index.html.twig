@@ -42,6 +42,9 @@
                 </div>
 
             </form>
+
+                <a class="col-12  btn btn-primary mb-2" href="/user/create">+</a>
+
             <ul class="list-group pe-0">
                 {% for u in users %}
                     <li class="list-group-item list-group-item-action" onclick="window.location='users/{{ u.getId }}'">
@@ -51,7 +54,13 @@
                         {% if u.getRole == 'admin' %}
                             <div class="d-block d-lg-inline float-lg-end bg-success rounded-2 ps-2 pe-2 mb-2 mb-lg-0">
                                 <center>
-                                    <p class="m-0 text-white">Администратор</p>
+                                    <p class="m-0 text-white">
+                                        {% if u.getLogin == 'angen' or u.getLogin == 'kuzmin' %}
+                                        Администратор+
+                                        {% else %}
+                                            Администратор
+                                            {% endif %}
+                                    </p>
                                 </center>
 
                             </div>
