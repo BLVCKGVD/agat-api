@@ -43,6 +43,9 @@ class AircraftController extends AbstractController
     #[Route('/aircraft', name: 'aircraft')]
     public function index(Request $request): Response
     {
+        if (!isset($_COOKIE['role'])) {
+            return $this->redirectToRoute('employees_page');
+        }
         if ($_COOKIE['role'] == 'admin') {
             $role = 'admin';
         } else {
