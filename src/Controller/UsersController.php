@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\UserLogs;
 use App\Entity\Users;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,6 +30,23 @@ class UsersController extends AbstractController
             'users' => $users,
             'login' => $_COOKIE['login'],
             'role' => $_COOKIE['role'],
+        ]);
+    }
+    public function get($id): Response
+    {
+        if (isset($_COOKIE['role']) && $_COOKIE['role']!= 'admin') {
+            return $this->redirectToRoute('employees_page');
+        }
+        $user = $this->getDoctrine()->getRepository(Users::class)->find($id);
+        $logs = $this->entityManager->getRepository(UserLogs::class)->findBy([
+            'employee' => $user->getId()
+        ]);
+        return $this->render('users/profile.html.twig', [
+            'controller_name' => 'UsersController',
+            'user' => $user,
+            'login' => $_COOKIE['login'],
+            'role' => $_COOKIE['role'],
+            'logs' => $logs,
         ]);
     }
 }

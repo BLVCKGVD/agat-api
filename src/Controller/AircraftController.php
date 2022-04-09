@@ -189,7 +189,8 @@ class AircraftController extends AbstractController
                     "Добавил наработку в количестве ".$form->get('add')->getData().
                     " ч. к воздушному судну ")
                 ->setDate(new \DateTime())
-                ->setAircraft($aircraft);
+                ->setAircraft($aircraft)
+                ->setBoardNum($aircraft->getBoardNum());
             $this->entityManager->persist($userLogs);
             $this->entityManager->persist($new_operating);
             $this->entityManager->flush();
@@ -216,7 +217,18 @@ class AircraftController extends AbstractController
                 ->setOverhaulExpDate($overhaul_exp_date)
                 ->setRepairsCount($aircraft->getRepairsCount() + 1)
                 ->setLastRepairDate($repair_date);
-
+            $userLogs = new UserLogs();
+            $userLogs->setEmployee(
+                $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                    'login'=>$_COOKIE['login']
+                ])
+            )
+                ->setAction(
+                    "Добавил ремонт с датой ремонта: ".date_format($repair_date,'d.m.Y')." к воздушному судну ")
+                ->setDate(new \DateTime())
+                ->setAircraft($aircraft)
+                ->setBoardNum($aircraft->getBoardNum());
+            $this->entityManager->persist($userLogs);
             $this->entityManager->persist($aircraft);
             $this->entityManager->persist($new_operating);
             $this->entityManager->flush();

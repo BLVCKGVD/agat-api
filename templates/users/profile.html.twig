@@ -1,0 +1,98 @@
+{% extends 'base_without_header.html.twig' %}
+{% block title %}Информация о {{ user.getFIO }}{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+{% block body %}
+    <div class="row">
+
+    <center>
+        <h3 class="mb-4">Информация о пользователе</h3>
+    </center>
+    <ul class="list-group col-12 fs-5 mb-4">
+    <li class="list-group-item">ФИО: <b>{{ user.getFIO }}</b></li>
+        <li class="list-group-item">Логин: <b>{{ user.getLogin }}</b></li>
+        {% if user.getRole == 'admin' %}
+        <li class="list-group-item">Роль: <b>Администратор</b></li>
+        {% endif %}
+        {% if user.getRole != 'admin' %}
+            <li class="list-group-item">Роль: <b>Пользователь</b></li>
+        {% endif %}
+    </ul>
+    </div>
+    <div class="row">
+
+        <button class="btn btn-primary mb-2" id="addResBtn" onclick="displaySpan()">Просмотр действий
+        </button>
+        <div id="form" style="display:none;">
+            <span class=" overflow-auto col-12 mb-5" style="display: none;" id='addRes'>
+        <div class="col-12 ">
+            <ul class="list-group col-12 fs-5 mb-4">
+            {% for l in logs|reverse %}
+                {% if l.getAircraft != null %}
+                    <li class="list-group-item">
+                        {{ l.getAction }}
+                        <a href="/aircrafts/{{l.getAircraft.getId}}" class="text-primary text-decoration-none">
+                            {{ l.getBoardNum }}
+                        </a>
+                        <p class="m-0 d-block d-lg-inline float-lg-end text-secondary">
+                            {{ l.getDate|date('d.m.Y H:i') }}
+                        </p>
+                    </li>
+
+                {% endif %}
+                {% if l.getAircraft == null %}
+                    {% if l.getStatus == 'secondary' %}
+                        <li class="list-group-item text-secondary">
+                        {{ l.getAction }}
+                        <p class="m-0 d-block d-lg-inline float-lg-end text-secondary">
+                            {{ l.getDate|date('d.m.Y H:i') }}
+                        </p>
+                    </li>
+                    {% endif %}
+                {% if l.getStatus == null %}
+                    <li class="list-group-item">
+                        {{ l.getAction }}
+                        <p class="m-0 d-block d-lg-inline float-lg-end text-secondary">
+                            {{ l.getDate|date('d.m.Y H:i') }}
+                        </p>
+                    </li>
+                {% endif %}
+                {% endif %}
+            {% endfor %}
+             </ul>
+
+        </div>
+
+
+    </span>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        function displaySpan() {
+            var addRes = document.getElementById("addRes");
+            var addResBtn = document.getElementById("addResBtn");
+            var form = document.getElementById("form");
+            if (addRes.style.display === "none") {
+                addRes.style.display = "block";
+                addResBtn.innerHTML = "Закрыть";
+                form.style.display = "block";
+
+            } else {
+                addRes.style.display = "none";
+                addResBtn.innerHTML = "Просмотр действий";
+                form.style.display = "none";
+
+            }
+        }
+
+
+
+    </script>
+{% endblock %}
+
+
+
+

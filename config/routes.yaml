@@ -8,6 +8,9 @@ content:
 users:
     path: /users
     controller: App\Controller\UsersController::index
+user:
+    path: /users/{id}
+    controller: App\Controller\UsersController::get
 
 content_edit:
     path: /content/edit/{page}

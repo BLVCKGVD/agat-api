@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\UserLogs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
@@ -49,6 +50,18 @@ class EmployeesPageController extends AbstractController
             setcookie("password", $user->getPassword(), time()+3600*24*14);
             setcookie("role", $found->getRole(), time()+3600*24*14);
             setcookie("FIO", $found->getFIO(), time()+3600*24*14);
+                $userLogs = new UserLogs();
+                $userLogs->setEmployee(
+                    $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                        'login'=>$found->getLogin()
+                    ])
+                )
+                    ->setAction(
+                        "Вошел в систему")
+                    ->setStatus('secondary')
+                    ->setDate(new \DateTime());
+                $this->getDoctrine()->getManager()->persist($userLogs);
+                $this->getDoctrine()->getManager()->flush();
             return $this->redirect('/employees');
             } else{
                 return $this->render('employees_page/authtorization.html.twig', [

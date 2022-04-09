@@ -38,6 +38,16 @@ class UserLogs
      */
     private $aircraft;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $board_num;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $status;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +97,30 @@ class UserLogs
     public function setAircraft(?Aircraft $aircraft): self
     {
         $this->aircraft = $aircraft;
+
+        return $this;
+    }
+
+    public function getBoardNum(): ?string
+    {
+        return $this->board_num;
+    }
+
+    public function setBoardNum(?string $board_num): self
+    {
+        $this->board_num = $board_num;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

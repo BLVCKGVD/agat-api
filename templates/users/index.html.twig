@@ -31,14 +31,14 @@
 
             <ul class="list-group pe-0">
                 {% for u in users %}
-                    <li class="list-group-item list-group-item-action" onclick="window.location='content/edit/'">
+                    <li class="list-group-item list-group-item-action" onclick="window.location='users/{{ u.getId }}'">
                         <div class="d-block d-lg-inline col-lg-auto col-12 text-center text-lg-start mb-lg-0 mb-2">
                             {{u.getFIO}}
                         </div>
                         {% if u.getRole == 'admin' %}
                             <div class="d-block d-lg-inline float-lg-end bg-success rounded-2 ps-2 pe-2 mb-2 mb-lg-0">
                                 <center>
-                                    <p class="m-0">Администратор</p>
+                                    <p class="m-0 text-white">Администратор</p>
                                 </center>
 
                             </div>
@@ -54,7 +54,7 @@
                         {% if u.getLogin == login %}
                             <div class="d-block d-lg-inline float-lg-end bg-danger rounded-2 ps-2 pe-2 me-lg-2">
                                 <center>
-                                    <p class="m-0">Вы</p>
+                                    <p class="m-0 text-white">Вы</p>
                                 </center>
 
                             </div>
