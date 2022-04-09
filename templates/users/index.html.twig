@@ -17,7 +17,10 @@
         </a>
         {% if role == 'admin' %}
             <a class="d-none d-md-inline" href="/content" >Страницы</a>
-            <a class="d-inline d-md-none" href="/content"><img  height="25px" class="d-inline"  src="{{ asset('build/images/pages-black.png') }}"></a>
+            <a class="content d-inline d-md-none" href="/content">
+                <img  height="25px" class="content2"  src="{{ asset('build/images/pages-black.png') }}">
+                <img  height="25px" class="content1"  src="{{ asset('build/images/pages.png') }}">
+            </a>
             <a class="active d-none d-md-inline" href="/users" >Пользователи</a>
             <a class="active users d-inline d-md-none" href="/users" >
                 <img class="d-inline" height="25px" src="{{ asset('build/images/users-black.png') }}">
