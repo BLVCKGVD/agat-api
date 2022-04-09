@@ -18,6 +18,8 @@ import './images/pages.png';
 import './images/home-black.png';
 import './images/airplane-black.png';
 import './images/pages-black.png';
+import './images/users-black.png';
+import './images/users.png';
 
 // start the Stimulus application
 import './bootstrap';

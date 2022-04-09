@@ -18,6 +18,11 @@
         {% if role == 'admin' %}
             <a class="active d-none d-md-inline" href="/content" >Страницы</a>
             <a class="active d-inline d-md-none" href="/content"><img  height="25px" class="d-inline"  src="{{ asset('build/images/pages-black.png') }}"></a>
+            <a class="d-none d-md-inline" href="/users" >Пользователи</a>
+            <a class="users d-inline d-md-none" href="/users" >
+                <img class="users2" height="25px" src="{{ asset('build/images/users-black.png') }}">
+                <img class="users1" height="25px" src="{{ asset('build/images/users.png') }}">
+            </a>
         {% endif %}
         <a class="float-end exit" href="/exit">Выйти</a>
     </div>
