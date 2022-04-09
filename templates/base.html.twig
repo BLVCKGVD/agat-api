@@ -16,7 +16,18 @@
         background-color: #f8f9fa;
         color: black;
     }
+    .link1:hover {
+        background-color: #f8f9fa;
+        color: black;
+    }
     .link {
+        color: #f8f9fa;
+        text-align: center;
+        font-size: 17px;
+        padding: 10px 10px;
+        vertical-align: center;
+    }
+    .link1 {
         color: #f8f9fa;
         text-align: center;
         font-size: 17px;
@@ -50,9 +61,13 @@
                         <img height="85px" class="photo d-inline ps-4 pe-4" src="{{ asset('build/images/logo.png') }}" style=" " >
                     </a>
                 </div>
-                <div class="float-lg-end float-none" style="">
+                <div class="d-block d-lg-none float-none" style="">
                     <a class="link d-block float-lg-start text-decoration-none" id="contacts" href="/page/contacts">Контакты</a>
                     <a class="link d-block float-lg-start  text-decoration-none" id="employees" href="/employees">Для сотрудников</a>
+                </div>
+                <div class="float-lg-end float-none d-none d-lg-inline" style="">
+                    <a class="link1 d-block float-lg-start text-decoration-none" id="contacts" href="/page/contacts">Контакты</a>
+                    <a class="link1 d-block float-lg-start  text-decoration-none" id="employees" href="/employees">Для сотрудников</a>
                 </div>
 
             </div>
