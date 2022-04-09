@@ -133,6 +133,19 @@ class AircraftController extends AbstractController
             $aircraft->addAircraftOperating($operating);
             $entityManager->persist($aircraft);
             $entityManager->flush();
+            $userLogs = new UserLogs();
+            $userLogs->setEmployee(
+                $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                    'login'=>$_COOKIE['login']
+                ])
+            )
+                ->setAction(
+                    "Создал воздушное судно")
+                ->setBoardNum($aircraft->getBoardNum())
+                ->setAircraft($aircraft)
+                ->setDate(new \DateTime());
+            $this->getDoctrine()->getManager()->persist($userLogs);
+            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('aircraft_info',[
                 'id'=>$aircraft->getId(),

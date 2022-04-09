@@ -49,4 +49,20 @@ class UsersController extends AbstractController
             'logs' => $logs,
         ]);
     }
+    public function delLogs($id)
+    {
+        if (isset($_COOKIE['role']) && $_COOKIE['role']!= 'admin') {
+            return $this->redirectToRoute('employees_page');
+        }
+        $user = $this->getDoctrine()->getRepository(Users::class)->find($id);
+        $logs = $this->entityManager->getRepository(UserLogs::class)->findBy([
+            'employee' => $user->getId()
+        ]);
+        for ($i = 0; $i<count($logs); $i++)
+        {
+            $this->entityManager->remove($logs[$i]);
+        }
+        $this->entityManager->flush();
+        return $this->redirect('/users/'.$user->getId());
+    }
 }

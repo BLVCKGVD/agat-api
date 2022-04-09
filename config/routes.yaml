@@ -11,6 +11,9 @@ users:
 user:
     path: /users/{id}
     controller: App\Controller\UsersController::get
+userlogsdel:
+    path: /userlogs/delete/{id}
+    controller: App\Controller\UsersController::delLogs
 
 content_edit:
     path: /content/edit/{page}

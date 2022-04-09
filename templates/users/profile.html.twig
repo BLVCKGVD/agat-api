@@ -21,13 +21,14 @@
     </ul>
     </div>
     <div class="row">
-
+        {%if logs != null%}
         <button class="btn btn-primary mb-2" id="addResBtn" onclick="displaySpan()">Просмотр действий
         </button>
         <div id="form" style="display:none;">
             <span class=" overflow-auto col-12 mb-5" style="display: none;" id='addRes'>
         <div class="col-12 ">
-            <ul class="list-group col-12 fs-5 mb-4">
+            <ul class="list-group col-12 fs-5 mb-4" style="max-height: 400px">
+
             {% for l in logs|reverse %}
                 {% if l.getAircraft != null %}
                     <li class="list-group-item">
@@ -62,11 +63,18 @@
             {% endfor %}
              </ul>
 
+
         </div>
 
 
     </span>
+
+                <a class="btn btn-danger mb-2" href="/userlogs/delete/{{user.getId}}"
+                    onclick="return confirm('Вы уверены, что хотите удалить действия пользователя {{ user.getLogin }}?')">
+                Удалить</a>
+            {% endif %}
         </div>
+
     </div>
 
 

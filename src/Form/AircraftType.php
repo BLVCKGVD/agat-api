@@ -36,6 +36,7 @@ class AircraftType extends AbstractType
                 //'oninvalid'=>"this.setCustomValidity('Введите заводской номер')"
             ]])
             ->add('fin_form',TextType::class, [
+                'required' => false,'required' => false,
                 'mapped' => false,
                 'label'=>'Название формы',
                 'help_attr'=>[
@@ -53,6 +54,7 @@ class AircraftType extends AbstractType
                     'class' =>'form-control',
                 ]])
             ->add('fin_res',TextType::class, [
+                'required' => false,
                 'mapped' => false,
                 'label'=>'Наработка',
                 'help_attr'=>[
@@ -62,6 +64,7 @@ class AircraftType extends AbstractType
                     'class' =>'form-control',
                 ]])
             ->add('fin_term',TextType::class, [
+                'required' => false,
                 'mapped' => false,
                 'label'=>'Срок',
                 'help_attr'=>[
@@ -88,6 +91,7 @@ class AircraftType extends AbstractType
                 //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
             ]])
             ->add('last_repair_date',DateType::class, [
+                'required' => false,
                 'widget' => 'single_text',
                 'label' => 'Дата последнего ремонта:',
                 'attr'=>[
@@ -188,6 +192,7 @@ class AircraftType extends AbstractType
             ]
             ])
             ->add('mt_made_by',TextType::class, [
+                'required' => false,
                 'label'=>'Кем выполнено',
                 'attr'=>
                 [
