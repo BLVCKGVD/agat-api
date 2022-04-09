@@ -187,31 +187,6 @@ class Aircraft
     private $factory_made_by;
 
     /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $noise_sert_num;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $noise_sert_date;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $noise_sert_exp_date;
-
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $max_pv;
-
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $max_gp;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $special_marks;
@@ -227,9 +202,15 @@ class Aircraft
      */
     private $aircraftOperating;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserLogs::class, mappedBy="aircraft")
+     */
+    private $userLogs;
+
     public function __construct()
     {
         $this->aircraftOperating = new ArrayCollection();
+        $this->userLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -633,65 +614,6 @@ class Aircraft
         return $this;
     }
 
-    public function getNoiseSertNum(): ?string
-    {
-        return $this->noise_sert_num;
-    }
-
-    public function setNoiseSertNum(?string $noise_sert_num): self
-    {
-        $this->noise_sert_num = $noise_sert_num;
-
-        return $this;
-    }
-
-    public function getNoiseSertDate(): ?\DateTimeInterface
-    {
-        return $this->noise_sert_date;
-    }
-
-    public function setNoiseSertDate(?\DateTimeInterface $noise_sert_date): self
-    {
-        $this->noise_sert_date = $noise_sert_date;
-
-        return $this;
-    }
-
-    public function getNoiseSertExpDate(): ?\DateTimeInterface
-    {
-        return $this->noise_sert_exp_date;
-    }
-
-    public function setNoiseSertExpDate(?\DateTimeInterface $noise_sert_exp_date): self
-    {
-        $this->noise_sert_exp_date = $noise_sert_exp_date;
-
-        return $this;
-    }
-
-    public function getMaxPv(): ?string
-    {
-        return $this->max_pv;
-    }
-
-    public function setMaxPv(?string $max_pv): self
-    {
-        $this->max_pv = $max_pv;
-
-        return $this;
-    }
-
-    public function getMaxGp(): ?string
-    {
-        return $this->max_gp;
-    }
-
-    public function setMaxGp(?string $max_gp): self
-    {
-        $this->max_gp = $max_gp;
-
-        return $this;
-    }
 
     public function getSpecialMarks(): ?string
     {
@@ -742,6 +664,36 @@ class Aircraft
             // set the owning side to null (unless already changed)
             if ($aircraftOperating->getAircraft() === $this) {
                 $aircraftOperating->setAircraft(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserLogs>
+     */
+    public function getUserLogs(): Collection
+    {
+        return $this->userLogs;
+    }
+
+    public function addUserLog(UserLogs $userLog): self
+    {
+        if (!$this->userLogs->contains($userLog)) {
+            $this->userLogs[] = $userLog;
+            $userLog->setAircraft($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserLog(UserLogs $userLog): self
+    {
+        if ($this->userLogs->removeElement($userLog)) {
+            // set the owning side to null (unless already changed)
+            if ($userLog->getAircraft() === $this) {
+                $userLog->setAircraft(null);
             }
         }
 

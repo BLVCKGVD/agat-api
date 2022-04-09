@@ -28,6 +28,18 @@
     </div>
     <h2 class="text-center mt-5">Список воздушных судов</h2>
     <div class="container mt-5">
+
+            <form method="get" class="row justify-content-center mb-5" autocomplete="off">
+
+                <div class="col-auto">
+                    <input class="form-control d-inline " style="" type="text" name="searchfor" value="{{searchfor}}">
+                </div>
+               <div class="col-auto">
+                   <button class="btn btn-primary">Найти</button>
+               </div>
+
+            </form>
+
     {% if role=='admin' %}
         <div class="row">
             <a class="col-12  btn btn-primary mb-2" href="aircrafts/create">+</a>

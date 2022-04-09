@@ -60,16 +60,13 @@ class TableBuilderType extends AbstractType
                 'last_arz'=>boolval($_COOKIE['last_arz']),
                 'arz_appointment'=>boolval($_COOKIE['arz_appointment']),
                 'factory_made_by'=>boolval($_COOKIE['factory_made_by']),
-                'noise_sert_num'=>boolval($_COOKIE['noise_sert_num']),
-                'noise_sert_date'=>boolval($_COOKIE['noise_sert_date']),
-                'noise_sert_exp_date'=>boolval($_COOKIE['noise_sert_exp_date']),
-                'max_pv'=>boolval($_COOKIE['max_pv']),
-                'max_gp'=>boolval($_COOKIE['max_gp']),
+
                 'special_marks'=>boolval($_COOKIE['special_marks']),
 
 
             ];
         }
+
 
 
 
@@ -104,14 +101,14 @@ class TableBuilderType extends AbstractType
                 'attr'=>['class'=>'form-check-input'],
                 'required' => false,
                 'data' => $data['release_date'],
-                'label' => 'Дата выпуска:',
+                'label' => 'Дата выпуска',
                 ])
             ->add('last_repair_date',CheckboxType::class, [
                 'label_attr'=>['class'=>'form-check-label'],
                 'attr'=>['class'=>'form-check-input'],
                 'required' => false,
                 'data' => $data['last_repair_date'],
-                'label' => 'Дата последнего ремонта:',
+                'label' => 'Дата последнего ремонта',
                 ])
             ->add('repairs_count',CheckboxType::class, [
                 'label_attr'=>['class'=>'form-check-label'],
@@ -132,7 +129,7 @@ class TableBuilderType extends AbstractType
                 'attr'=>['class'=>'form-check-input'],
                 'data' => $data['assigned_exp_date'],
                 'required' => false,
-                'label' => 'Назначенный срок службы:',
+                'label' => 'Назначенный срок службы',
                 ])
             ->add('overhaul_res',CheckboxType::class, [
                 'label_attr'=>['class'=>'form-check-label'],
@@ -247,14 +244,14 @@ class TableBuilderType extends AbstractType
                 'data' => $data['lg_date'],
                 'required' => false,
 
-                'label' => 'Когда выдан ЛГ:',
+                'label' => 'Когда выдан ЛГ',
                 ])
             ->add('lg_exp_date',CheckboxType::class, [
                 'label_attr'=>['class'=>'form-check-label'],
                 'attr'=>['class'=>'form-check-input'],
                 'data' => $data['lg_exp_date'],
                 'required' => false,
-                'label' => 'Срок действия ЛГ:',
+                'label' => 'Срок действия ЛГ',
                 ])
             ->add('reg_sert',CheckboxType::class, [
                 'label_attr'=>['class'=>'form-check-label'],
@@ -271,7 +268,7 @@ class TableBuilderType extends AbstractType
                 'data' => $data['reg_sert_date'],
                 'required' => false,
 
-                'label' => 'Когда выдан рег. сертификат:',
+                'label' => 'Когда выдан рег. сертификат',
                 ])
             ->add('ac_type',CheckboxType::class, [
                     'label_attr'=>['class'=>'form-check-label'],
@@ -294,17 +291,20 @@ class TableBuilderType extends AbstractType
                 'attr'=>['class'=>'form-check-input'],
                 'data' => $data['extension_reason'],
                 'required' => false,
+                'label'=>"Причина продления"
                ))
             ->add('last_arz',CheckboxType::class, array(
                 'data' => $data['last_arz'],
                 'required' => false,
                 'label_attr'=>['class'=>'form-check-label'],
-                'attr'=>['class'=>'form-check-input'],))
+                'attr'=>['class'=>'form-check-input'],
+                'label'=>"Последнее АРЗ"))
             ->add('arz_appointment',CheckboxType::class, array(
                 'data' => $data['arz_appointment'],
                 'required' => false,
                 'label_attr'=>['class'=>'form-check-label'],
                 'attr'=>['class'=>'form-check-input'],
+                'label'=>"Назначение АРЗ"
 
             ))
             ->add('factory_made_by',CheckboxType::class, [
@@ -314,36 +314,12 @@ class TableBuilderType extends AbstractType
                 'label_attr'=>['class'=>'form-check-label'],
                 'attr'=>['class'=>'form-check-input'],
                 ])
-            ->add('noise_sert_num',CheckboxType::class, array(
-                'data' => $data['noise_sert_num'],
-                'required' => false,
-                'label_attr'=>['class'=>'form-check-label'],
-                'attr'=>['class'=>'form-check-input'],))
-            ->add('noise_sert_date',CheckboxType::class, array(
-                'data' => $data['noise_sert_date'],
-                'required' => false,
-                'label_attr'=>['class'=>'form-check-label'],
-                'attr'=>['class'=>'form-check-input'],))
-            ->add('noise_sert_exp_date',CheckboxType::class, array(
-                'data' => $data['noise_sert_exp_date'],
-                'required' => false,
-                'label_attr'=>['class'=>'form-check-label'],
-                'attr'=>['class'=>'form-check-input'],))
-            ->add('max_pv',CheckboxType::class, array(
-                'data' => $data['max_pv'],
-                'required' => false,
-                'label_attr'=>['class'=>'form-check-label'],
-                'attr'=>['class'=>'form-check-input'],))
-            ->add('max_gp',CheckboxType::class, array(
-                'data' => $data['max_gp'],
-                'required' => false,
-                'label_attr'=>['class'=>'form-check-label'],
-                'attr'=>['class'=>'form-check-input'],))
             ->add('special_marks',CheckboxType::class, array(
                 'data' => $data['special_marks'],
                 'required' => false,
                 'label_attr'=>['class'=>'form-check-label'],
-                'attr'=>['class'=>'form-check-input'],))
+                'attr'=>['class'=>'form-check-input'],
+                'label'=>"Особенности"))
             ->add('save', SubmitType::class,[
                 'label' =>'Применить',
                 'attr'=>[

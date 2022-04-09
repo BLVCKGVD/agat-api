@@ -277,21 +277,6 @@ class AircraftType extends AbstractType
                 'class' =>'form-control',
                 //'oninvalid'=>"this.setCustomValidity('Введите завод изготовитель')"
             ]])
-            ->add('noise_sert_num',TextType::class, array('required' => false,'attr'=>array(
-                'class' =>'form-control'
-            )))
-            ->add('noise_sert_date',DateType::class, array('required' => false,'attr'=>array(
-                'class' =>'form-control'
-            )))
-            ->add('noise_sert_exp_date',DateType::class, array('required' => false,'attr'=>array(
-                'class' =>'form-control'
-            )))
-            ->add('max_pv',TextType::class, array('required' => false,'attr'=>array(
-                'class' =>'form-control'
-            )))
-            ->add('max_gp',TextType::class, array('required' => false,'attr'=>array(
-                'class' =>'form-control'
-            )))
             ->add('special_marks',TextType::class, array('required' => false,'attr'=>array(
                 'class' =>'form-control'
             )))

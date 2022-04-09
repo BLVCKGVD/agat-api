@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UsersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,6 +38,16 @@ class Users
      * @ORM\Column(type="string", length=255)
      */
     private $login;
+
+    /**
+     * @ORM\OneToMany(targetEntity=UserLogs::class, mappedBy="employee", orphanRemoval=true)
+     */
+    private $relatedUser;
+
+    public function __construct()
+    {
+        $this->relatedUser = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -86,6 +98,36 @@ class Users
     public function setLogin(string $login): self
     {
         $this->login = $login;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserLogs>
+     */
+    public function getRelatedUser(): Collection
+    {
+        return $this->relatedUser;
+    }
+
+    public function addRelatedUser(UserLogs $relatedUser): self
+    {
+        if (!$this->relatedUser->contains($relatedUser)) {
+            $this->relatedUser[] = $relatedUser;
+            $relatedUser->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRelatedUser(UserLogs $relatedUser): self
+    {
+        if ($this->relatedUser->removeElement($relatedUser)) {
+            // set the owning side to null (unless already changed)
+            if ($relatedUser->getEmployee() === $this) {
+                $relatedUser->setEmployee(null);
+            }
+        }
 
         return $this;
     }

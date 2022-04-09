@@ -5,6 +5,10 @@ content:
     path: /content
     controller: App\Controller\ContentController::index
 
+users:
+    path: /users
+    controller: App\Controller\UsersController::index
+
 content_edit:
     path: /content/edit/{page}
     controller: App\Controller\ContentController::edit

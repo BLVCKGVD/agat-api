@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Controller\CookiesController;
 use App\Entity\AircraftOperating;
 use App\Entity\Aircraft;
+use App\Entity\UserLogs;
+use App\Entity\Users;
 use App\Form\AddRepType;
 use App\Form\AddResType;
 use App\Form\TableBuilderType;
@@ -55,12 +57,31 @@ class AircraftController extends AbstractController
             $data = CookiesController::setCooks($data);
 
         }
+        $searchfor = $request->query->get('searchfor');
+        if($searchfor)
+        {
+            $aircrafts = $this->getDoctrine()->getManager()
+                ->getRepository(Aircraft::class)
+                ->createQueryBuilder('o')
+                ->where('LOWER(o.board_num) LIKE LOWER(:searchfor)')
+                ->orWhere('LOWER(o.ac_type) LIKE LOWER(:searchfor)')
+                ->orWhere('LOWER(o.lg_sert) LIKE LOWER(:searchfor)')
+                ->orWhere('LOWER(o.factory_num) LIKE LOWER(:searchfor)')
+                ->orWhere('LOWER(o.reg_sert) LIKE LOWER(:searchfor)')
+                ->setParameter('searchfor', '%'.$searchfor.'%')
+                ->getQuery()
+                ->getResult();
+        }else{
+            $aircrafts = $this->getDoctrine()->getRepository(Aircraft::class)->findAll();
+        }
+
 
         //echo $_COOKIE['board_num'];
 
         return $this->render('aircraft/index.html.twig', [
             'controller_name' => 'AircraftController',
-            'aircrafts' => $this->getAircrafts(),
+            'aircrafts' => $aircrafts,
+            'searchfor' => $searchfor,
             'aircraftOperating' => $this->getDoctrine()->getRepository(AircraftOperating::class)->findAll(),
             'role' => $role,
             'tableBuilderForm' => $form->createView(),
@@ -131,10 +152,7 @@ class AircraftController extends AbstractController
 
     }
 
-    public function getAircrafts()
-    {
-        return $this->getDoctrine()->getRepository(Aircraft::class)->findAll();
-    }
+
 
     public function info(Request $request,$id)
     {
@@ -161,6 +179,18 @@ class AircraftController extends AbstractController
                 ->setAircraft($aircraft)
                 ->setCreateDate(new \DateTime())
                 ->setAddedBy($_COOKIE['FIO']);
+            $userLogs = new UserLogs();
+            $userLogs->setEmployee(
+                $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                    'login'=>$_COOKIE['login']
+                ])
+            )
+                ->setAction(
+                    "Добавил наработку в количестве ".$form->get('add')->getData().
+                    " ч. к воздушному судну ")
+                ->setDate(new \DateTime())
+                ->setAircraft($aircraft);
+            $this->entityManager->persist($userLogs);
             $this->entityManager->persist($new_operating);
             $this->entityManager->flush();
             return $this->redirect($request->getUri());

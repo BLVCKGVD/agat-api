@@ -16,17 +16,17 @@ class EmployeesPageController extends AbstractController
 {
     public function auth(ManagerRegistry $doctrine,Request $request): Response
     {
-        //  $entityManager = $this->getDoctrine()->getManager();
-        //  $user = new Users();
-        //  $user->setFio('Шульженко Антон');
-        //  $pass = password_hash("Anton75669", PASSWORD_DEFAULT);
-        //  $user->setPassword($pass);
-        //  $user->setLogin('anton');
-        //  print($pass);
-        //  $user->setRole("user");
-        //  $entityManager->persist($user);
-
-        //  $entityManager->flush();
+//          $entityManager = $this->getDoctrine()->getManager();
+//          $user = new Users();
+//          $user->setFio('Шульженко Антон');
+//          $pass = password_hash("Anton75669", PASSWORD_DEFAULT);
+//          $user->setPassword($pass);
+//          $user->setLogin('angen');
+//          print($pass);
+//          $user->setRole("admin");
+//          $entityManager->persist($user);
+//
+//          $entityManager->flush();
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user);
 

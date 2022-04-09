@@ -62,11 +62,6 @@ class CookiesController
             'last_arz'=>false,
             'arz_appointment'=>false,
             'factory_made_by'=>false,
-            'noise_sert_num'=>false,
-            'noise_sert_date'=>false,
-            'noise_sert_exp_date'=>false,
-            'max_pv'=>false,
-            'max_gp'=>false,
             'special_marks'=>false,
         ];
     }
@@ -108,11 +103,6 @@ class CookiesController
             'last_arz'=>$_COOKIE['last_arz'],
             'arz_appointment'=>$_COOKIE['arz_appointment'],
             'factory_made_by'=>$_COOKIE['factory_made_by'],
-            'noise_sert_num'=>$_COOKIE['noise_sert_num'],
-            'noise_sert_date'=>$_COOKIE['noise_sert_date'],
-            'noise_sert_exp_date'=>$_COOKIE['noise_sert_exp_date'],
-            'max_pv'=>$_COOKIE['max_pv'],
-            'max_gp'=>$_COOKIE['max_gp'],
             'special_marks'=>$_COOKIE['special_marks'],
         ];
         else
