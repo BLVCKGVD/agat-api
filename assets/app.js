@@ -23,3 +23,4 @@ import './images/users.png';
 
 // start the Stimulus application
 import './bootstrap';
+

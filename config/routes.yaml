@@ -11,6 +11,9 @@ users:
 user:
     path: /users/{id}
     controller: App\Controller\UsersController::get
+user_delete:
+    path: /users/delete/{id}
+    controller: App\Controller\UsersController::delete
 userCreate:
     path: /user/create
     controller: App\Controller\UsersController::create
@@ -42,7 +45,9 @@ exit:
 aircrafts_page:
     path: /aircrafts
     controller: App\Controller\AircraftController::index    
-
+add_ac_type:
+    path: /add_ac_type
+    controller: App\Controller\AcTypesController::create
 download:
     path: /aircrafts/download/{id}/{fileName}
     controller: App\Controller\AircraftController::testWord

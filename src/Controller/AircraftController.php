@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Controller\CookiesController;
+use App\Entity\AcTypes;
 use App\Entity\AircraftOperating;
 use App\Entity\Aircraft;
 use App\Entity\UserLogs;
@@ -109,7 +110,9 @@ class AircraftController extends AbstractController
             $aircraft = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
 
-
+            $ac_type = $form->get('add_type')->getData();
+            $aircraft->setAcType($ac_type->getType())
+                ->setAcCategory($ac_type->getCategory());
             $release_date = new \DateTime;
             $release_date->format('YYYY-MM-DD');
             $release_date = $aircraft->getReleaseDate();
@@ -273,9 +276,9 @@ class AircraftController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
             $aircraft = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
-
 
             $release_date = new \DateTime;
             $release_date->format('YYYY-MM-DD');
@@ -311,6 +314,16 @@ class AircraftController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $entite = $em->getRepository(Aircraft::class)->find($id);
             $em->remove($entite);
+            $userLogs = new UserLogs();
+            $userLogs->setEmployee(
+                $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                    'login'=>$_COOKIE['login']
+                ])
+            )
+                ->setAction(
+                    "Удалил воздушное судно ".$entite->getBoardNum())
+                ->setDate(new \DateTime());
+            $this->getDoctrine()->getManager()->persist($userLogs);
             $em->flush();
             return $this->redirectToRoute('aircrafts_page');
         } else {

@@ -45,7 +45,7 @@ class Users
     private $relatedUser;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserLogs::class, mappedBy="employee_add")
+     * @ORM\OneToMany(targetEntity=UserLogs::class, mappedBy="employee_add", cascade={"remove"})
      */
     private $userLogs;
 

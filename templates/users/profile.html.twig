@@ -19,7 +19,27 @@
             <li class="list-group-item">Роль: <b>Пользователь</b></li>
         {% endif %}
     </ul>
+        {% if login != user.getLogin %}
+            {% if role == 'admin' and (user.role == 'admin' or user.role == 'user') %}
+                {% if login == 'angen' or login == 'kuzmin' %}
+        <div class="float-end">
+            <a class="btn btn-danger mb-2" href="/users/delete/{{user.getId}}"
+               onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.getLogin }}?')">
+                Удалить пользователя</a>
+        </div>
+                    {% else %}
+                        {% if user.role == 'user' %}
+                        <div class="float-end">
+                            <a class="btn btn-danger mb-2" href="/users/delete/{{user.getId}}"
+                               onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.getLogin }}?')">
+                                Удалить пользователя</a>
+                        </div>
+                            {% endif %}
+                    {% endif %}
+                {% endif %}
+        {% endif %}
     </div>
+
     <div class="row">
         {%if logs != null%}
         <button class="btn btn-primary mb-2" id="addResBtn" onclick="displaySpan()">Просмотр действий
@@ -84,6 +104,7 @@
                 <a class="btn btn-danger mb-2" href="/userlogs/delete/{{user.getId}}"
                     onclick="return confirm('Вы уверены, что хотите удалить действия пользователя {{ user.getLogin }}?')">
                 Удалить действия</a>
+
             {% endif %}
         </div>
 

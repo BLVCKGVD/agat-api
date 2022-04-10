@@ -203,7 +203,7 @@ class Aircraft
     private $aircraftOperating;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserLogs::class, mappedBy="aircraft")
+     * @ORM\OneToMany(targetEntity=UserLogs::class, mappedBy="aircraft", cascade={"remove"})
      */
     private $userLogs;
 

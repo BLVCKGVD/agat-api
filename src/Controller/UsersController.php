@@ -139,7 +139,6 @@ class UsersController extends AbstractController
                 ->setDate(new \DateTime());
             $this->getDoctrine()->getManager()->persist($userLogs);
             $this->getDoctrine()->getManager()->flush();
-            $this->getDoctrine()->getManager()->flush();
             return $this->redirectToRoute('users');
 
 
@@ -154,5 +153,52 @@ class UsersController extends AbstractController
 
         ]);
 
+    }
+    public function delete($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (isset($_COOKIE['role']) && $_COOKIE['role'] == 'admin' && isset($_COOKIE['login']))
+        {
+            $user = $em->getRepository(Users::class)->find($id);
+            if ($user->getLogin() == $_COOKIE['login'])
+            {
+                return $this->redirectToRoute('users');
+            }
+            if($user->getRole() == 'admin' && $_COOKIE['role'] == 'admin')
+            {
+                if ($_COOKIE['login'] == 'angen' || $_COOKIE['login'] == 'kuzmin')
+                {
+                    $em->remove($user);
+                    $userLogs = new UserLogs();
+                    $userLogs->setEmployee(
+                        $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                            'login'=>$_COOKIE['login']
+                        ])
+                    )
+                        ->setAction(
+                            "Удалил пользователя ".$user->getFIO())
+                        ->setDate(new \DateTime());
+                    $this->getDoctrine()->getManager()->persist($userLogs);
+                    $em->flush();
+                    return $this->redirectToRoute('users');
+                } else {return $this->redirectToRoute('users');}
+            }
+            if ($user->getRole() == 'user')
+            {
+                $em->remove($user);
+                $userLogs = new UserLogs();
+                $userLogs->setEmployee(
+                    $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                        'login'=>$_COOKIE['login']
+                    ])
+                )
+                    ->setAction(
+                        "Удалил пользователя ".$user->getFIO())
+                    ->setDate(new \DateTime());
+                $this->getDoctrine()->getManager()->persist($userLogs);
+                $em->flush();
+                return $this->redirectToRoute('users');
+            } else {return $this->redirectToRoute('users');}
+        } else {return $this->redirectToRoute('users');}
     }
 }

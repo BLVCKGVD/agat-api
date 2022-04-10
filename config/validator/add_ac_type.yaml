@@ -1,0 +1,13 @@
+App\Entity\AcTypes:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: type
+    properties:
+        type:
+            - NotBlank: ~
+            - Length:
+                  min: 1
+                  minMessage: "Поле должно быть минимум из {{ limit }} символов"
+        eng_count:
+            - NotBlank: ~
+            - Positive:
+                  message: "Количесвто двигателей должно быть больше 0"

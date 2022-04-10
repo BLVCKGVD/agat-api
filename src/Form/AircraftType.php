@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use App\Entity\AcTypes;
 use App\Entity\Aircraft;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -11,12 +13,24 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
 class AircraftType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('add_type', EntityType::class,
+            [
+                'label'=>'Выберите тип судна',
+                'mapped'=>false,
+                'class' => AcTypes::class,
+                'attr' => [
+                    'class' => 'js-example-basic-single col-10 d-inline',
+
+                ]
+            ]
+            )
             ->add('board_num',TextType::class, [
                 'label'=>'Бортовой номер',
                 'attr'=>
@@ -36,7 +50,7 @@ class AircraftType extends AbstractType
                 //'oninvalid'=>"this.setCustomValidity('Введите заводской номер')"
             ]])
             ->add('fin_form',TextType::class, [
-                'required' => false,'required' => false,
+                'required' => false,
                 'mapped' => false,
                 'label'=>'Название формы',
                 'help_attr'=>[
@@ -246,6 +260,7 @@ class AircraftType extends AbstractType
     
             ]])
             ->add('ac_type',TextType::class, [
+                'required'=>false,
                 'label' => 'Тип ВС',
                 'attr'=>[
                 'class' =>'form-control',
@@ -256,6 +271,7 @@ class AircraftType extends AbstractType
                 ]
             )
             ->add('ac_category',ChoiceType::class, [
+                'required'=>false,
                 'label' => 'Категория ВС',
                 'choices' => [
                     'Вертолет'=>'Вертолет',
