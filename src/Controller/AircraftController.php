@@ -404,14 +404,14 @@ class AircraftController extends AbstractController
     public function getPartStatus(Parts $part)
     {
         $em = $this->getDoctrine()->getManager();
+        $today = new \DateTime();
         $operating = $em->getRepository(PartsOperating::class)->getLastPartsOperating($part);
-        $overhaul_diff = $part->getOverhaulExpDate()->diff(new \DateTime())->format("%a");
-        $assigned_diff = $part->getAssignedExpDate()->diff(new \DateTime())->format("%a");
         if($operating->getOverhaulRes() >= $part->getOverhaulRes()*0.8 ||
             $operating->getOverhaulRes() >= $part->getOverhaulRes() ||
             $operating->getTotalRes() >= $part->getAssignedRes()*0.8 ||
             $operating->getTotalRes() >= $part->getAssignedRes() ||
-            $overhaul_diff <= 30 || $assigned_diff < 30)
+            \DateTime::createFromInterface($part->getAssignedExpDate()) < $today||
+            \DateTime::createFromInterface($part->getOverhaulExpDate()) < $today)
         {
             return "danger";
         } return null;
