@@ -205,11 +205,15 @@
 
 
 
+
             </thead>
             <tbody style="overflow-y: auto">
             {% for a in aircrafts %}
 
-                <tr class="" onclick="window.location='aircrafts/{{ a.getId }}'">
+                <tr {% if a.status == 'danger' %}
+                        style="background-color: #f5c2c7"
+                        {% endif %}
+                        onclick="window.location='aircrafts/{{ a.getId }}'">
 
                     {% if data.ac_type==1 %}
 

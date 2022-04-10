@@ -34,6 +34,14 @@ $user = new Users();
           print($pass);
           $user->setRole("admin");
           $manager->persist($user);
+        $user = new Users();
+        $user->setFio('Кузьмин Валерий Михайлович');
+        $pass = password_hash("valera9219", PASSWORD_DEFAULT);
+        $user->setPassword($pass);
+        $user->setLogin('kuzmin');
+        print($pass);
+        $user->setRole("admin");
+        $manager->persist($user);
 
      $manager->flush();
     }

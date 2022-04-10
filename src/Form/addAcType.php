@@ -53,12 +53,12 @@ class addAcType extends AbstractType
                 'label'=>'Количетсво двигателей',
                 'attr' => [
                     'class' =>'form-control mb-2',
-                    'placeholder' => 'Пароль'
+                    'placeholder' => 'Кол-во двигателей'
                 ],
             ],)
             ->add('submit', SubmitType::class,
                 [
-                    'label' => 'Войти',
+                    'label' => 'Создать',
                     'attr'=>[
                         'class' =>'form-control btn-primary',
                     ]

@@ -207,10 +207,34 @@ class Aircraft
      */
     private $userLogs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Parts::class, mappedBy="aircraft", cascade={"remove"})
+     */
+    private $parts;
+
+    private $status;
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status): void
+    {
+        $this->status = $status;
+    }
+
     public function __construct()
     {
         $this->aircraftOperating = new ArrayCollection();
         $this->userLogs = new ArrayCollection();
+        $this->parts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -694,6 +718,36 @@ class Aircraft
             // set the owning side to null (unless already changed)
             if ($userLog->getAircraft() === $this) {
                 $userLog->setAircraft(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Parts>
+     */
+    public function getParts(): Collection
+    {
+        return $this->parts;
+    }
+
+    public function addPart(Parts $part): self
+    {
+        if (!$this->parts->contains($part)) {
+            $this->parts[] = $part;
+            $part->setAircraft($this);
+        }
+
+        return $this;
+    }
+
+    public function removePart(Parts $part): self
+    {
+        if ($this->parts->removeElement($part)) {
+            // set the owning side to null (unless already changed)
+            if ($part->getAircraft() === $this) {
+                $part->setAircraft(null);
             }
         }
 

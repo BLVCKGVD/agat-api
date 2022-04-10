@@ -1,0 +1,187 @@
+{% extends 'base_without_header.html.twig' %}
+{% block title %}Информация о {{ part.getName }}{% endblock %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <center>
+            <h3>Информация о комплектующем</h3>
+        </center>
+
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-12">
+            <ul class="list-group col-12 fs-5">
+
+                <li class="list-group-item">Наименование: <b>{{ part.getName }}</b></li>
+                <li class="list-group-item">Маркировка: <b>{{ part.getMarking }}</b></li>
+                <li class="list-group-item">Заводской номер: <b>{{ part.getFactoryNum() }}</b></li>
+                <li class="list-group-item">Документ: <b>{{ part.getDocument }}</b></li>
+                {% if part.getReleaseDate != null %}
+                    <li class="list-group-item">Дата выпуска: <b>{{ part.getReleaseDate()|date('d.m.Y') }}</b></li>
+                {% endif %}
+                {% if lastOperating.totalRes >= part.getAssignedRes() %}
+                    <li class="list-group-item list-group-item-danger">
+                        Назначенный ресурс: <b>{{ part.getAssignedRes() }} ч.</b> |
+                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.totalRes/part.getAssignedRes()*100>=80.0 and lastOperating.totalRes/part.getAssignedRes()*100<100.0 %}
+                    <li class="list-group-item list-group-item-warning">
+                        Назначенный ресурс: <b>{{ part.getAssignedRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ part.getAssignedRes()-lastOperating.totalRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.totalRes/part.getAssignedRes()*100) }}
+                            %)</b> |
+                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.totalRes/part.getAssignedRes()*100<80.0 %}
+                    <li class="list-group-item list-group-item-success">
+                        Назначенный ресурс: <b>{{ part.getAssignedRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ part.getAssignedRes()-lastOperating.totalRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.totalRes/part.getAssignedRes()*100) }}
+                            %)</b> |
+                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if part.getAssignedExpDate != null %}
+                    {% if part.getAssignedExpDate <= date() %}
+                        <li class="list-group-item list-group-item-danger"> Назначенный срок службы
+                            до: <b>{{ part.getAssignedExpDate|date('d.m.Y') }}</b> | <b>Истек</b>
+                        </li>
+                    {% endif %}
+                    {% if part.getAssignedExpDate >= date('-30days') and part.getAssignedExpDate <= date('+30days') %}
+                        <li class="list-group-item list-group-item-warning"> Назначенный срок службы
+                            до: <b>{{ part.getAssignedExpDate|date('d.m.Y') }}</b> | <b>Осталось меньше 30 дней</b>
+                        </li>
+                    {% endif %}
+                    {% if part.getAssignedExpDate > date('+30days') %}
+                        <li class="list-group-item list-group-item-success"> Назначенный срок службы
+                            до: <b>{{ part.getAssignedExpDate|date('d.m.Y') }}</b></li>
+                    {% endif %}
+                {% endif %}
+                {% if lastOperating.overhaulRes >= part.getOverhaulRes() %}
+                    <li class="list-group-item list-group-item-danger">
+                        Межремонтый ресурс: <b>{{ part.getOverhaulRes() }} ч.</b> |
+                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.getOverhaulRes }}
+                            ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.overhaulRes/part.getOverhaulRes()*100>=80.0 and lastOperating.getOverhaulRes/part.getOverhaulRes()*100<100.0 %}
+                    <li class="list-group-item list-group-item-warning">
+                        Межремонтый ресурс: <b>{{ part.getOverhaulRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ part.getOverhaulRes()-lastOperating.overhaulRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/part.getOverhaulRes()*100) }}
+                            %)</b> |
+                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if lastOperating.overhaulRes/part.getOverhaulRes()*100<80.0 %}
+                    <li class="list-group-item list-group-item-success">
+                        Межремонтый ресурс: <b>{{ part.getOverhaulRes() }} ч.</b> |
+                        Остаточный
+                        ресурс: <b>{{ part.getOverhaulRes()-lastOperating.overhaulRes }}
+                            ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/part.getOverhaulRes()*100) }}
+                            %)</b> |
+                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                    </li>
+                {% endif %}
+                {% if part.getOverhaulExpDate != null %}
+                    {% if part.getOverhaulExpDate <= date() %}
+                        <li class="list-group-item list-group-item-danger"> Межремонтный срок службы
+                            до: <b>{{ part.getOverhaulExpDate|date('d.m.Y') }}</b> | <b>Истек</b>
+                        </li>
+                    {% endif %}
+                    {% if part.getOverhaulExpDate >= date('-30days') and part.getOverhaulExpDate <= date('+30days') %}
+                        <li class="list-group-item list-group-item-warning"> Межремонтный срок службы
+                            до: <b>{{ part.getOverhaulExpDate|date('d.m.Y') }}</b> | <b>Осталось меньше 30 дней</b>
+                        </li>
+                    {% endif %}
+                    {% if part.getOverhaulExpDate > date('+30days') %}
+                        <li class="list-group-item list-group-item-success"> Межремонтный срок службы
+                            до: <b>{{ part.getOverhaulExpDate|date('d.m.Y') }}</b></li>
+                    {% endif %}
+                {% endif %}
+                <li class="list-group-item">Ремонт выполнен: <b>{{ part.getRepairPlace }}</b>
+                </li>
+                {% if part.getRepairDate != null %}
+                    <li class="list-group-item">Дата последнего ремонта: <b>{{ part.getRepairDate|date('d.m.Y') }}</b>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+
+    </div>
+    {% if role=='admin' %}
+        <div class="row">
+            <a class="col-12 btn btn-danger mb-2" href="/aircrafts/parts/delete/{{ part.getId }}"
+               onclick="return confirm('Вы уверены, что хотите удалить {{ part.getName }}?')">Удалить</a>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <button class="btn col-12 btn-secondary mb-2 d-block" id="AddHistoryBtn" onclick="displayHistory()">Показать
+            историю добавления наработки
+        </button>
+    </div>
+    <span id="AddHistory" style="display: none">
+    <ul class="list-group">
+    {% for ao in partOperating|reverse %}
+        <li class="list-group-item">{{ ao.addedBy }} | Дата добавления: {{ ao.getCreateDate|date('d.m.y') }} |
+            Наработка: {{ ao.getTotalRes }}
+        </li>
+    {% endfor %}
+    </ul>
+    </span>
+
+
+    <script type="text/javascript">
+
+
+        function displayRep() {
+            var addRep = document.getElementById("addRep");
+            var addRepBtn = document.getElementById("addRepBtn");
+            var form = document.getElementById("form1");
+            if (addRep.style.display === "none") {
+                addRep.style.display = "block";
+                form1.style.display = "block";
+
+            } else {
+                addRep.style.display = "none";
+                addRepBtn.innerHTML = "Добавить ремонт";
+                form.style.display = "none";
+
+            }
+        }
+
+
+
+        function displayHistory() {
+            var AddHistory = document.getElementById("AddHistory");
+            var AddHistorysBtn = document.getElementById("AddHistoryBtn");
+
+            if (AddHistory.style.display === "none") {
+                AddHistory.style.display = "block";
+                AddHistorysBtn.innerHTML = "Закрыть историю добавления наработки";
+
+            } else {
+                AddHistory.style.display = "none";
+                AddHistorysBtn.innerHTML = "Показать историю добавления наработки";
+            }
+        }
+
+
+    </script>
+{% endblock %}
+
+
+
+

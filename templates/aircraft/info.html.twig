@@ -204,22 +204,32 @@
         <div class="col-lg-5 col-md-12">
             <button class="col-12 mt-2 btn btn-outline-primary mb-2" id="EngBtn" onclick="displayEng()">Двигатели
             </button>
+
             <span class="col-12" id="Eng" style="display: none;">
             <ul class="list-group col-12 fs-5">
-
+                {% for part in parts %}
+                {% if part.getType == 'engine' %}
                 <li class="list-group-item">
-                    C11056723 | Model-17
-                    <a class="float-end ms-2">
-                        <img style="height: 20px; " src="{{ asset('build/images/bin.png') }}">
-                    </a>
-                    <a class="float-end">
+                    {%  if part.status == 'danger' %}
+                        <p title="Есть проблема со сроками или ресурсами" class="d-inline text-danger">
+                            !
+                        </p>
+                    {% endif%}
+                        {{ part.getName }} | {{ part.getFactoryNum }}
+
+                    <a class="float-end" href="/aircrafts/parts/{{ part.getId }}">
                         <img style="height: 20px; " src="{{ asset('build/images/open.png') }}">
                     </a>
                 </li>
+                {% endif %}
+                {% endfor %}
+
             </ul>
+                {% if eng_count < eng_limit %}
             <center>
-                <button class="col-10 mt-2 btn btn-success mb-2">+</button>
+                <button onclick="window.location='/aircrafts/add_eng/{{ aircraft.getId }}'" class="col-10 mt-2 btn btn-success mb-2">+</button>
             </center>
+                {% endif %}
         </span>
 
             <button class="col-12 btn btn-outline-primary mt-2 mb-2" id="PartsBtn" onclick="displayParts()">
@@ -228,15 +238,24 @@
             <span class="col-12 mb-2" id="Parts" style="display:none;">
 
             <ul class="list-group col-12 fs-5">
-
-                <li class="list-group-item">Тип ВС: <b>{{ aircraft.getAcType }}</b></li>
-                <li class="list-group-item">Бортовой номер: <b>{{ aircraft.getBoardNum }}</b></li>
-                <li class="list-group-item">Заводской номер: <b>{{ aircraft.getFactoryNum() }}</b></li>
+                {% for part in parts %}
+            {% if part.getType == null %}
+                <li  class="list-group-item">
+                    {%  if part.status == 'danger' %}
+                        <p title="Есть проблема со сроками или ресурсами" class="d-inline text-danger">
+                            !
+                        </p>
+                    {% endif%}
+                    {{ part.getName }} | {{ part.getFactoryNum }}
+                </li>
+            {% endif %}
+            {% endfor%}
             </ul>
             <center>
-                <button class="col-10 mt-2 btn btn-success mb-2">+</button>
+                <button onclick="window.location='/aircrafts/add_part/{{ aircraft.getId }}'"  class="col-10 mt-2 btn btn-success mb-2">+</button>
             </center>
         </span>
+
         </div>
     </div>
     {% if role=='admin' %}

@@ -1,0 +1,31 @@
+{% extends 'base_without_header.html.twig' %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+{% block body %}
+<body>
+<div class="row justify-content-center">
+    <center>
+        <h4 class="mb-4">Создать комплектующее</h4>
+    </center>
+    <div class="col-12 col-md-7 col-lg-5">
+        {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.marking) }}
+        {{ form_row(form.factory_num) }}
+        {{ form_row(form.document) }}
+        {{ form_label(form.repair_place) }}
+        {{ form_errors(form.repair_place) }}
+        {{ form_widget(form.repair_place) }}
+        {{ form_help(form.repair_place, {
+            'help_attr': {'class': 'text-secondary'}}) }}
+        <div>{{ form_label(form.repair_date) }}
+            {{ form_errors(form.repair_date) }}</div>
+        {{ form_widget(form.repair_date) }}
+        {{ form_help(form.repair_date, {
+            'help_attr': {'class': 'text-secondary'}}) }}
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+

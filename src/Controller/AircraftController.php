@@ -6,11 +6,15 @@ use App\Controller\CookiesController;
 use App\Entity\AcTypes;
 use App\Entity\AircraftOperating;
 use App\Entity\Aircraft;
+use App\Entity\Parts;
+use App\Entity\PartsOperating;
 use App\Entity\UserLogs;
 use App\Entity\Users;
 use App\Form\AddRepType;
 use App\Form\AddResType;
 use App\Form\TableBuilderType;
+use App\Repository\PartsOperatingRepository;
+use Cassandra\Map;
 use Doctrine\Common\Collections\ArrayCollection;
 use PhpOffice\PhpWord\IOFactory;
 use App\Repository\AircraftOperatingRepository;
@@ -75,12 +79,17 @@ class AircraftController extends AbstractController
                 ->setParameter('searchfor', '%'.$searchfor.'%')
                 ->getQuery()
                 ->getResult();
+            foreach ($aircrafts as $aircraft)
+            {
+                $aircraft->setStatus($this->getAircraftStatus($aircraft));
+            }
         }else{
             $aircrafts = $this->getDoctrine()->getRepository(Aircraft::class)->findAll();
+            foreach ($aircrafts as $aircraft)
+            {
+                $aircraft->setStatus($this->getAircraftStatus($aircraft));
+            }
         }
-
-
-        //echo $_COOKIE['board_num'];
 
         return $this->render('aircraft/index.html.twig', [
             'controller_name' => 'AircraftController',
@@ -184,13 +193,40 @@ class AircraftController extends AbstractController
         $operating = $this->entityManager->getRepository(AircraftOperating::class)
             ->getLastAircraftOperating($aircraft);
 
+        $parts = $aircraft->getParts();
+        $type = $this->entityManager->getRepository(AcTypes::class)->findOneBy([
+            'type'=>$aircraft->getAcType(),
+        ]);
+        $eng_limit = $type->getEngCount();
+        $eng_count = 0;
+        foreach ($parts as $part)
+        {
+            $part->setStatus($this->getPartStatus($part));
+            if ($part->getType()=='engine')
+            {
+                $eng_count++;
+            }
+        }
+
         $form = $this->createForm(AddResType::class);
         $form->handleRequest($request);
         $formRep = $this->createForm(AddRepType::class);
         $formRep->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            foreach ($parts as $p)
+            {
+                $partOp = $this->entityManager->getRepository(PartsOperating::class)
+                    ->getLastPartsOperating($p);
+                $partOperating = new PartsOperating();
+                $partOperating
+                    ->setTotalRes($partOp->getTotalRes()+$form->get('add')->getData())
+                    ->setOverhaulRes($partOp->getOverhaulRes()+$form->get('add')->getData())
+                    ->setPart($p)
+                    ->setCreateDate(new \DateTime())
+                    ->setAddedBy($_COOKIE['FIO']);
+                $this->entityManager->persist($partOperating);
+            }
             $new_operating = new AircraftOperating();
             $new_operating
                 ->setTotalRes($operating->getTotalRes()+$form->get('add')->getData())
@@ -256,8 +292,11 @@ class AircraftController extends AbstractController
         }
         return $this->render('aircraft/info.html.twig', [
             'controller_name' => 'AircraftController',
+            'eng_count'=>$eng_count,
+            'eng_limit'=>$eng_limit,
             'aircraft' => $aircraft,
             'lastOperating' => $operating,
+            'parts' => $parts,
             'addRes' => $form->createView(),
             'addRep' => $formRep->createView(),
             'aircraftOperating' => $aircraft->getAircraftOperating(),
@@ -289,7 +328,12 @@ class AircraftController extends AbstractController
             $assigned_exp_date->modify('+' . $form->get('assigned_exp_date')->getData() . 'years');
             $overhaul_exp_date = new \DateTime();
             $overhaul_exp_date->format('YYYY-MM-DD');
-            $overhaul_exp_date->setTimestamp($release_date->getTimestamp());
+            if($form->get('last_repair_date')->getData() == null)
+            {
+                $overhaul_exp_date->setTimestamp($release_date->getTimestamp());
+            } else {
+                $overhaul_exp_date=$form->get('last_repair_date')->getData();
+            }
             $overhaul_exp_date->modify('+' . $form->get('overhaul_exp_date')->getData() . 'years');
             $aircraft
                 ->setFinPeriodicMt
@@ -357,6 +401,54 @@ class AircraftController extends AbstractController
 
     }
 
+    public function getPartStatus(Parts $part)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $operating = $em->getRepository(PartsOperating::class)->getLastPartsOperating($part);
+        $overhaul_diff = $part->getOverhaulExpDate()->diff(new \DateTime())->format("%a");
+        $assigned_diff = $part->getAssignedExpDate()->diff(new \DateTime())->format("%a");
+        if($operating->getOverhaulRes() >= $part->getOverhaulRes()*0.8 ||
+            $operating->getOverhaulRes() >= $part->getOverhaulRes() ||
+            $operating->getTotalRes() >= $part->getAssignedRes()*0.8 ||
+            $operating->getTotalRes() >= $part->getAssignedRes() ||
+            $overhaul_diff <= 30 || $assigned_diff < 30)
+        {
+            return "danger";
+        } return null;
+    }
+
+    public function getAircraftStatus(Aircraft $aircraft)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $operating = $em->getRepository(AircraftOperating::class)->getLastAircraftOperating($aircraft);
+        $overhaul_diff = $aircraft->getOverhaulExpDate()->diff(new \DateTime())->format("%a");
+        $assigned_diff = $aircraft->getAssignedExpDate()->diff(new \DateTime())->format("%a");
+        $lg_diff = $aircraft->getLgExpDate()->diff(new \DateTime())->format("%a");
+        if($operating->getOverhaulRes() >= $aircraft->getOverhaulRes()*0.8 ||
+            $operating->getOverhaulRes() >= $aircraft->getOverhaulRes() ||
+            $operating->getTotalRes() >= $aircraft->getAssignedRes()*0.8 ||
+            $operating->getTotalRes() >= $aircraft->getAssignedRes() ||
+            $overhaul_diff <= 30 || $assigned_diff <= 30 || $lg_diff <= 30)
+        {
+            return "danger";
+        }
+        $parts = $aircraft->getParts();
+        if ($parts != null)
+        {
+            foreach ($parts as $part)
+            {
+                $part->setStatus($this->getPartStatus($part));
+                if ($part->getStatus()=='danger')
+                {
+                    return "danger";
+                }
+            }
+            return null;
+        }
+        return null;
+
+
+    }
 
 
 }

@@ -4,7 +4,18 @@ main:
 content:
     path: /content
     controller: App\Controller\ContentController::index
-
+part_create:
+    path: aircrafts/add_part/{id}
+    controller: App\Controller\PartsController::create
+part_info:
+    path: aircrafts/parts/{id}
+    controller: App\Controller\PartsController::info
+part_delete:
+    path: aircrafts/parts/delete/{id}
+    controller: App\Controller\PartsController::delete
+eng_create:
+    path: aircrafts/add_eng/{id}
+    controller: App\Controller\PartsController::createEng
 users:
     path: /users
     controller: App\Controller\UsersController::index
