@@ -67,6 +67,7 @@ class AircraftController extends AbstractController
 
         }
         $searchfor = $request->query->get('searchfor');
+        $filter = $request->get('filter');
         if($searchfor)
         {
             $aircrafts = $this->getDoctrine()->getManager()
@@ -96,6 +97,7 @@ class AircraftController extends AbstractController
             'controller_name' => 'AircraftController',
             'aircrafts' => $aircrafts,
             'searchfor' => $searchfor,
+            'filter'=>$filter,
             'aircraftOperating' => $this->getDoctrine()->getRepository(AircraftOperating::class)->findAll(),
             'role' => $role,
             'tableBuilderForm' => $form->createView(),
@@ -194,6 +196,10 @@ class AircraftController extends AbstractController
             $role = 'user';
         }
         $aircraft = $this->getDoctrine()->getRepository(Aircraft::class)->find($id);
+        if($aircraft==null)
+        {
+            return $this->redirectToRoute('aircrafts_page');
+        }
         $operating = $this->entityManager->getRepository(AircraftOperating::class)
             ->getLastAircraftOperating($aircraft);
 

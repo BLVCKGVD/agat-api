@@ -3,6 +3,8 @@
 {% block title %}Список ВС{% endblock %}
 
 {% block body %}
+
+
     <div class="topnav overflow-x-scroll">
         <a class="d-none d-md-inline" href="/employees">Домашняя страница</a>
         <a class="home d-inline d-md-none" href="/employees">
@@ -31,16 +33,30 @@
     <div class="container mt-5">
 
 
-            <form method="get" class="row justify-content-center mb-5" autocomplete="off">
+            <form id="searchForm" method="get" class="row justify-content-center mb-3" autocomplete="off">
 
                 <div class="col-auto">
                     <input class="form-control d-inline " style="" type="text" name="searchfor" value="{{searchfor}}">
                 </div>
+
                <div class="col-auto">
                    <button class="btn btn-primary">Найти</button>
                </div>
+                <div class="col-12 d-block mt-3">
+                    <div class="col-3 float-end">
+                <select class="form-select " name="filter" onchange="this.form.submit();" >
+                    <option {% if filter == 'all'%}selected{% endif %} value="all">Все</option>
+                    <option {% if filter == 'danger'%}selected{% endif %} value="danger">С проблеммами</option>
+                </select>
+                    </div>
+                </div>
 
             </form>
+        {% if filter == null %}
+            <script>
+                document.getElementById("searchForm").submit();
+            </script>
+        {% endif %}
 
     {% if role=='admin' %}
         <div class="row">
@@ -216,7 +232,7 @@
                         style="background-color: #f5c2c7"
                         {% endif %}
                         onclick="window.location='aircrafts/{{ a.getId }}'">
-
+                    {% if filter == 'danger' and a.status == 'danger'  %}
                     {% if data.ac_type==1 %}
 
                         <td>{{ a.getAcType }}</td>
@@ -348,8 +364,147 @@
                     {% endif %}
 
                 </tr>
+            {% endif%}
 
 
+                {% if filter == 'all' %}
+            <tr {% if a.status == 'danger' %}
+                style="background-color: #f5c2c7"
+            {% endif %}
+                    onclick="window.location='aircrafts/{{ a.getId }}'">
+
+                    {% if data.ac_type==1 %}
+
+                        <td>{{ a.getAcType }}</td>
+                    {% endif %}
+
+                    {% if data.board_num==1 %}
+                        <td>{{ a.getBoardNum }}</td>
+                    {% endif %}
+
+                    {% if data.factory_num==1 %}
+                        <td>{{ a.getFactoryNum }}</td>
+                    {% endif %}
+
+                    {% if data.release_date==1 %}
+                        <td>{{ a.getReleaseDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.last_repair_date==1 %}
+                        <td>{{ a.getLastRepairDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.lg_date==1 %}
+                        <td>{{ a.getLgDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.ac_category==1 %}
+                        <td>{{ a.getAcCategory }}</td>
+                    {% endif %}
+
+                    {% if data.serial_num==1 %}
+                        <td>{{ a.getSerialNum }}</td>
+                    {% endif %}
+
+                    {% if data.repairs_count==1 %}
+                        <td>{{ a.getRepairsCount }}</td>
+                    {% endif %}
+
+                    {% if data.assigned_res==1 %}
+                        <td>{{ a.getAssignedRes }}</td>
+                    {% endif %}
+
+                    {% if data.assigned_exp_date==1 %}
+                        <td>{{ a.getAssignedExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.overhaul_res==1 %}
+                        <td>{{ a.getOverhaulRes }}</td>
+                    {% endif %}
+
+                    {% if data.fin_periodic_mt==1 %}
+                        <td>{{ a.getFinPeriodicMt }}</td>
+                    {% endif %}
+
+                    {% if data.overhaul_exp_date==1 %}
+                        <td>{{ a.getOverhaulExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.res_renew_num==1 %}
+                        <td>{{ a.getResRenewNum }}</td>
+                    {% endif %}
+
+                    {% if data.operator==1 %}
+                        <td>{{ a.getOperator }}</td>
+                    {% endif %}
+
+                    {% if data.owner==1 %}
+                        <td>{{ a.getOwner }}</td>
+                    {% endif %}
+
+                    {% if data.rent_doc_num==1 %}
+                        <td>{{ a.getRentDocNum }}</td>
+                    {% endif %}
+
+                    {% if data.rent_exp_date==1 %}
+                        <td>{{ a.getRentExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.vsu_num==1 %}
+                        <td>{{ a.getVsuNum }}</td>
+                    {% endif %}
+
+                    {% if data.construction_weight==1 %}
+                        <td>{{ a.getConstructionWeight }}</td>
+                    {% endif %}
+
+                    {% if data.centering==1 %}
+                        <td>{{ a.getCentering }}</td>
+                    {% endif %}
+
+                    {% if data.max_takeoff_weight==1 %}
+                        <td>{{ a.getMaxTakeoffWeight }}</td>
+                    {% endif %}
+
+                    {% if data.mt_made_by==1 %}
+                        <td>{{ a.getMtMadeBy }}</td>
+                    {% endif %}
+
+                    {% if data.lg_sert==1 %}
+                        <td>{{ a.getLgSert }}</td>
+                    {% endif %}
+
+                    {% if data.lg_exp_date==1 %}
+                        <td>{{ a.getLgExpDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.reg_sert==1 %}
+                        <td>{{ a.getRegSert }}</td>
+                    {% endif %}
+
+
+                    {% if data.reg_sert_date==1 %}
+                        <td>{{ a.getRegSertDate|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.extension_reason==1 %}
+                        <td>{{ a.getExtensionReason }}</td>
+                    {% endif %}
+
+                    {% if data.last_arz==1 %}
+                        <td>{{ a.getLastArz|date("d.m.Y") }}</td>
+                    {% endif %}
+
+                    {% if data.arz_appointment==1 %}
+                        <td>{{ a.getArzAppointment }}</td>
+                    {% endif %}
+
+                    {% if data.factory_made_by==1 %}
+                        <td>{{ a.getFactoryMadeBy }}</td>
+                    {% endif %}
+
+                    </tr>
+                {% endif %}
 
             {% endfor %}
             </tbody>
@@ -379,7 +534,9 @@
             }
         }
 
+
     </script>
+
 
 {% endblock %}
 

@@ -42,7 +42,15 @@ class PartsController extends AbstractController
         }
 
         $part = $this->entityManager->getRepository(Parts::class)->find($id);
+        if($part==null)
+        {
+            return $this->redirectToRoute('aircrafts_page');
+        }
         $aircraft = $part->getAircraft();
+        if($aircraft==null)
+        {
+            return $this->redirectToRoute('aircrafts_page');
+        }
         $operatings = $part->getPartsOperatings();
 
         $operating = $this->entityManager->getRepository(PartsOperating::class)

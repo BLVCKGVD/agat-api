@@ -74,7 +74,7 @@
                     <li class="list-group-item list-group-item-warning">
                         Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
                         Остаточный
-                        ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }}
+                        ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }} ч.
                             ({{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
                             %)</b> |
                         Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
@@ -84,7 +84,7 @@
                     <li class="list-group-item list-group-item-success">
                         Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
                         Остаточный
-                        ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }}
+                        ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }} ч.
                             ({{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
                             %)</b> |
                         Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
@@ -117,7 +117,7 @@
                         <li class="list-group-item list-group-item-warning">
                             Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
                             Остаточный
-                            ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
+                            ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }} ч.
                                 ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
                                 %)</b> |
                             Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
@@ -127,7 +127,7 @@
                         <li class="list-group-item list-group-item-success">
                             Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
                             Остаточный
-                            ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }}
+                            ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }} ч.
                                 ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
                                 %)</b> |
                             Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
@@ -160,9 +160,9 @@
                     <h3>{{ aircraft.getRentExpDate|date('d.m.Y') }}</h3>
                 {% endif %}
                 <h3>{{ aircraft.getVsuNum }}</h3> -->
-                <li class="list-group-item">Вес конструкции: <b>{{ aircraft.getConstructionWeight }}</b></li>
-                <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }}</b></li>
-                <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }}</b></li>
+                <li class="list-group-item">Вес конструкции: <b>{{ aircraft.getConstructionWeight }} кг</b></li>
+                <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }} мм</b></li>
+                <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }} кг</b></li>
                 <li class="list-group-item">Заключительное периодическое ТО: <b>{{ aircraft.getFinPeriodicMt }}</b></li>
                 <li class="list-group-item">ТО выполнено: <b>{{ aircraft.getMtMadeBy }}</b></li>
                 <li class="list-group-item">Сертификат Летной годности(ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
@@ -235,9 +235,15 @@
             </ul>
                 {% if eng_count < eng_limit and role == 'admin' %}
             <center>
-                <button onclick="window.location='/aircrafts/add_eng/{{ aircraft.getId }}'" class="col-10 mt-2 btn btn-success mb-2">+</button>
+                <button onclick="window.location='/aircrafts/add_eng/{{ aircraft.getId }}'" class="col-10 mt-2 btn btn-success mb-2 d-block">+</button>
             </center>
                 {% endif %}
+                <center>
+                    <p class="text-secondary d-inline">Добавьте еще</p> {{ eng_limit - eng_count}} <p class="text-secondary d-inline">
+                    {% if (eng_limit - eng_count) == 1%}двигатель{% endif%}
+                        {% if (eng_limit - eng_count) < 5 and (eng_limit - eng_count) > 1%}двигателя{% endif%}
+                        {% if (eng_limit - eng_count) > 5 %}двигателей{% endif%}</p>
+                </center>
         </span>
 
             <button class="col-12 btn btn-outline-primary mt-2 mb-2" id="PartsBtn" onclick="displayParts()">
