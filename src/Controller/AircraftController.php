@@ -423,6 +423,7 @@ class AircraftController extends AbstractController
     public function getAircraftStatus(Aircraft $aircraft)
     {
         $em = $this->getDoctrine()->getManager();
+        $today = new \DateTime();
         $operating = $em->getRepository(AircraftOperating::class)->getLastAircraftOperating($aircraft);
         $overhaul_diff = $aircraft->getOverhaulExpDate()->diff(new \DateTime())->format("%a");
         $assigned_diff = $aircraft->getAssignedExpDate()->diff(new \DateTime())->format("%a");
@@ -431,7 +432,9 @@ class AircraftController extends AbstractController
             $operating->getOverhaulRes() >= $aircraft->getOverhaulRes() ||
             $operating->getTotalRes() >= $aircraft->getAssignedRes()*0.8 ||
             $operating->getTotalRes() >= $aircraft->getAssignedRes() ||
-            $overhaul_diff <= 30 || $assigned_diff <= 30 || $lg_diff <= 30)
+            $overhaul_diff <= 30 || $assigned_diff <= 30 || $lg_diff <= 30 ||
+            \DateTime::createFromInterface($aircraft->getOverhaulExpDate()) < $today ||
+            \DateTime::createFromInterface($aircraft->getAssignedExpDate()) < $today)
         {
             return "danger";
         }
