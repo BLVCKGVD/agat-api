@@ -92,6 +92,11 @@ class Parts
     private $status;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $overhaul_years;
+
+    /**
      * @return mixed
      */
     public function getStatus()
@@ -300,6 +305,18 @@ class Parts
     public function setOverhaulExpDate(\DateTimeInterface $overhaul_exp_date): self
     {
         $this->overhaul_exp_date = $overhaul_exp_date;
+
+        return $this;
+    }
+
+    public function getOverhaulYears(): ?int
+    {
+        return $this->overhaul_years;
+    }
+
+    public function setOverhaulYears(?int $overhaul_years): self
+    {
+        $this->overhaul_years = $overhaul_years;
 
         return $this;
     }

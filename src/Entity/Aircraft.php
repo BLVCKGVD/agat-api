@@ -215,6 +215,11 @@ class Aircraft
     private $status;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $overhaul_years;
+
+    /**
      * @return mixed
      */
     public function getStatus()
@@ -750,6 +755,18 @@ class Aircraft
                 $part->setAircraft(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOverhaulYears(): ?int
+    {
+        return $this->overhaul_years;
+    }
+
+    public function setOverhaulYears(?int $overhaul_years): self
+    {
+        $this->overhaul_years = $overhaul_years;
 
         return $this;
     }

@@ -11,13 +11,113 @@
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
+    <style>
+        body{
+
+        }
+        /* Add a black background color to the top navigation */
+        .airplane2{
+            display: none;
+        }
+        .airplane:hover .airplane1 {
+            display: none;
+        }
+        .airplane:hover .airplane2 {
+            display: inline;
+        }
+        .content2{
+            display: none;
+        }
+        .content:hover .content1 {
+            display: none;
+        }
+        .content:hover .content2 {
+            display: inline;
+        }
+        .home2{
+            display: none;
+        }
+        .home:hover .home1 {
+            display: none;
+        }
+        .home:hover .home2 {
+            display: inline;
+        }
+        .users2{
+            display: none;
+        }
+        .users:hover .users1 {
+            display: none;
+        }
+        .users:hover .users2 {
+            display: inline;
+        }
+        .exit {
+            height: inherit;
+        }
+        .topnav {
+            background-color: #0d6efd;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            z-index: 1;
+            top: 0;
+        }
+
+        /* Style the links inside the navigation bar */
+        .topnav a {
+            float: left;
+            color: #f8f9fa;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        /* Change the color of links on hover */
+        .topnav a:hover {
+            background-color: #f8f9fa;
+            color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .topnav a.active {
+            background-color: #f8f9fa;
+            color: black;
+        }
+    </style>
     <link rel="js" href="assets">
     <title>{%block title%}База{%endblock%}</title>
 </head>
 
 <body>
+<div class="topnav overflow-x-scroll mb-5">
+    <a class="d-none d-md-inline" href="/employees">Домашняя страница</a>
+    <a class="home d-inline d-md-none" href="/employees">
+        <img  height="25px" class="home2"  src="{{ asset('build/images/home-black.png') }}">
+        <img class="home1" height="25px" src="{{ asset('build/images/home.png') }}">
+    </a>
 
-<div class="container bg-light mt-3">
+    <a class=" d-none d-md-inline" href="/aircrafts">Список ВС</a>
+    <a class="airplane d-inline d-md-none" href="/aircrafts" >
+        <img class="airplane2" height="25px" src="{{ asset('build/images/airplane-black.png') }}">
+        <img class="airplane1" height="25px" src="{{ asset('build/images/airplane.png') }}">
+    </a>
+    {% if role == 'admin' %}
+        <a class="d-none d-md-inline" href="/content" >Страницы</a>
+        <a class="content d-inline d-md-none" href="/content" >
+            <img class="content2" height="25px" src="{{ asset('build/images/pages-black.png') }}">
+            <img class="content1" height="25px" src="{{ asset('build/images/pages.png') }}">
+        </a>
+        <a class="d-none d-md-inline" href="/users" >Пользователи</a>
+        <a class="users d-inline d-md-none" href="/users" >
+            <img class="users2" height="25px" src="{{ asset('build/images/users-black.png') }}">
+            <img class="users1" height="25px" src="{{ asset('build/images/users.png') }}">
+        </a>
+    {% endif %}
+    <a class="float-end" href="/exit">Выйти</a>
+</div>
+<div class="container bg-light mt-5 pt-5">
     {% block body %}
 
     {% endblock %}

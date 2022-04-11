@@ -46,6 +46,7 @@ class AcTypesController extends AbstractController
         return $this->render('aircraft/addType.html.twig',[
             'form' => $form->createView(),
             'login' => $_COOKIE['login'],
+            'role' => $_COOKIE['role'],
         ]);
 
     }

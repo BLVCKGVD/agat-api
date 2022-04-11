@@ -157,12 +157,17 @@ class AircraftType extends AbstractType
             ->add('res_renew_num',TextType::class, array('required' => false,'attr'=>array(
                 'class' =>'form-control'
                 )))
-            ->add('operator',TextType::class, array('required' => false,'attr'=>array(
+            ->add('operator',TextType::class, array('required' => false,'label'=>'Оператор','attr'=>array(
+                'label'=>'Оператор',
                 'class' =>'form-control'
                 )))
-            ->add('owner',TextType::class, array('required' => false,'attr'=>array(
+            ->add('owner',TextType::class, [
+                'required' => false,
+                'label'=>'Владелец',
+                'attr'=>[
+
                 'class' =>'form-control'
-                )))
+            ]])
             ->add('rent_doc_num',TextType::class, array('required' => false,'attr'=>array(
                 'class' =>'form-control'
                 )))
@@ -256,7 +261,7 @@ class AircraftType extends AbstractType
                 'attr'=>[
                 'type'=>'date',
                 'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .5rem;',
-                'class' =>'mb-1',
+                'class' =>'form-control mb-1',
     
             ]])
             ->add('ac_type',TextType::class, [

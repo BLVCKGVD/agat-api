@@ -69,6 +69,7 @@ class ContentController extends AbstractController
         return $this->render('content/edit.html.twig',[
             'form'=>$form->createView(),
             'content'=>$content,
+            'role' => $_COOKIE['role'],
         ]);
     }
 }

@@ -121,6 +121,7 @@ class AircraftController extends AbstractController
 
             $ac_type = $form->get('add_type')->getData();
             $aircraft->setAcType($ac_type->getType())
+                ->setOverhaulYears($form->get('overhaul_exp_date')->getData())
                 ->setAcCategory($ac_type->getCategory());
             $release_date = new \DateTime;
             $release_date->format('YYYY-MM-DD');
@@ -134,6 +135,7 @@ class AircraftController extends AbstractController
             $overhaul_exp_date->setTimestamp($release_date->getTimestamp());
             $overhaul_exp_date->modify('+' . $form->get('overhaul_exp_date')->getData() . 'years');
             $aircraft
+
                 ->setFinPeriodicMt
                 ($form->get('fin_form')->getData()
                     . " " . $form->get('fin_res')->getData()
@@ -171,6 +173,7 @@ class AircraftController extends AbstractController
             return $this->render('aircraft/create.html.twig', [
                 'controller_name' => 'AircraftController',
                 'form' => $form->createView(),
+                'role' => $_COOKIE['role'],
 
             ]);
 
@@ -266,9 +269,9 @@ class AircraftController extends AbstractController
             $overhaul_exp_date = new \DateTime();
             $overhaul_exp_date->format('YYYY-MM-DD');
             $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
-            $overhaul_exp_date->modify('+' . $formRep->get('overhaul_exp_date')->getData() . 'years');
+            $overhaul_exp_date->modify('+' . $aircraft->getOverhaulYears() . 'years');
             $aircraft
-                ->setOverhaulRes($formRep->get('add')->getData())
+                ->setOverhaulRes($aircraft->getOverhaulRes())
                 ->setOverhaulExpDate($overhaul_exp_date)
                 ->setRepairsCount($aircraft->getRepairsCount() + 1)
                 ->setLastRepairDate($repair_date);

@@ -11,6 +11,25 @@
 
 
     </div>
+    <div class="row">
+        <button class="btn btn-primary mb-2" id="addRepBtn" onclick="displayRep()">Добавить ремонт
+        </button>
+        <div id="form1" style="display:none;">
+            <span class=" overflow-auto col-12 mb-5" style="display: none; max-height: 350px" id='addRep'>
+        <div class="col-12 ">
+
+            <div class="col-6 ms-auto me-auto ">
+                {{ form_start(addRep) }}
+                {{ form_row(addRep.repair_date) }}
+                {{ form_end(addRep) }}
+            </div>
+
+        </div>
+
+    </span>
+        </div>
+
+    </div>
 
 
     <div class="row">

@@ -17,37 +17,38 @@ class AddRepType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('add', IntegerType::class,[
-                'required' => true,
-                'label'=>'Укажите новый межремонтный ресурс',
-                'help'=>"в часах",
-                'attr' => [
-                    'class' =>'form-control mb-2',
-                    'min'=>1,
-                    'placeholder' => '',
-                    'autofocus' => true,
-                    'autocomplete' => 'off',
-
-                ],
-            ])
+//            ->add('add', IntegerType::class,[
+//                'required'=>false,
+//                'label'=>'Укажите новый межремонтный ресурс',
+//                'help'=>"в часах",
+//                'attr' => [
+//                    'class' =>'form-control mb-2',
+//                    'min'=>1,
+//                    'placeholder' => '',
+//                    'autofocus' => true,
+//                    'autocomplete' => 'off',
+//
+//                ],
+//            ])
             ->add('repair_date',DateType::class, [
                 'widget' => 'single_text',
                 'label' => 'Дата ремонта:',
                 'attr'=>[
                     'type'=>'date',
                     'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .5rem;',
-                    'class' =>'mb-4',
+                    'class' =>'mb-4 form-control',
                     //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
 
                 ]])
-            ->add('overhaul_exp_date',IntegerType::class, [
-                'mapped'=>false,
-                'label' => 'Новый межремонтный срок службы:',
-                'help'=>'лет',
-                'attr'=>[
-                    'class' =>'form-control mb-0',
-                    //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
-                ]])
+//            ->add('overhaul_exp_date',IntegerType::class, [
+//                'required'=>false,
+//                'mapped'=>false,
+//                'label' => 'Новый межремонтный срок службы:',
+//                'help'=>'лет',
+//                'attr'=>[
+//                    'class' =>'form-control mb-0',
+//                    //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
+//                ]])
             ->add('submit', SubmitType::class,
                 [
 

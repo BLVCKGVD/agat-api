@@ -37,9 +37,9 @@
                     <div class="mt-0">{{ form_widget(form.board_num) }}</div>
                 </div>
                 <div class="col">
-                    {{ form_label(form.max_takeoff_weight) }}
-                    {{ form_widget(form.max_takeoff_weight) }}
-                    <div class="text-secondary">{{ form_help(form.max_takeoff_weight) }}</div>
+                    {{ form_label(form.construction_weight) }}
+                    {{ form_widget(form.construction_weight) }}
+                    <div class="text-secondary mb-0">{{ form_help(form.construction_weight) }}</div>
                 </div>
             </div>
 
@@ -85,9 +85,9 @@
                 </div>
                 <div class="col form-control border border-primary border-2">
 
-                    {{ form_label(form.construction_weight) }}
-                    {{ form_widget(form.construction_weight) }}
-                    <div class="text-secondary mb-0">{{ form_help(form.construction_weight) }}</div>
+                    {{ form_label(form.max_takeoff_weight) }}
+                    {{ form_widget(form.max_takeoff_weight) }}
+                    <div class="text-secondary">{{ form_help(form.max_takeoff_weight) }}</div>
 
                     <div class="col-6">{{ form_label(form.centering) }}{{ form_widget(form.centering) }}</div>
 
@@ -110,12 +110,19 @@
                     {{ form_row(form.lg_given) }}
                 </div>
             </div>
-            <div class=" col-6 form-group row mb-4 ">
-                <div class="col-6 form-control border border-primary border-2">
+            <div class="form-group row mb-4 ">
+                <div class="col form-control me-3 border border-primary border-2">
                     {{ form_row(form.reg_sert) }}
                     <br>
                     {{ form_row(form.reg_sert_date) }}
                 </div>
+
+                    <div class="col form-control border border-primary border-2">
+                        {{ form_row(form.operator) }}
+                        <br>
+                        {{ form_row(form.owner) }}
+                    </div>
+
 
             </div>
 

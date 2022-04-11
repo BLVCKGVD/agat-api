@@ -38,9 +38,7 @@
 
             <div class="col-6 ms-auto me-auto ">
                 {{ form_start(addRep) }}
-                {{ form_label(addRep.add) }}
-                {{ form_widget(addRep.add) }}
-                <div class="text-secondary">{{ form_help(addRep.add) }}</div>
+                {{ form_row(addRep.repair_date) }}
                 {{ form_end(addRep) }}
             </div>
 
@@ -194,7 +192,10 @@
                     </li>
                 {% endif %}
                 <li class="list-group-item">Категория ВС: <b>{{ aircraft.getAcCategory }}</b></li>
+                <li class="list-group-item">Оператор: <b>{{ aircraft.getOperator }}</b></li>
+                <li class="list-group-item">Владелец: <b>{{ aircraft.getOwner }}</b></li>
                 <!--<h3>{{ aircraft.getExtensionReason }}</h3>
+
                 <h3>{{ aircraft.getLastArz }}</h3>
                 <h3>{{ aircraft.getArzAppointment }}</h3>-->
                 <li class="list-group-item">Завод изготовитель: <b>{{ aircraft.getFactoryMadeBy }}</b></li>
@@ -202,7 +203,9 @@
             </ul>
         </div>
         <div class="col-lg-5 col-md-12">
-            <button class="col-12 mt-2 btn btn-outline-primary mb-2" id="EngBtn" onclick="displayEng()">Двигатели
+            <button class="col-12 mt-2 btn
+            btn-outline-primary
+             mb-2" id="EngBtn" onclick="displayEng()">Двигатели
             </button>
 
             <span class="col-12" id="Eng" style="display: none;">
@@ -211,6 +214,11 @@
                 {% if part.getType == 'engine' %}
                 <li class="list-group-item">
                     {%  if part.status == 'danger' %}
+                        <script>
+                            var EngBtn = document.getElementById("EngBtn");
+                            EngBtn.classList.remove('btn-outline-primary');
+                            EngBtn.classList.add('btn-outline-danger')
+                        </script>
                         <p title="Есть проблема со сроками или ресурсами" class="d-inline text-danger">
                             !
                         </p>
@@ -225,7 +233,7 @@
                 {% endfor %}
 
             </ul>
-                {% if eng_count < eng_limit %}
+                {% if eng_count < eng_limit and role == 'admin' %}
             <center>
                 <button onclick="window.location='/aircrafts/add_eng/{{ aircraft.getId }}'" class="col-10 mt-2 btn btn-success mb-2">+</button>
             </center>
@@ -242,18 +250,29 @@
             {% if part.getType == null %}
                 <li  class="list-group-item">
                     {%  if part.status == 'danger' %}
+                        <script>
+                            var PartsBtn = document.getElementById("PartsBtn");
+                            PartsBtn.classList.remove('btn-outline-primary');
+                            PartsBtn.classList.add('btn-outline-danger')
+                        </script>
                         <p title="Есть проблема со сроками или ресурсами" class="d-inline text-danger">
                             !
                         </p>
                     {% endif%}
                     {{ part.getName }} | {{ part.getFactoryNum }}
+
+                    <a class="float-end" href="/aircrafts/parts/{{ part.getId }}">
+                        <img style="height: 20px; " src="{{ asset('build/images/open.png') }}">
+                    </a>
                 </li>
             {% endif %}
             {% endfor%}
             </ul>
+                {% if role == 'admin' %}
             <center>
                 <button onclick="window.location='/aircrafts/add_part/{{ aircraft.getId }}'"  class="col-10 mt-2 btn btn-success mb-2">+</button>
             </center>
+                {% endif %}
         </span>
 
         </div>
@@ -275,11 +294,7 @@
                 <div class="col-6">
                     <button class="btn btn-primary mb-2"
                             onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
-                        Отчет по форме: ИФ-12-ОН
-                    </button>
-                    <button class="btn btn-primary mb-2"
-                            onclick="window.location='/aircrafts/download/{{ aircraft.getId }}/test'">
-                        Отчет по форме: ИФ-19-ОН
+                        Скачать
                     </button>
                 </div>
             </center>

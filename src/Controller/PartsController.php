@@ -9,6 +9,7 @@ use App\Entity\Parts;
 use App\Entity\PartsOperating;
 use App\Entity\UserLogs;
 use App\Entity\Users;
+use App\Form\AddRepType;
 use App\Form\PartsType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,7 +29,7 @@ class PartsController extends AbstractController
         $this->entityManager = $em;
     }
 
-    public function info($id)
+    public function info($id, Request $request)
     {
         if (!isset($_COOKIE['role']))
         {
@@ -43,12 +44,45 @@ class PartsController extends AbstractController
         $part = $this->entityManager->getRepository(Parts::class)->find($id);
         $aircraft = $part->getAircraft();
         $operatings = $part->getPartsOperatings();
+
+        $operating = $this->entityManager->getRepository(PartsOperating::class)
+            ->getLastPartsOperating($part);
+        $formRep = $this->createForm(AddRepType::class);
+        $formRep->handleRequest($request);
+
+        if ($formRep->isSubmitted() && $formRep->isValid()) {
+            $new_operating = new PartsOperating();
+            $new_operating
+                ->setTotalRes($operating->getTotalRes())
+                ->setOverhaulRes(0)
+                ->setPart($part)
+                ->setCreateDate(new \DateTime())
+                ->setAddedBy($_COOKIE['FIO']);
+            $repair_date = new \DateTime;
+            $repair_date->format('YYYY-MM-DD');
+            $repair_date = $formRep->get('repair_date')->getData();
+            $overhaul_exp_date = new \DateTime();
+            $overhaul_exp_date->format('YYYY-MM-DD');
+            $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
+            $overhaul_exp_date->modify('+' . $part->getOverhaulYears() . 'years');
+            $part
+                ->setOverhaulRes($part->getOverhaulRes())
+                ->setOverhaulExpDate($overhaul_exp_date)
+                ->setRepairDate($repair_date);
+
+            $this->entityManager->persist($part);
+            $this->entityManager->persist($new_operating);
+            $this->entityManager->flush();
+            return $this->redirect($request->getUri());
+        }
+
         return $this->render('parts/profile.html.twig', [
             'controller_name' => 'AircraftController',
             'lastOperating' => $this->entityManager->getRepository(PartsOperating::class)->getLastPartsOperating($part),
             'part' => $part,
             'partOperating' => $operatings,
             'role' => $role,
+            'addRep' => $formRep->createView()
 
 
         ]);
@@ -84,6 +118,7 @@ class PartsController extends AbstractController
                     ->setName($form->get('name')->getData())
                     ->setMarking($form->get('marking')->getData())
                     ->setDocument($form->get('document')->getData())
+                    ->setOverhaulYears($form->get('overhaul_exp')->getData())
                     ->setReleaseDate($form->get('release_date')->getData());
                 if($form->get('repair_date')->getData()==null)
                 {
@@ -137,6 +172,7 @@ class PartsController extends AbstractController
                     ->setMarking($form->get('marking')->getData())
                     ->setDocument($form->get('document')->getData())
                     ->setType('engine')
+                    ->setOverhaulYears($form->get('overhaul_exp')->getData())
                     ->setReleaseDate($form->get('release_date')->getData());
                 if($form->get('repair_date')->getData()==null)
                 {
