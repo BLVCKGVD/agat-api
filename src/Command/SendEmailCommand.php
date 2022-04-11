@@ -37,14 +37,25 @@ class SendEmailCommand extends Command
             ->to('antondead1338@gmail.com')
             ->subject('Проблемные воздуные суда');
         $aircrafts = $this->entityManager->getRepository(Aircraft::class)->findAll();
+        $dangerAc = array();
         foreach ($aircrafts as $a)
         {
-            ;
+
             if ($this->getAircraftStatus($a) == 'danger')
             {
-                $email->html('
-    <p>Воздушные суда, у которых обнаружились проблемы:</p><a style="text-decoration:none; color: red;" href="https://www.agat-avia.ru/aircrafts/'.$a->getId().'?ac='.$a->getId().'">'.$a->getBoardNum().'</a>');
+                $status = 'danger';
+                array_push($dangerAc,
+                    '<a style="text-decoration:none; color: red; display: block;" href="https://www.agat-avia.ru/aircrafts/'.
+                    $a->getId().'?ac='.
+                    $a->getId().'">'.
+                    $a->getBoardNum().'</a>');
             }
+        }
+        if($status == 'danger')
+        {
+            $email->html('
+    <p>Воздушные суда, у которых обнаружились проблемы:</p>'.implode($dangerAc));
+
         }
         $this->mailer->send($email);
         $output->writeln('Отправилось');

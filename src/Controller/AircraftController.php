@@ -196,6 +196,10 @@ class AircraftController extends AbstractController
         {
             return $this->redirect('/login?ac='.$request->get('ac'));
         }
+        if($request->get('ac') != null)
+        {
+            return $this->redirect('/aircrafts/'.$request->get('ac'));
+        }
         if ($_COOKIE['role'] == 'admin') {
             $role = 'admin';
         } else {
