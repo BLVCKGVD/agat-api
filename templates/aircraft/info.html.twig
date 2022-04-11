@@ -238,12 +238,14 @@
                 <button onclick="window.location='/aircrafts/add_eng/{{ aircraft.getId }}'" class="col-10 mt-2 btn btn-success mb-2 d-block">+</button>
             </center>
                 {% endif %}
+                {% if (eng_limit - eng_count) != 0%}
                 <center>
                     <p class="text-secondary d-inline">Добавьте еще</p> {{ eng_limit - eng_count}} <p class="text-secondary d-inline">
                     {% if (eng_limit - eng_count) == 1%}двигатель{% endif%}
                         {% if (eng_limit - eng_count) < 5 and (eng_limit - eng_count) > 1%}двигателя{% endif%}
                         {% if (eng_limit - eng_count) > 5 %}двигателей{% endif%}</p>
                 </center>
+                {% endif %}
         </span>
 
             <button class="col-12 btn btn-outline-primary mt-2 mb-2" id="PartsBtn" onclick="displayParts()">

@@ -116,8 +116,36 @@ class EmployeesPageController extends AbstractController
             }
             
     } return $this->redirectToRoute('authtorization');
+
     
     
 }
+    public function user()
+    {
+        if (isset($_COOKIE['role']))
+        {
+            return $this->render('instructions/user.html.twig',
+            [
+                'role' => $_COOKIE['role'],
+                'login' => $_COOKIE['login'],
+            ]);
+        } else {
+            return $this->redirectToRoute('employees_page');
+        }
+
+    }
+    public function admin()
+    {
+        if (isset($_COOKIE['role']) && $_COOKIE['role'] == 'admin')
+        {
+            return $this->render('instructions/admin.html.twig',
+                [
+                    'role' => $_COOKIE['role'],
+                    'login' => $_COOKIE['login'],
+                ]);
+        } else {
+            return $this->redirectToRoute('employees_page');
+        }
+    }
 
 }

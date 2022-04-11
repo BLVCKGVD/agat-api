@@ -48,6 +48,12 @@ authtorization:
 employees_page:
     path: /employees
     controller: App\Controller\EmployeesPageController::index
+instruction_user:
+    path: /instruction/user
+    controller: App\Controller\EmployeesPageController::user
+instruction_admin:
+    path: /instruction/admin
+    controller: App\Controller\EmployeesPageController::admin
 
 exit:
     path: /exit
