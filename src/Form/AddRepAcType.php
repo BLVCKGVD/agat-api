@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
-class AddRepType extends AbstractType
+class AddRepAcType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -41,19 +41,6 @@ class AddRepType extends AbstractType
                     //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
 
                 ]])
-            ->add('repair_place', TextType::class,[
-                'required'=>false,
-                'mapped'=>false,
-                'label'=>'Ремонт выполнен',
-                'attr' => [
-                    'class' =>'form-control mb-2',
-                    'min'=>1,
-                    'placeholder' => 'Компания',
-                    'autofocus' => true,
-                    'autocomplete' => 'off',
-
-                ],
-            ])
 //            ->add('overhaul_exp_date',IntegerType::class, [
 //                'required'=>false,
 //                'mapped'=>false,

@@ -128,10 +128,11 @@
                             до: <b>{{ part.getOverhaulExpDate|date('d.m.Y') }}</b></li>
                     {% endif %}
                 {% endif %}
-                <li class="list-group-item">Ремонт выполнен: <b>{{ part.getRepairPlace }}</b>
-                </li>
+
                 {% if part.getRepairDate != null %}
                     <li class="list-group-item">Дата последнего ремонта: <b>{{ part.getRepairDate|date('d.m.Y') }}</b>
+                    </li>
+                    <li class="list-group-item">Ремонт выполнен: <b>{{ part.getRepairPlace }}</b>
                     </li>
                 {% endif %}
 

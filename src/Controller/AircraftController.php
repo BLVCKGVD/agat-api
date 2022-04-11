@@ -10,6 +10,7 @@ use App\Entity\Parts;
 use App\Entity\PartsOperating;
 use App\Entity\UserLogs;
 use App\Entity\Users;
+use App\Form\AddRepAcType;
 use App\Form\AddRepType;
 use App\Form\AddResType;
 use App\Form\TableBuilderType;
@@ -213,7 +214,7 @@ class AircraftController extends AbstractController
 
         $form = $this->createForm(AddResType::class);
         $form->handleRequest($request);
-        $formRep = $this->createForm(AddRepType::class);
+        $formRep = $this->createForm(AddRepAcType::class);
         $formRep->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

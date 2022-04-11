@@ -68,6 +68,7 @@ class PartsController extends AbstractController
             $part
                 ->setOverhaulRes($part->getOverhaulRes())
                 ->setOverhaulExpDate($overhaul_exp_date)
+                ->setRepairPlace($formRep->get('repair_place')->getData())
                 ->setRepairDate($repair_date);
 
             $this->entityManager->persist($part);
