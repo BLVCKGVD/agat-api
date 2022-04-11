@@ -6,6 +6,8 @@ use App\Entity\UserLogs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Users;
 use App\Repository\UsersRepository;
@@ -15,8 +17,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class EmployeesPageController extends AbstractController
 {
-    public function auth(ManagerRegistry $doctrine,Request $request): Response
+    public function auth(ManagerRegistry $doctrine,Request $request, MailerInterface $mailer): Response
     {
+
 //          $entityManager = $this->getDoctrine()->getManager();
 //          $user = new Users();
 //          $user->setFio('Шульженко Антон');
@@ -62,6 +65,10 @@ class EmployeesPageController extends AbstractController
                     ->setDate(new \DateTime());
                 $this->getDoctrine()->getManager()->persist($userLogs);
                 $this->getDoctrine()->getManager()->flush();
+                if($request->get('ac')!=null)
+                {
+                    return $this->redirect('/aircrafts/'.$request->get('ac'));
+                }
             return $this->redirect('/employees');
             } else{
                 return $this->render('employees_page/authtorization.html.twig', [
