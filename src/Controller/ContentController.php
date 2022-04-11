@@ -29,6 +29,7 @@ class ContentController extends AbstractController
             'controller_name' => 'ContentController',
             'content' => $content,
             'role' => $_COOKIE['role'],
+            'login' => $_COOKIE['login'],
         ]);
     }
     public function getContent($page)
@@ -70,6 +71,7 @@ class ContentController extends AbstractController
             'form'=>$form->createView(),
             'content'=>$content,
             'role' => $_COOKIE['role'],
+            'login' => $_COOKIE['login'],
         ]);
     }
 }

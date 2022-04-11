@@ -91,7 +91,8 @@ class PartsController extends AbstractController
             'part' => $part,
             'partOperating' => $operatings,
             'role' => $role,
-            'addRep' => $formRep->createView()
+            'addRep' => $formRep->createView(),
+            'login' => $_COOKIE['login'],
 
 
         ]);

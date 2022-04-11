@@ -100,6 +100,7 @@ class AircraftController extends AbstractController
             'filter'=>$filter,
             'aircraftOperating' => $this->getDoctrine()->getRepository(AircraftOperating::class)->findAll(),
             'role' => $role,
+            'login' => $_COOKIE['login'],
             'tableBuilderForm' => $form->createView(),
             'data' => $data
 
@@ -177,6 +178,7 @@ class AircraftController extends AbstractController
                 'controller_name' => 'AircraftController',
                 'form' => $form->createView(),
                 'role' => $_COOKIE['role'],
+                'login'=> $_COOKIE['login'],
 
             ]);
 
@@ -307,6 +309,7 @@ class AircraftController extends AbstractController
             'aircraft' => $aircraft,
             'lastOperating' => $operating,
             'parts' => $parts,
+            'login' => $_COOKIE['login'],
             'addRes' => $form->createView(),
             'addRep' => $formRep->createView(),
             'aircraftOperating' => $aircraft->getAircraftOperating(),
