@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\EmailSubsription;
 use App\Entity\UserLogs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -97,7 +98,7 @@ class EmployeesPageController extends AbstractController
     ]);
     
     }
-    public function index(ManagerRegistry $doctrine): Response
+    public function index(ManagerRegistry $doctrine, Request $request, MailerInterface $mailer): Response
     {   
         if(isset($_COOKIE['login']) && $_COOKIE['login']!='' && isset($_COOKIE['password']) && $_COOKIE['password']!='')
         {   
@@ -113,12 +114,36 @@ class EmployeesPageController extends AbstractController
             
             if(password_verify($_COOKIE['password'], $pass_hash))
             {
+                if ($request->query->get('mail') != null)
+                {
+                    $email = new EmailSubsription();
+                    $email->setEmail($request->query->get('mail'))
+                        ->setSubUser($found);
+                    $this->getDoctrine()->getManager()->persist($email);
+                    $this->getDoctrine()->getManager()->flush();
+                    if($request->query->get('test') == 'on')
+                    $email = (new Email())
+                        ->from('agataviainfo@gmail.com')
+                        ->to($request->query->get('mail'))
+                        ->subject('Добро пожаловать!');
+                    $email->html('Добро пожаловать в систему рассылки информации по воздушным судам авиакомпании "Агат" '.
+                    $found->getFIO().', удачного использования системы. Не забудьте прочитать руководство');
+                    $mailer->send($email);
+                    return $this->redirect('/employees');
+                }
+                if ($found->getEmailSubsription() == null)
+                {
+                    $mail = null;
+                } else {
+                    $mail = $found->getEmailSubsription()->getEmail();
+                }
                 
                 return $this->render('employees_page/index.html.twig', [
                     'controller_name' => 'EmployeesPageController',
                     'FIO' => $_COOKIE['FIO'],
                     'login' => $_COOKIE['login'],
-                    'role' => $_COOKIE['role']
+                    'role' => $_COOKIE['role'],
+                    'mail'=>$mail,
                 ]);
             }
             

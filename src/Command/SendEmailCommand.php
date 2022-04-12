@@ -3,6 +3,7 @@ namespace App\Command;
 
 use App\Entity\Aircraft;
 use App\Entity\AircraftOperating;
+use App\Entity\EmailSubsription;
 use App\Entity\Parts;
 use App\Entity\PartsOperating;
 use App\Repository\AircraftRepository;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
 
@@ -32,10 +34,17 @@ class SendEmailCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
+        $subscribers = $this->entityManager->getRepository(EmailSubsription::class)->findAll();
         $email = (new Email())
             ->from('agataviainfo@gmail.com')
-            ->to('antondead1338@gmail.com')
-            ->subject('Проблемные воздуные суда');
+            ->to()
+            ->subject('Проблемные воздушные суда');
+        foreach ($subscribers as $m)
+        {
+            $email->addTo($m->getEmail());
+        }
+
+
         $aircrafts = $this->entityManager->getRepository(Aircraft::class)->findAll();
         $dangerAc = array();
         foreach ($aircrafts as $a)

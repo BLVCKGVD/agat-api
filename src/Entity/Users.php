@@ -49,6 +49,11 @@ class Users
      */
     private $userLogs;
 
+    /**
+     * @ORM\OneToOne(targetEntity=EmailSubsription::class, mappedBy="subUser", cascade={"persist", "remove"})
+     */
+    private $emailSubsription;
+
     public function __construct()
     {
         $this->relatedUser = new ArrayCollection();
@@ -164,6 +169,23 @@ class Users
                 $userLog->setEmployeeAdd(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEmailSubsription(): ?EmailSubsription
+    {
+        return $this->emailSubsription;
+    }
+
+    public function setEmailSubsription(EmailSubsription $emailSubsription): self
+    {
+        // set the owning side of the relation if necessary
+        if ($emailSubsription->getSubUser() !== $this) {
+            $emailSubsription->setSubUser($this);
+        }
+
+        $this->emailSubsription = $emailSubsription;
 
         return $this;
     }
