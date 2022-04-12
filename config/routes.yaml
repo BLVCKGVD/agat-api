@@ -48,6 +48,9 @@ authtorization:
 employees_page:
     path: /employees
     controller: App\Controller\EmployeesPageController::index
+subscription_delte:
+    path: /subscription/delete
+    controller: App\Controller\EmployeesPageController::delete
 instruction_user:
     path: /instruction/user
     controller: App\Controller\EmployeesPageController::user

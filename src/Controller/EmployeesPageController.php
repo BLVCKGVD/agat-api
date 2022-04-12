@@ -108,6 +108,10 @@ class EmployeesPageController extends AbstractController
             $found = $repository->findOneBy([
                 'login' => $_COOKIE['login'],
             ]);
+            if ($found==null)
+            {
+                return $this->redirectToRoute('authtorization');
+            }
             $pass_hash = $found->getPassword(); 
 
             
@@ -134,8 +138,10 @@ class EmployeesPageController extends AbstractController
                 if ($found->getEmailSubsription() == null)
                 {
                     $mail = null;
+                    $mail_id = null;
                 } else {
                     $mail = $found->getEmailSubsription()->getEmail();
+                    $mail_id = $found->getEmailSubsription()->getId();
                 }
                 
                 return $this->render('employees_page/index.html.twig', [
@@ -144,6 +150,7 @@ class EmployeesPageController extends AbstractController
                     'login' => $_COOKIE['login'],
                     'role' => $_COOKIE['role'],
                     'mail'=>$mail,
+                    'mail_id'=>$mail_id,
                 ]);
             }
             
@@ -152,6 +159,32 @@ class EmployeesPageController extends AbstractController
     
     
 }
+    public function delete(MailerInterface $mailer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if (isset($_COOKIE['login']))
+        {
+            $user = $em->getRepository(Users::class)->findOneBy([
+                'login'=>$_COOKIE['login'],
+            ]);
+            $mail = $user->getEmailSubsription();
+            if($mail!=null){
+                $em->remove($mail);
+                $em->flush();
+                $email = (new Email())
+                    ->from('agataviainfo@gmail.com')
+                    ->to($mail->getEmail())
+                    ->subject('Добро пожаловать!');
+                $email->html('Вы отписались от рассылки');
+                $mailer->send($email);
+                return $this->redirect('/employees');
+            }
+            return $this->redirect('/employees');
+        }
+        return $this->redirect('/employees');
+
+
+    }
     public function user()
     {
         if (isset($_COOKIE['role']))

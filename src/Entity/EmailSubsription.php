@@ -23,7 +23,7 @@ class EmailSubsription
     private $email;
 
     /**
-     * @ORM\OneToOne(targetEntity=Users::class, inversedBy="emailSubsription", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Users::class, inversedBy="emailSubsription", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $subUser;
