@@ -55,11 +55,13 @@ class SendEmailCommand extends Command
         {
             $email->html('
     <p>Воздушные суда, у которых обнаружились проблемы:</p>'.implode($dangerAc));
-
+            $this->mailer->send($email);
+            $output->writeln('Отправилось');
+            return 1;
         }
-        $this->mailer->send($email);
-        $output->writeln('Отправилось');
-        return 1;
+        $output->writeln('Не отправилось');
+
+        return 0;
 
 
     }
