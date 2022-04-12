@@ -126,8 +126,8 @@ class EmployeesPageController extends AbstractController
                         ->from('agataviainfo@gmail.com')
                         ->to($request->query->get('mail'))
                         ->subject('Добро пожаловать!');
-                    $email->html('Добро пожаловать в систему рассылки информации по воздушным судам авиакомпании "Агат" '.
-                    $found->getFIO().', удачного использования системы. Не забудьте прочитать руководство');
+                    $email->html('Добро пожаловать в систему рассылки информации по воздушным судам авиакомпании "Агат".<br> '.
+                    $found->getFIO().', удачного использования системы. <br>Не забудьте прочитать руководство');
                     $mailer->send($email);
                     return $this->redirect('/employees');
                 }
