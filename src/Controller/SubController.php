@@ -25,10 +25,11 @@ class SubController extends AbstractController
 
     public function index(Request $request): Response
     {
-        if (!isset($_COOKIE['login']) && $_COOKIE['login'] != 'angen' || $_COOKIE['login'] != 'kuzmin') {
+        if (!isset($_COOKIE['login'])) {
             return $this->redirectToRoute('employees_page');
         }
-
+        if ($_COOKIE['login'] == 'angen' || $_COOKIE['login'] == 'kuzmin')
+        {
             $subs = $this->entityManager->getRepository(EmailSubsription::class)->findAll();
 
             return $this->render('email/index.html.twig',[
@@ -37,62 +38,66 @@ class SubController extends AbstractController
                 'login'=>$_COOKIE['login']
             ]);
 
+        } else {
+            return $this->redirectToRoute('employees_page');
+        }
+
+
+
 
     }
 
     public function messageForAll(Request $request,EntityManagerInterface $em)
     {
-        if (!isset($_COOKIE['login']) && $_COOKIE['login'] != 'angen' || $_COOKIE['login'] != 'kuzmin') {
+        if (!isset($_COOKIE['login'])) {
             return $this->redirectToRoute('employees_page');
         }
+        if ($_COOKIE['login'] == 'angen' || $_COOKIE['login'] == 'kuzmin') {
+            $form = $this->createForm(ContentType::class);
+            $form->handleRequest($request);
 
-        $form = $this->createForm(ContentType::class);
-        $form->handleRequest($request);
+            if ($form->isSubmitted()) {
+                $subject = $form->get('subject')->getData();
+                $text = $form->get('text')->getData();
+                $errors = array();
+                if ($subject == null || $text == null) {
+                    if ($subject == null) {
+                        array_push($errors, "Введите тему письма");
+                    }
+                    if ($text == null) {
+                        array_push($errors, "Введите текст письма");
+                    }
+                    return $this->render('email/forAll.html.twig', [
+                        'form' => $form->createView(),
+                        'role' => $_COOKIE['role'],
+                        'login' => $_COOKIE['login'],
+                        'errors' => $errors,
+                    ]);
 
-        if($form->isSubmitted())
-        {
-            $subject = $form->get('subject')->getData();
-            $text = $form->get('text')->getData();
-            $errors = array();
-            if ($subject == null || $text == null)
-            {
-                if ($subject == null)
-                {
-                    array_push($errors,"Введите тему письма");
                 }
-                if ($text == null)
-                {
-                    array_push($errors,"Введите текст письма");
+
+                $subscribers = $this->entityManager->getRepository(EmailSubsription::class)->findAll();
+                $email = (new Email())
+                    ->from('agataviainfo@gmail.com')
+                    ->to()
+                    ->subject($subject);
+                foreach ($subscribers as $m) {
+                    $email->addTo($m->getEmail());
                 }
-                return $this->render('email/forAll.html.twig',[
-                    'form'=>$form->createView(),
-                    'role' => $_COOKIE['role'],
-                    'login' => $_COOKIE['login'],
-                    'errors'=>$errors,
-                ]);
-
-            }
-
-            $subscribers = $this->entityManager->getRepository(EmailSubsription::class)->findAll();
-            $email = (new Email())
-                ->from('agataviainfo@gmail.com')
-                ->to()
-                ->subject($subject);
-            foreach ($subscribers as $m)
-            {
-                $email->addTo($m->getEmail());
-            }
-            $email->html($text);
+                $email->html($text);
                 $this->mailer->send($email);
 
-            return $this->redirectToRoute('subs');
+                return $this->redirectToRoute('subs');
 
+            }
+            return $this->render('email/forAll.html.twig', [
+                'form' => $form->createView(),
+                'role' => $_COOKIE['role'],
+                'login' => $_COOKIE['login'],
+                'errors' => null,
+            ]);
+        } else {
+            return $this->redirectToRoute('employees_page');
         }
-        return $this->render('email/forAll.html.twig',[
-            'form'=>$form->createView(),
-            'role' => $_COOKIE['role'],
-            'login' => $_COOKIE['login'],
-            'errors'=>null,
-        ]);
     }
 }
