@@ -35,6 +35,22 @@
             <div class="col-lg-8 col-12">
                 <p class="fs-5">Добро пожаловать в систему управления состояниями, ресурсами и комплектующими воздушных судов авиакомпании
                 "Агат!"</p>
+                <ul class="list-group mb-2" title="Перейти к судну">
+                    {% if fav != null %}
+                        <h4>Избранные ВС</h4>
+                    {% endif %}
+                    {% for f in fav %}
+                    <li onclick="window.location='aircrafts/{{ f.idAircraft.getId }}'" class="list-group-item list-group-item-warning list-group-item-action">
+                        <b class="pe-2">{{ f.idAircraft.getAcType }}</b>
+                        <b class="border-start border-2 border-warning ps-2 pe-2">{{ f.idAircraft.getBoardNum }}</b>
+                        <b class="border-start border-2 border-warning ps-2 pe-2">{{ f.idAircraft.getFactoryNum }}</b>
+                        {% if f.idAircraft.status == 'danger' %}
+                        <p class=" float-end text-white bg-danger mb-0 pe-2 ps-2 rounded">Проблемы</p>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+
             </div>
             <div class="col-lg-4 col-12 p-3 border border-2 border-primary rounded-2">
                 <center>

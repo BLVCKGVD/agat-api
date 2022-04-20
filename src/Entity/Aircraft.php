@@ -220,6 +220,12 @@ class Aircraft
     private $overhaul_years;
 
     /**
+     * @ORM\OneToMany(targetEntity=Favourites::class, mappedBy="idAircraft", orphanRemoval=true)
+     */
+    private $favourites;
+
+
+    /**
      * @return mixed
      */
     public function getStatus()
@@ -240,6 +246,7 @@ class Aircraft
         $this->aircraftOperating = new ArrayCollection();
         $this->userLogs = new ArrayCollection();
         $this->parts = new ArrayCollection();
+        $this->favourites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -767,6 +774,36 @@ class Aircraft
     public function setOverhaulYears(?int $overhaul_years): self
     {
         $this->overhaul_years = $overhaul_years;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Favourites>
+     */
+    public function getFavourites(): Collection
+    {
+        return $this->favourites;
+    }
+
+    public function addFavourite(Favourites $favourite): self
+    {
+        if (!$this->favourites->contains($favourite)) {
+            $this->favourites[] = $favourite;
+            $favourite->setIdAircraft($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavourite(Favourites $favourite): self
+    {
+        if ($this->favourites->removeElement($favourite)) {
+            // set the owning side to null (unless already changed)
+            if ($favourite->getIdAircraft() === $this) {
+                $favourite->setIdAircraft(null);
+            }
+        }
 
         return $this;
     }

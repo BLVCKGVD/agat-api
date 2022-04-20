@@ -6,6 +6,7 @@ use App\Controller\CookiesController;
 use App\Entity\AcTypes;
 use App\Entity\AircraftOperating;
 use App\Entity\Aircraft;
+use App\Entity\Favourites;
 use App\Entity\Parts;
 use App\Entity\PartsOperating;
 use App\Entity\UserLogs;
@@ -322,11 +323,31 @@ class AircraftController extends AbstractController
             'addRep' => $formRep->createView(),
             'aircraftOperating' => $aircraft->getAircraftOperating(),
             'role' => $role,
+            'added' => $this->getFav($aircraft),
 
 
         ]);
 
     }
+
+    public function getFav($aircraft)
+    {
+        if(isset($_COOKIE['login']))
+        {
+            $user = $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                'login'=>$_COOKIE['login']
+            ]);
+            if ($this->entityManager->getRepository(Favourites::class)->findOneBy([
+                'idUser'=>$user->getId(),
+                'idAircraft'=>$aircraft->getId()
+            ])){
+                return "added";
+            } else{
+                return "not added";
+            }
+        }
+    }
+
 
     public function edit($id, Request $request)
     {

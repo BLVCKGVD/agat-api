@@ -2,7 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Aircraft;
+use App\Entity\AircraftOperating;
 use App\Entity\EmailSubsription;
+use App\Entity\Favourites;
+use App\Entity\Parts;
+use App\Entity\PartsOperating;
 use App\Entity\UserLogs;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,10 +117,15 @@ class EmployeesPageController extends AbstractController
             {
                 return $this->redirectToRoute('authtorization');
             }
-            $pass_hash = $found->getPassword(); 
+            $pass_hash = $found->getPassword();
 
-            
-            
+            $fav = $this->getDoctrine()->getRepository(Favourites::class)->findBy([
+                'idUser'=>$found->getId()
+            ]);
+            foreach ($fav as $f)
+            {
+                $f->getIdAircraft()->setStatus($this->getAircraftStatus($f->getIdAircraft()));
+            }
             if(password_verify($_COOKIE['password'], $pass_hash))
             {
                 if ($request->query->get('mail') != null)
@@ -151,6 +161,7 @@ class EmployeesPageController extends AbstractController
                     'role' => $_COOKIE['role'],
                     'mail'=>$mail,
                     'mail_id'=>$mail_id,
+                    'fav'=>$fav,
                 ]);
             }
             
@@ -211,6 +222,58 @@ class EmployeesPageController extends AbstractController
         } else {
             return $this->redirectToRoute('employees_page');
         }
+    }
+
+    public function getPartStatus(Parts $part)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $today = new \DateTime();
+        $operating = $em->getRepository(PartsOperating::class)->getLastPartsOperating($part);
+        if($operating->getOverhaulRes() >= $part->getOverhaulRes()*0.8 ||
+            $operating->getOverhaulRes() >= $part->getOverhaulRes() ||
+            $operating->getTotalRes() >= $part->getAssignedRes()*0.8 ||
+            $operating->getTotalRes() >= $part->getAssignedRes() ||
+            \DateTime::createFromInterface($part->getAssignedExpDate()) < $today||
+            \DateTime::createFromInterface($part->getOverhaulExpDate()) < $today)
+        {
+            return "danger";
+        } return null;
+    }
+
+    public function getAircraftStatus(Aircraft $aircraft)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $today = new \DateTime();
+        $operating = $em->getRepository(AircraftOperating::class)->getLastAircraftOperating($aircraft);
+        $overhaul_diff = $aircraft->getOverhaulExpDate()->diff(new \DateTime())->format("%a");
+        $assigned_diff = $aircraft->getAssignedExpDate()->diff(new \DateTime())->format("%a");
+        $lg_diff = $aircraft->getLgExpDate()->diff(new \DateTime())->format("%a");
+        if($operating->getOverhaulRes() >= $aircraft->getOverhaulRes()*0.8 ||
+            $operating->getOverhaulRes() >= $aircraft->getOverhaulRes() ||
+            $operating->getTotalRes() >= $aircraft->getAssignedRes()*0.8 ||
+            $operating->getTotalRes() >= $aircraft->getAssignedRes() ||
+            $overhaul_diff <= 30 || $assigned_diff <= 30 || $lg_diff <= 30 ||
+            \DateTime::createFromInterface($aircraft->getOverhaulExpDate()) < $today ||
+            \DateTime::createFromInterface($aircraft->getAssignedExpDate()) < $today)
+        {
+            return "danger";
+        }
+        $parts = $aircraft->getParts();
+        if ($parts != null)
+        {
+            foreach ($parts as $part)
+            {
+                $part->setStatus($this->getPartStatus($part));
+                if ($part->getStatus()=='danger')
+                {
+                    return "danger";
+                }
+            }
+            return null;
+        }
+        return null;
+
+
     }
 
 }

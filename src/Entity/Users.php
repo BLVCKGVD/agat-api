@@ -54,10 +54,17 @@ class Users
      */
     private $emailSubsription;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Favourites::class, mappedBy="idUser", orphanRemoval=true)
+     */
+    private $favourites;
+
+
     public function __construct()
     {
         $this->relatedUser = new ArrayCollection();
         $this->userLogs = new ArrayCollection();
+        $this->favourites = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,4 +196,36 @@ class Users
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Favourites>
+     */
+    public function getFavourites(): Collection
+    {
+        return $this->favourites;
+    }
+
+    public function addFavourite(Favourites $favourite): self
+    {
+        if (!$this->favourites->contains($favourite)) {
+            $this->favourites[] = $favourite;
+            $favourite->setIdUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavourite(Favourites $favourite): self
+    {
+        if ($this->favourites->removeElement($favourite)) {
+            // set the owning side to null (unless already changed)
+            if ($favourite->getIdUser() === $this) {
+                $favourite->setIdUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }

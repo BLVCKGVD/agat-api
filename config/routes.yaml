@@ -61,7 +61,13 @@ instruction_admin:
 exit:
     path: /exit
     controller: App\Controller\ExitController::index
+addFav:
+    path: /addFav/{id}
+    controller: App\Controller\FavouritesController::add
 
+remFav:
+    path: /remFav/{id}
+    controller: App\Controller\FavouritesController::remove
 aircrafts_page:
     path: /aircrafts
     controller: App\Controller\AircraftController::index    
