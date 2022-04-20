@@ -1,0 +1,20 @@
+{% extends 'base_without_header.html.twig' %}
+
+{% block title %}Рассылка для всех {% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <button class="btn btn-secondary mb-2" id="back" onclick="window.location='/subscriptions'">Вернуться</button>
+        <center>
+            <h3>Создайте письмо</h3>
+        </center>
+        {{ form(form) }}
+        {% if errors != null %}
+        {% for err in errors %}
+            <p class="text-danger">{{ err }}</p>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+{% endblock %}

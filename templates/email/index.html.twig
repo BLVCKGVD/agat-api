@@ -1,0 +1,29 @@
+{% extends 'base_without_header.html.twig' %}
+{% block stylesheets %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+{% block body %}
+    <div class="row">
+        <a class="col-12  btn btn-primary mb-2" href="/subscriptions/forall">Отправить письмо для всех подписчиков</a>
+    </div>
+    <table class="table table-bordered overflow-x-scroll w-100">
+    <thead>
+        <th>Логин</th>
+        <th>ФИО</th>
+        <th>Привязанная почта</th>
+    </thead>
+    <tbody>
+    {% for sub in subs %}
+
+        <tr>
+            <td>{{ sub.subUser.login }}</td>
+            <td>{{ sub.subUser.FIO }}</td>
+            <td>{{ sub.email }}</td>
+        </tr>
+
+
+
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

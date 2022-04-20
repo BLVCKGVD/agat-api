@@ -67,6 +67,12 @@
                                 class="list-group-item list-group-item-action border border-success mb-2 rounded-2">
                             Добавить тип воздушного судна
                         </li>
+                            {% if login == 'angen' or login == 'kuzmin' %}
+                            <li onclick="window.location='/subscriptions'"
+                                class="list-group-item list-group-item-action border border-success mb-2 rounded-2">
+                                Управление почтовыми рассылками
+                            </li>
+                                {% endif %}
                             <li onclick="window.location='/instruction/admin'" class="list-group-item list-group-item-action border border-warning mb-2 rounded-2">
                                 Руководство для администраторов
                             </li>
@@ -80,7 +86,8 @@
                         </li>
                         {% if mail == null %}
                         <li class="list-group-item list-group-item border border-success mb-2 rounded-2">
-                            Подписаться на рассылку
+                            Подписаться на рассылку<br>
+                            <p class="text-danger">{{ error }}</p>
                             <form>
                                 <input autocomplete="off" type="email" name="mail" class="mt-2 form-control" placeholder="Введите почту">
                                 <p class="fs-6 text-secondary">Уведомления приходят каждый день в 11:00</p>
@@ -92,6 +99,7 @@
                                 <input type="submit" class="btn btn-success mt-2" value="Подписаться">
                             </form>
                         </li>
+
                         {% endif %}
 
                         {% if mail != null %}

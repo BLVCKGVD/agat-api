@@ -6,6 +6,7 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Tetranz\Select2EntityBundle\Form\Type\Select2EntityType;
 
@@ -14,6 +15,14 @@ class ContentType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('subject', TextType::class,[
+                'required' => false,
+                'mapped'=>false,
+                'label'=>'Введите тему письма',
+                'attr' => [
+                    'class'=>'form-control'
+                ],
+            ])
             ->add('text', CKEditorType::class,[
                 'required' => false,
                 'label'=>'Введите текст',

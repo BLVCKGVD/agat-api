@@ -9,7 +9,11 @@
         <center>
             <h3>Редактирование страницы: {{ content.page|trans }}</h3>
         </center>
-        {{ form(form) }}
+        {{ form_start(form) }}
+        {{ form_row(form.text) }}
+        {% do form.subject.setRendered %}
+        {{ form_end(form) }}
+
 
 
     </div>

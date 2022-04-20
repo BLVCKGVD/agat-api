@@ -68,6 +68,13 @@ addFav:
 remFav:
     path: /remFav/{id}
     controller: App\Controller\FavouritesController::remove
+
+subs:
+    path: /subscriptions
+    controller: App\Controller\SubController::index
+message_for_all:
+    path: /subscriptions/forall
+    controller: App\Controller\SubController::messageForAll
 aircrafts_page:
     path: /aircrafts
     controller: App\Controller\AircraftController::index    

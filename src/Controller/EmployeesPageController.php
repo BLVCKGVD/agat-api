@@ -130,6 +130,22 @@ class EmployeesPageController extends AbstractController
             {
                 if ($request->query->get('mail') != null)
                 {
+                    $check_mail = $this->getDoctrine()->getRepository(EmailSubsription::class)->findOneBy([
+                        'email'=> $request->query->get('mail')
+                    ]);
+                    if ($check_mail != null)
+                    {
+                        return $this->render('employees_page/index.html.twig', [
+                            'controller_name' => 'EmployeesPageController',
+                            'FIO' => $_COOKIE['FIO'],
+                            'login' => $_COOKIE['login'],
+                            'role' => $_COOKIE['role'],
+                            'fav'=>$fav,
+                            'mail'=>null,
+                            'id_mail'=>null,
+                            'error'=>"Данная почта уже привязана"
+                        ]);
+                    }
                     $email = new EmailSubsription();
                     $email->setEmail($request->query->get('mail'))
                         ->setSubUser($found);
@@ -162,6 +178,7 @@ class EmployeesPageController extends AbstractController
                     'mail'=>$mail,
                     'mail_id'=>$mail_id,
                     'fav'=>$fav,
+                    'error'=>''
                 ]);
             }
             
