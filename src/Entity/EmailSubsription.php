@@ -56,4 +56,11 @@ class EmailSubsription
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->subUser->getFIO()." | ".$this->subUser->getlogin()." | ".$this->getEmail();
+    }
+
+
 }

@@ -99,3 +99,7 @@ aircraft_info:
 aircraft_delete:
     path: /aircrafts/delete/{id}
     controller: App\Controller\AircraftController::delete    
+
+message_for_selected:
+    path: /subscriptions/forSelected
+    controller: App\Controller\SubController::messageForSelected

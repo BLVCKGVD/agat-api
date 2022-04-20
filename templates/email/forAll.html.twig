@@ -9,7 +9,10 @@
         <center>
             <h3>Создайте письмо</h3>
         </center>
-        {{ form(form) }}
+        {{ form_start(form) }}
+        {{ form_row(form.subject) }}
+        {{ form_row(form.text) }}
+        {{ form_end(form) }}
         {% if errors != null %}
         {% for err in errors %}
             <p class="text-danger">{{ err }}</p>
