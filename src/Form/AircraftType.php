@@ -26,7 +26,7 @@ class AircraftType extends AbstractType
                 'mapped'=>false,
                 'class' => AcTypes::class,
                 'attr' => [
-                    'class' => 'js-example-basic-single col-10 d-inline',
+                    'class' => 'js-example-basic-single col-12 d-inline',
 
                 ]
             ]
