@@ -193,9 +193,9 @@ class AircraftController extends AbstractController
 
     public function info(Request $request,$id)
     {
-        if (!isset($_COOKIE['role']) && $request->get('ac') != null)
+        if (!isset($_COOKIE['role']))
         {
-            return $this->redirect('/login?ac='.$request->get('ac'));
+            return $this->redirect('/login?ac='.$id);
         }
         if($request->get('ac') != null)
         {
