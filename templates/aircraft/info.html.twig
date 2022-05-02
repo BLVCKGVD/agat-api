@@ -2,6 +2,11 @@
 {% block title %}Информация о {{ aircraft.getBoardNum }}{% endblock %}
 {% block stylesheets %}
     {{ encore_entry_link_tags('app') }}
+    <style>
+        .qrcode{
+
+        }
+    </style>
 {% endblock %}
 {% block body %}
     <div class="row">
@@ -298,7 +303,7 @@
         </span>
             <center>
                 <p class="mb-0 mt-3">QR код воздушного судна</p>
-                <img src="{{ qr_code_url(app.request.uri) }}" class="img-fluid" />
+                <img src="{{ qr_code_data_uri(app.request.uri) }}" class="img-fluid qrcode" />
             </center>
 
         </div>
