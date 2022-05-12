@@ -158,12 +158,12 @@ class AircraftType extends AbstractType
                 'class' =>'form-control'
                 )))
             ->add('operator',TextType::class, array('required' => false,'label'=>'Оператор','attr'=>array(
-                'label'=>'Оператор',
+                'label'=>'Эксплуатант/владелец',
                 'class' =>'form-control'
                 )))
             ->add('owner',TextType::class, [
                 'required' => false,
-                'label'=>'Владелец',
+                'label'=>'Собственник',
                 'attr'=>[
 
                 'class' =>'form-control'
@@ -203,7 +203,7 @@ class AircraftType extends AbstractType
                 ]])
             ->add('fin_periodic_mt',TextType::class, [
                 'required'=>false,
-                'label'=>'Заключительное периодическое ТО',
+                'label'=>'Периодическое ТО',
                 'attr'=>
                 [
                 'class' =>'form-control',

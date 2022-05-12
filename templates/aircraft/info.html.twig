@@ -182,7 +182,7 @@
                 <li class="list-group-item">Вес конструкции: <b>{{ aircraft.getConstructionWeight }} кг</b></li>
                 <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }} мм</b></li>
                 <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }} кг</b></li>
-                <li class="list-group-item">Заключительное периодическое ТО: <b>{{ aircraft.getFinPeriodicMt }}</b></li>
+                <li class="list-group-item">Периодическое ТО: <b>{{ aircraft.getFinPeriodicMt }}</b></li>
                 <li class="list-group-item">ТО выполнено: <b>{{ aircraft.getMtMadeBy }}</b></li>
                 <li class="list-group-item">Сертификат Летной годности(ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
                 {% if aircraft.getLgDate != null %}
@@ -211,8 +211,8 @@
                     </li>
                 {% endif %}
                 <li class="list-group-item">Категория ВС: <b>{{ aircraft.getAcCategory }}</b></li>
-                <li class="list-group-item">Оператор: <b>{{ aircraft.getOperator }}</b></li>
-                <li class="list-group-item">Владелец: <b>{{ aircraft.getOwner }}</b></li>
+                <li class="list-group-item">Эксплуатант/владелец: <b>{{ aircraft.getOperator }}</b></li>
+                <li class="list-group-item">Собственник: <b>{{ aircraft.getOwner }}</b></li>
                 <!--<h3>{{ aircraft.getExtensionReason }}</h3>
 
                 <h3>{{ aircraft.getLastArz }}</h3>
