@@ -7,6 +7,7 @@ use App\Entity\AcTypes;
 use App\Entity\AircraftOperating;
 use App\Entity\Aircraft;
 use App\Entity\Favourites;
+use App\Entity\Maintance;
 use App\Entity\Parts;
 use App\Entity\PartsOperating;
 use App\Entity\UserLogs;
@@ -127,7 +128,9 @@ class AircraftController extends AbstractController
             $ac_type = $form->get('add_type')->getData();
             $aircraft->setAcType($ac_type->getType())
                 ->setOverhaulYears($form->get('overhaul_exp_date')->getData())
-                ->setAcCategory($ac_type->getCategory());
+                ->setAcCategory($ac_type->getCategory())
+                ->setAssignedTerm($form->get('assigned_exp_date')->getData())
+                ->setOverhaulTerm($form->get('overhaul_exp_date')->getData());
             $release_date = new \DateTime;
             $release_date->format('YYYY-MM-DD');
             $release_date = $aircraft->getReleaseDate();
@@ -139,21 +142,44 @@ class AircraftController extends AbstractController
             $overhaul_exp_date->format('YYYY-MM-DD');
             $overhaul_exp_date->setTimestamp($release_date->getTimestamp());
             $overhaul_exp_date->modify('+' . $form->get('overhaul_exp_date')->getData() . 'years');
+            $maintance = new Maintance();
+            $maintance->setMtForm($form->get('fin_form')->getData())
+                ->setMtRes($form->get('fin_res')->getData())
+                ->setMtExpDate($form->get('fin_term')->getData());
+            if($form->get('total_res_overhaul')->getData())
+            {
+                $maintance->setMtNar($form->get('total_res_overhaul')->getData());
+            } else {
+                $maintance->setMtNar(0);
+            }
+            $aircraft->addMaintance($maintance);
             $aircraft
-
                 ->setFinPeriodicMt
                 ($form->get('fin_form')->getData()
                     . " " . $form->get('fin_res')->getData()
-                    . " " . $form->get('fin_term')->getData());
+                    . " " . date_format($form->get('fin_term')->getData(),"Y-m-d"));
+
             $aircraft->setAssignedExpDate($assigned_exp_date);
             $aircraft->setOverhaulExpDate($overhaul_exp_date);
             $operating = new AircraftOperating();
+            if ($form->get('overhaul_res_overhaul')->getData())
+            {
+                $operating->setOverhaulRes($form->get('overhaul_res_overhaul')->getData());
+            } else {
+                $operating->setOverhaulRes(0);
+            }
+            if ($form->get('total_res_overhaul')->getData())
+            {
+                $operating->setTotalRes($form->get('total_res_overhaul')->getData());
+            } else
+            {
+                $operating->setTotalRes(0);
+            }
             $operating->setAddedBy($_COOKIE['FIO'])
-                ->setCreateDate(new \DateTime())
-                ->setOverhaulRes(0)
-                ->setTotalRes(0);
+                ->setCreateDate(new \DateTime());
             $aircraft->addAircraftOperating($operating);
             $entityManager->persist($aircraft);
+            $entityManager->persist($maintance);
             $entityManager->flush();
             $userLogs = new UserLogs();
             $userLogs->setEmployee(
@@ -213,7 +239,8 @@ class AircraftController extends AbstractController
         }
         $operating = $this->entityManager->getRepository(AircraftOperating::class)
             ->getLastAircraftOperating($aircraft);
-
+        $maintance = $this->entityManager->getRepository(Maintance::class)
+            ->getLastAircraftMaintance($aircraft);
         $parts = $aircraft->getParts();
         $type = $this->entityManager->getRepository(AcTypes::class)->findOneBy([
             'type'=>$aircraft->getAcType(),
@@ -233,6 +260,103 @@ class AircraftController extends AbstractController
         $form->handleRequest($request);
         $formRep = $this->createForm(AddRepAcType::class);
         $formRep->handleRequest($request);
+
+        $formEdit = $this->createForm(AircraftType::class, $aircraft);
+        $formEdit->handleRequest($request);
+
+        if ($formEdit->isSubmitted() && $formEdit->isValid())
+        {
+            $aircraft = $formEdit->getData();
+
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $ac_type = $formEdit->get('add_type')->getData();
+            $aircraft->setAcType($ac_type->getType())
+                ->setOverhaulYears($formEdit->get('overhaul_exp_date')->getData())
+                ->setAssignedTerm($formEdit->get('assigned_exp_date')->getData())
+                ->setOverhaulTerm($formEdit->get('overhaul_exp_date')->getData())
+                ->setAcCategory($ac_type->getCategory());
+            $release_date = new \DateTime;
+            $release_date->format('YYYY-MM-DD');
+            if ($aircraft->getLastRepairDate())
+            {
+                $repair_date = new \DateTime();
+                $repair_date->format('YYYY-MM-DD');
+                $repair_date = $aircraft->getLastRepairDate();
+            }
+            $release_date = $aircraft->getReleaseDate();
+            $assigned_exp_date = new \DateTime();
+            $assigned_exp_date->format('YYYY-MM-DD');
+            $assigned_exp_date->setTimestamp($release_date->getTimestamp());
+            $assigned_exp_date->modify('+' . $formEdit->get('assigned_term')->getData() . 'years');
+            $overhaul_exp_date = new \DateTime();
+            $overhaul_exp_date->format('YYYY-MM-DD');
+            if ($repair_date != null)
+            {
+                $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
+            } else {
+                $overhaul_exp_date->setTimestamp($release_date->getTimestamp());
+            }
+            $overhaul_exp_date->modify('+' . $formEdit->get('overhaul_term')->getData() . 'years');
+            $aircraft->setOverhaulExpDate($overhaul_exp_date);
+            $aircraft->setAssignedExpDate($assigned_exp_date);
+            $maintance = new Maintance();
+            $maintance->setMtForm($formEdit->get('fin_form')->getData())
+                ->setMtRes($formEdit->get('fin_res')->getData())
+                ->setMtExpDate($formEdit->get('fin_term')->getData());
+            if($formEdit->get('total_res_overhaul')->getData())
+            {
+                $maintance->setMtNar($formEdit->get('total_res_overhaul')->getData());
+            } else {
+                $maintance->setMtNar(0);
+            }
+            $aircraft->addMaintance($maintance);
+            $aircraft
+                ->setFinPeriodicMt
+                ($formEdit->get('fin_form')->getData()
+                    . " " . $formEdit->get('fin_res')->getData()
+                    . " " . date_format($formEdit->get('fin_term')->getData(),"Y-m-d"));
+
+            $aircraft->setAssignedExpDate($assigned_exp_date);
+            $aircraft->setOverhaulExpDate($overhaul_exp_date);
+            $operating = new AircraftOperating();
+            if ($formEdit->get('overhaul_res_overhaul')->getData())
+            {
+                $operating->setOverhaulRes($formEdit->get('overhaul_res_overhaul')->getData());
+            } else {
+                $operating->setOverhaulRes(0);
+            }
+            if ($formEdit->get('total_res_overhaul')->getData())
+            {
+                $operating->setTotalRes($formEdit->get('total_res_overhaul')->getData());
+            } else
+            {
+                $operating->setTotalRes(0);
+            }
+            $operating->setAddedBy($_COOKIE['FIO'])
+                ->setCreateDate(new \DateTime());
+            $aircraft->addAircraftOperating($operating);
+            $entityManager->persist($aircraft);
+            $entityManager->persist($maintance);
+            $entityManager->flush();
+            $userLogs = new UserLogs();
+            $userLogs->setEmployee(
+                $this->getDoctrine()->getRepository(Users::class)->findOneBy([
+                    'login'=>$_COOKIE['login']
+                ])
+            )
+                ->setAction(
+                    "Отредактировал воздушное судно")
+                ->setBoardNum($aircraft->getBoardNum())
+                ->setAircraft($aircraft)
+                ->setDate(new \DateTime());
+            $this->getDoctrine()->getManager()->persist($userLogs);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('aircraft_info',[
+                'id'=>$aircraft->getId(),
+            ]);
+        }
 
         if ($form->isSubmitted() && $form->isValid()) {
             foreach ($parts as $p)
@@ -317,8 +441,10 @@ class AircraftController extends AbstractController
             'eng_limit'=>$eng_limit,
             'aircraft' => $aircraft,
             'lastOperating' => $operating,
+            'lastMaintance'=>$maintance,
             'parts' => $parts,
             'login' => $_COOKIE['login'],
+            'form'=>$formEdit->createView(),
             'addRes' => $form->createView(),
             'addRep' => $formRep->createView(),
             'aircraftOperating' => $aircraft->getAircraftOperating(),

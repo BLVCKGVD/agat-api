@@ -57,6 +57,161 @@
         <div class="col-lg-7 col-md-12">
             <ul class="list-group col-12 fs-5 mb-2">
                 <li class="list-group-item">
+                    {% if role == 'admin' %}
+                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#Modal" aria-label="Редактировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                        </svg>
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Редактирование {{ aircraft.getBoardNum }}</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row justify-content-center">
+
+                                        <div class="col-xs-12 col-md-10">
+
+
+                                            {{ form_start(form) }}
+
+                                            <div class="col-12">
+                                            <div class="d-none">{{form_widget(form.ac_type) }}{{ form_widget(form.ac_category) }}{{ form_widget(form.add_type) }}
+                                            {{ form_widget(form.assigned_exp_date, {value: aircraft.getAssignedTerm}) }}
+                                                {{ form_widget(form.overhaul_exp_date, {value: aircraft.getOverhaulTerm}) }}</div>
+                                            <div class="form-group row mb-0 ">
+                                                <div class="col">
+                                                    {{ form_label(form.board_num) }}
+                                                    <div class="text-danger mb-0">{{ form_errors(form.board_num) }}</div>
+                                                    <div class="mt-0">{{ form_widget(form.board_num) }}</div>
+                                                </div>
+                                                <div class="col">
+                                                    {{ form_label(form.construction_weight) }}
+                                                    {{ form_widget(form.construction_weight) }}
+                                                    <div class="text-secondary fs-6 mb-0">{{ form_help(form.construction_weight) }}</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row mb-4 ">
+                                                <div class="col">
+                                                    {{ form_label(form.factory_num) }}
+                                                    <div class="text-danger mb-0">{{ form_errors(form.factory_num) }}</div>
+                                                    <div class="mt-0">{{ form_widget(form.factory_num) }}</div>
+                                                </div>
+                                                <div class="col">
+                                                    {{ form_row(form.factory_made_by) }}
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row mb-4 ">
+                                                <div class="col form-control pt-4 me-3 border border-primary border-2">
+
+                                                    {{ form_label(form.release_date) }}
+                                                    {{ form_widget(form.release_date) }}
+                                                    {{ form_label(form.last_repair_date) }}
+                                                    {{ form_widget(form.last_repair_date) }}
+                                                    {{ form_label(form.repairs_count) }}
+                                                    {{ form_widget(form.repairs_count, {value: aircraft.getRepairsCount}) }}
+                                                </div>
+                                                <div class="col form-control border border-primary border-2">
+                                                    {{ form_label(form.assigned_res) }}
+                                                    {{ form_widget(form.assigned_res) }}
+                                                    <div class="text-secondary">{{ form_help(form.assigned_res) }}</div>
+                                                    {{ form_label(form.assigned_exp_date) }}
+                                                    {{ form_widget(form.assigned_term) }}
+                                                    <div class="text-secondary">{{ form_help(form.assigned_exp_date) }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-4">
+                                                <div class="col form-control me-3 border border-primary border-2">
+                                                    {{ form_label(form.overhaul_res) }}
+                                                    {{ form_widget(form.overhaul_res) }}
+                                                    <div class="text-secondary">{{ form_help(form.overhaul_res) }}</div>
+                                                    {{ form_label(form.overhaul_exp_date) }}
+                                                    {{ form_widget(form.overhaul_term) }}
+
+                                                    <div class="text-secondary">{{ form_help(form.overhaul_exp_date) }}</div>
+                                                </div>
+                                                <div class="col form-control border border-primary border-2">
+
+                                                    {{ form_label(form.max_takeoff_weight) }}
+                                                    {{ form_widget(form.max_takeoff_weight) }}
+                                                    <div class="text-secondary">{{ form_help(form.max_takeoff_weight) }}</div>
+
+                                                    <div class="col-6">{{ form_label(form.centering) }}{{ form_widget(form.centering) }}</div>
+
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-4 ">
+                                                <div class="col form-control border border-primary border-2 me-3">
+                                                    <div class="mb-2">{{ form_label(form.fin_periodic_mt) }}:</div>
+                                                    {{ form_row(form.fin_form, {value: lastMaintance.MtForm}) }}
+                                                    {{ form_row(form.fin_res, {value: lastMaintance.MtRes}) }}
+                                                    {{ form_row(form.fin_term, {value: lastMaintance.MtExpDate|date('Y-m-d')}) }}
+                                                    {{ form_row(form.mt_made_by) }}
+                                                </div>
+                                                <div class="col form-control border border-primary border-2">
+                                                    <div class="mb-1">{{ form_row(form.lg_sert) }}</div>
+                                                    <br>
+                                                    {{ form_row(form.lg_date) }}
+                                                    {{ form_row(form.lg_exp_date) }}
+                                                    <br>
+                                                    {{ form_row(form.lg_given) }}
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-4 ">
+                                                <div class="col form-control me-3 border border-primary border-2">
+                                                    {{ form_row(form.reg_sert) }}
+                                                    <br>
+                                                    {{ form_row(form.reg_sert_date) }}
+                                                </div>
+
+                                                <div class="col form-control border border-primary border-2">
+                                                    {{ form_row(form.operator) }}
+                                                    <br>
+                                                    {{ form_row(form.owner) }}
+                                                </div>
+
+
+                                            </div>
+                                                <div class="form-group row mb-4 ">
+                                                    <div class="col form-control border border-primary border-2">
+                                                        {{ form_label(form.overhaul_res_overhaul) }}
+                                                        {{ form_widget(form.overhaul_res_overhaul, {value: lastOperating.overhaulRes}) }}
+                                                        <div class="text-secondary">{{ form_help(form.overhaul_res_overhaul) }}</div>
+                                                        <br>
+                                                        {{ form_label(form.total_res_overhaul) }}
+                                                        {{ form_widget(form.total_res_overhaul , {value: lastOperating.totalRes}) }}
+                                                        <div class="text-secondary">{{ form_help(form.total_res_overhaul) }}</div>
+                                                    </div>
+                                                </div>
+
+
+
+
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                    <div class="d-inline">{{ form_widget(form.save) }}</div>
+                                    {{ form_row(form._token) }}
+                                    <div class="d-none">{{ form_rest(form) }}</div>
+                                    {{ form_end(form) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                     {% if added == 'added' %}
                     <a href="/remFav/{{ aircraft.getId }}" title="Убрать из избранного" class="float-end btn btn-warning align-items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-star" viewBox="0 0 17 20">
@@ -86,7 +241,7 @@
                 {% if lastOperating.totalRes >= aircraft.getAssignedRes() %}
                     <li class="list-group-item list-group-item-danger">
                         Назначенный ресурс: <b>{{ aircraft.getAssignedRes() }} ч.</b> |
-                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | СНЭ: <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if lastOperating.totalRes/aircraft.getAssignedRes()*100>=80.0 and lastOperating.totalRes/aircraft.getAssignedRes()*100<100.0 %}
@@ -96,7 +251,7 @@
                         ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }} ч.
                             ({{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
                             %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                        СНЭ: <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if lastOperating.totalRes/aircraft.getAssignedRes()*100<80.0 %}
@@ -106,7 +261,7 @@
                         ресурс: <b>{{ aircraft.getAssignedRes()-lastOperating.totalRes }} ч.
                             ({{ '%0.1f'| format(100 - lastOperating.totalRes/aircraft.getAssignedRes()*100) }}
                             %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                        СНЭ: <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if aircraft.getAssignedExpDate != null %}
@@ -128,7 +283,7 @@
                     {% if lastOperating.overhaulRes >= aircraft.getOverhaulRes() %}
                         <li class="list-group-item list-group-item-danger">
                             Межремонтый ресурс: <b>{{ aircraft.getOverhaulRes() }} ч.</b> |
-                            ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.getOverhaulRes }}
+                            ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | ППР: <b>{{ lastOperating.getOverhaulRes }}
                                 ч.</b>
                         </li>
                     {% endif %}
@@ -139,7 +294,7 @@
                             ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }} ч.
                                 ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
                                 %)</b> |
-                            Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                            ППР: <b>{{ lastOperating.overhaulRes }} ч.</b>
                         </li>
                     {% endif %}
                     {% if lastOperating.overhaulRes/aircraft.getOverhaulRes()*100<80.0 %}
@@ -149,7 +304,7 @@
                             ресурс: <b>{{ aircraft.getOverhaulRes()-lastOperating.overhaulRes }} ч.
                                 ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/aircraft.getOverhaulRes()*100) }}
                                 %)</b> |
-                            Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                            ППР: <b>{{ lastOperating.overhaulRes }} ч.</b>
                         </li>
                     {% endif %}
                 {% if aircraft.getOverhaulExpDate != null %}
@@ -180,9 +335,10 @@
                 {% endif %}
                 <h3>{{ aircraft.getVsuNum }}</h3> -->
                 <li class="list-group-item">Вес конструкции: <b>{{ aircraft.getConstructionWeight }} кг</b></li>
-                <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }} мм</b></li>
+                <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }} м</b></li>
                 <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }} кг</b></li>
-                <li class="list-group-item">Периодическое ТО: <b>{{ aircraft.getFinPeriodicMt }}</b></li>
+                <li class="list-group-item">Периодическое ТО: <b>{{ lastMaintance.MtForm }} | {{ lastMaintance.MtRes }} |
+                         {{ lastMaintance.MtExpDate|date('d.m.Y') }}</b></li>
                 <li class="list-group-item">ТО выполнено: <b>{{ aircraft.getMtMadeBy }}</b></li>
                 <li class="list-group-item">Сертификат Летной годности(ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
                 {% if aircraft.getLgDate != null %}
@@ -195,7 +351,7 @@
                             до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b> | <b>Истек</b>
                         </li>
                     {% endif %}
-                    {% if aircraft.getLgExpDate >= date('-30days') and aircraft.getLgExpDate <= date('+30days') %}
+                    {% if aircraft.getLgExpDate >= date('-30days') and aircraft.getLgExpDate <= date('+30days') and aircraft.getLgExpDate > date() %}
                         <li class="list-group-item list-group-item-warning"> Срок службы сертификата Летной годности(ЛГ)
                             до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b> | <b>Осталось меньше 30 дней</b>
                         </li>

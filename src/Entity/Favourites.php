@@ -18,13 +18,13 @@ class Favourites
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="favourites")
+     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="favourites", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $idUser;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Aircraft::class, inversedBy="favourites")
+     * @ORM\ManyToOne(targetEntity=Aircraft::class, inversedBy="favourites", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $idAircraft;

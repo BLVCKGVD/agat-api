@@ -34,7 +34,7 @@ class UserLogs
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Aircraft::class, inversedBy="userLogs")
+     * @ORM\ManyToOne(targetEntity=Aircraft::class, inversedBy="userLogs" , cascade={"persist"})
      */
     private $aircraft;
 
@@ -54,7 +54,7 @@ class UserLogs
     private $FIO;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="userLogs")
+     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="userLogs", cascade={"persist", "remove"})
      */
     private $employee_add;
 

@@ -6,6 +6,7 @@ use App\Entity\AcTypes;
 use App\Entity\Aircraft;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -77,16 +78,16 @@ class AircraftType extends AbstractType
                 'attr'=>[
                     'class' =>'form-control',
                 ]])
-            ->add('fin_term',TextType::class, [
+            ->add('fin_term',DateType::class, [
                 'required' => false,
                 'mapped' => false,
-                'label'=>'Срок',
-                'help_attr'=>[
-                    'class'=>'text-danger mb-0'
-                ],
+                'widget' => 'single_text',
+                'label' => 'Дата выпуска:',
                 'attr'=>[
-                    'class' =>'form-control',
-                ]])
+                    'type'=>'date',
+                    'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .5rem;',
+                    'class' =>'mb-2 mt-2',
+            ]])
             ->add('serial_num',TextType::class, [
                 'required' => false,
                 'label'=>'Серийный номер',
@@ -120,7 +121,6 @@ class AircraftType extends AbstractType
                 'label'=>'Количество ремонтов',
                 'attr'=>[
                 'class' =>'col-2',
-                'value'=>'0',
                 'min'=>'0',
                 //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
                 ]])
@@ -139,6 +139,15 @@ class AircraftType extends AbstractType
                     'class' =>'form-control mb-0',
                 //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
             ]])
+            ->add('assigned_term',IntegerType::class, [
+                'mapped'=>true,
+                'required'=>false,
+                'label' => 'Назначенный срок службы:',
+                'help'=>'лет',
+                'attr'=>[
+                    'class' =>'form-control mb-0',
+                    //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
+                ]])
             ->add('overhaul_res',IntegerType::class, [
                 'label'=>'Межремонтный ресурс',
                 'help'=>'в часах',
@@ -154,6 +163,15 @@ class AircraftType extends AbstractType
                     'class' =>'form-control mb-0',
                 //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
             ]])
+            ->add('overhaul_term',IntegerType::class, [
+                'mapped'=>true,
+                'required'=>false,
+                'label' => 'Межремонтный срок службы:',
+                'help'=>'лет',
+                'attr'=>[
+                    'class' =>'form-control mb-0',
+                    //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
+                ]])
             ->add('res_renew_num',TextType::class, array('required' => false,'attr'=>array(
                 'class' =>'form-control'
                 )))
@@ -180,18 +198,16 @@ class AircraftType extends AbstractType
             ->add('vsu_num',TextType::class, array('required' => false,'attr'=>array(
                 'class' =>'form-control'
                 )))
-            ->add('construction_weight',IntegerType::class,[
+            ->add('construction_weight',NumberType::class,[
                 'help'=>'в килограммах',
                 'label'=>'Вес конструкции',
                 'attr'=>[
                 'class' =>'form-control mb-0',
-                'value'=>'0',
                 'min'=>'0'
                 ]])
-            ->add('centering',IntegerType::class, [
+            ->add('centering',NumberType::class, [
                 'label'=>'Центровка',
                 'attr'=>[
-                'value'=>'0',
                 'class' =>'form-control',
                 //'oninvalid'=>"this.setCustomValidity('Введите серийный номер')"
             ]])
@@ -270,8 +286,8 @@ class AircraftType extends AbstractType
                 'attr'=>[
                 'class' =>'form-control',
                 //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
-                
-                
+
+
                     ]
                 ]
             )
@@ -306,12 +322,33 @@ class AircraftType extends AbstractType
             ->add('special_marks',TextType::class, array('required' => false,'attr'=>array(
                 'class' =>'form-control'
             )))
+            ->add('overhaul_res_overhaul',IntegerType::class, [
+                'label'=>'Наработка (после последнего ремонта)',
+                'required'=>false,
+                'mapped'=>false,
+                'help'=>'в часах (необязательно)',
+                'attr'=>[
+                    'class' =>'form-control mb-0',
+                    'min'=>'0'
+                    //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
+                ]])
+            ->add('total_res_overhaul',IntegerType::class, [
+                'label'=>'Наработка (общая)',
+                'help'=>'в часах (необязательно)',
+                'required'=>false,
+                'mapped'=>false,
+                'attr'=>[
+                    'class' =>'form-control mb-0',
+                    'min'=>'0'
+                    //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
+                ]])
             ->add('save', SubmitType::class,[
                 'label' =>'Сохранить',
                 'attr'=>[
                 
                 'class' =>'form-control btn-primary',
             ]])
+
         ;
     }
 

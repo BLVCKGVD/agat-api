@@ -107,7 +107,7 @@ class Aircraft
     private $vsu_num;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $construction_weight;
 
@@ -224,6 +224,23 @@ class Aircraft
      */
     private $favourites;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Maintance::class, mappedBy="aircraft", orphanRemoval=true)
+     */
+    private $maintances;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $overhaul_term;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $assigned_term;
+
+
+
 
     /**
      * @return mixed
@@ -247,6 +264,7 @@ class Aircraft
         $this->userLogs = new ArrayCollection();
         $this->parts = new ArrayCollection();
         $this->favourites = new ArrayCollection();
+        $this->maintances = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -458,12 +476,12 @@ class Aircraft
         return $this;
     }
 
-    public function getConstructionWeight(): ?int
+    public function getConstructionWeight(): ?float
     {
         return $this->construction_weight;
     }
 
-    public function setConstructionWeight(int $construction_weight): self
+    public function setConstructionWeight(float $construction_weight): self
     {
         $this->construction_weight = $construction_weight;
 
@@ -807,4 +825,59 @@ class Aircraft
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Maintance>
+     */
+    public function getMaintances(): Collection
+    {
+        return $this->maintances;
+    }
+
+    public function addMaintance(Maintance $maintance): self
+    {
+        if (!$this->maintances->contains($maintance)) {
+            $this->maintances[] = $maintance;
+            $maintance->setAircraft($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMaintance(Maintance $maintance): self
+    {
+        if ($this->maintances->removeElement($maintance)) {
+            // set the owning side to null (unless already changed)
+            if ($maintance->getAircraft() === $this) {
+                $maintance->setAircraft(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOverhaulTerm(): ?int
+    {
+        return $this->overhaul_term;
+    }
+
+    public function setOverhaulTerm(int $overhaul_term): self
+    {
+        $this->overhaul_term = $overhaul_term;
+
+        return $this;
+    }
+
+    public function getAssignedTerm(): ?int
+    {
+        return $this->assigned_term;
+    }
+
+    public function setAssignedTerm(int $assigned_term): self
+    {
+        $this->assigned_term = $assigned_term;
+
+        return $this;
+    }
+
 }
