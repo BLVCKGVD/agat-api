@@ -135,13 +135,13 @@ class PartsController extends AbstractController
                     $overhaul_exp_date = new \DateTime();
                     $overhaul_exp_date->setTimestamp($part->getReleaseDate()->getTimestamp());
                     $overhaul_exp_date->modify('+'.$form->get('overhaul_exp')->getData().'years');
-                    $part->setOverhaulExpDate($overhaul_exp_date);
                 } else {
                     $repair_date = $form->get('repair_date')->getData();
                     $overhaul_exp_date = new \DateTime();
                     $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
                     $overhaul_exp_date->modify('+'.$form->get('overhaul_exp')->getData().'years');
                 }
+                $part->setOverhaulExpDate($overhaul_exp_date);
                 $assigned_exp_date = new \DateTime();
                 $assigned_exp_date->setTimestamp($part->getReleaseDate()->getTimestamp());
                 $assigned_exp_date->modify('+'.$form->get('assigned_exp')->getData().'years');
