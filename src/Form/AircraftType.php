@@ -157,7 +157,7 @@ class AircraftType extends AbstractType
             ->add('res_renew_num',TextType::class, array('required' => false,'attr'=>array(
                 'class' =>'form-control'
                 )))
-            ->add('operator',TextType::class, array('required' => false,'label'=>'Оператор','attr'=>array(
+            ->add('operator',TextType::class, array('required' => false,'label'=>'Эксплуатант/владелец','attr'=>array(
                 'label'=>'Эксплуатант/владелец',
                 'class' =>'form-control'
                 )))
