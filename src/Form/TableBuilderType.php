@@ -157,14 +157,14 @@ class TableBuilderType extends AbstractType
                 'attr'=>['class'=>'form-check-input'],
                 'data' => $data['operator'],
                 'required' => false,
-                'label' => 'Эксплуатант'
+                'label' => 'Эксплуатант/владелец'
             ])
             ->add('owner',CheckboxType::class, [
                 'label_attr'=>['class'=>'form-check-label'],
                 'attr'=>['class'=>'form-check-input'],
                 'data' => $data['owner'],
                 'required' => false,
-                'label' => 'Владелец'
+                'label' => 'Собственник'
             ])
             ->add('rent_doc_num',CheckboxType::class, [
                 'label_attr'=>['class'=>'form-check-label'],
@@ -220,7 +220,7 @@ class TableBuilderType extends AbstractType
                 'attr'=>['class'=>'form-check-input'],
                 'data' => $data['fin_periodic_mt'],
                 'required' => false,
-                'label'=>'Заключительное периодическое ТО',
+                'label'=>'Периодическое ТО',
 
             ])
             ->add('mt_made_by',CheckboxType::class, [
@@ -228,7 +228,7 @@ class TableBuilderType extends AbstractType
                 'attr'=>['class'=>'form-check-input'],
                 'data' => $data['mt_made_by'],
                 'required' => false,
-                'label'=>'Кем выполнено заключительное периодическое ТО',
+                'label'=>'Кем выполнено периодическое ТО',
 
             ])
             ->add('lg_sert',CheckboxType::class, [
