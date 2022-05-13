@@ -68,7 +68,9 @@
                         <div class="modal-dialog modal-xl modal-dialog-scrollable">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Редактирование {{ aircraft.getBoardNum }}</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Редактирование {{ aircraft.getBoardNum }}
+                                        <p class="fs-6 text-secondary mb-0">Данная функция доступна только администраторам, вводите данные внимательно</p></h5>
+
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
                                 </div>
                                 <div class="modal-body">
@@ -85,12 +87,12 @@
                                                 {{ form_widget(form.overhaul_exp_date, {value: aircraft.getOverhaulTerm}) }}</div>
                                             <div class="form-group row mb-0 ">
                                                 <div class="col">
-                                                    {{ form_label(form.board_num) }}
+                                                    <div class="fs-6">{{ form_label(form.board_num) }}</div>
                                                     <div class="text-danger mb-0">{{ form_errors(form.board_num) }}</div>
                                                     <div class="mt-0">{{ form_widget(form.board_num) }}</div>
                                                 </div>
                                                 <div class="col">
-                                                    {{ form_label(form.construction_weight) }}
+                                                    <div class="fs-6">{{ form_label(form.construction_weight) }}</div>
                                                     {{ form_widget(form.construction_weight) }}
                                                     <div class="text-secondary fs-6 mb-0">{{ form_help(form.construction_weight) }}</div>
                                                 </div>
@@ -98,12 +100,12 @@
 
                                             <div class="form-group row mb-4 ">
                                                 <div class="col">
-                                                    {{ form_label(form.factory_num) }}
+                                                    <div class="fs-6">{{ form_label(form.factory_num) }}</div>
                                                     <div class="text-danger mb-0">{{ form_errors(form.factory_num) }}</div>
                                                     <div class="mt-0">{{ form_widget(form.factory_num) }}</div>
                                                 </div>
                                                 <div class="col">
-                                                    {{ form_row(form.factory_made_by) }}
+                                                    <div class="fs-6">{{ form_row(form.factory_made_by) }}</div>
                                                 </div>
                                             </div>
 
@@ -144,6 +146,7 @@
                                                     <div class="text-secondary">{{ form_help(form.max_takeoff_weight) }}</div>
 
                                                     <div class="col-6">{{ form_label(form.centering) }}{{ form_widget(form.centering) }}</div>
+                                                    <div class="text-secondary">{{ form_help(form.centering) }}</div>
 
                                                 </div>
                                             </div>

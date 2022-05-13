@@ -207,6 +207,7 @@ class AircraftType extends AbstractType
                 ]])
             ->add('centering',NumberType::class, [
                 'label'=>'Центровка',
+                'help'=>'в метрах',
                 'attr'=>[
                 'class' =>'form-control',
                 //'oninvalid'=>"this.setCustomValidity('Введите серийный номер')"
@@ -323,7 +324,7 @@ class AircraftType extends AbstractType
                 'class' =>'form-control'
             )))
             ->add('overhaul_res_overhaul',IntegerType::class, [
-                'label'=>'Наработка (после последнего ремонта)',
+                'label'=>'Наработка (ППР)',
                 'required'=>false,
                 'mapped'=>false,
                 'help'=>'в часах (необязательно)',
@@ -333,7 +334,7 @@ class AircraftType extends AbstractType
                     //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
                 ]])
             ->add('total_res_overhaul',IntegerType::class, [
-                'label'=>'Наработка (общая)',
+                'label'=>'Наработка (СНЭ)',
                 'help'=>'в часах (необязательно)',
                 'required'=>false,
                 'mapped'=>false,
