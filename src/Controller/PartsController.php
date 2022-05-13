@@ -154,6 +154,7 @@ class PartsController extends AbstractController
                 $part->addPartsOperating($operating);
                 $this->getDoctrine()->getManager()->persist($part);
                 $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', "Комплектующее успешно создано");
                 return $this->redirect('/aircrafts/'.$id);
             }
         }

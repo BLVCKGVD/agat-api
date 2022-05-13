@@ -27,6 +27,15 @@
         {% endif %}
         <a class="float-end" href="/exit">Выйти</a>
     </div>
+    {% set top = 0 %}
+    {% for message in app.flashes('success') %}
+        {% set top = top + 4 %}
+        <div class="col-4 successes alert alert-success" style="top: {{ top }}em">
+                {{ message }}
+        </div>
+    {% endfor %}
+
+
 
     <div class="container mt-5 pt-5">
         <h2 class="text-center">Авторизованы как {{ FIO }}</h2>

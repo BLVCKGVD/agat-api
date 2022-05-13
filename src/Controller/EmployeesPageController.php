@@ -75,6 +75,7 @@ class EmployeesPageController extends AbstractController
                 {
                     return $this->redirect('/aircrafts/'.$request->get('ac'));
                 }
+                $this->addFlash('success', "Вы успешно вошли в систему");
             return $this->redirect('/employees');
             } else{
                 return $this->render('employees_page/authtorization.html.twig', [
@@ -151,14 +152,18 @@ class EmployeesPageController extends AbstractController
                         ->setSubUser($found);
                     $this->getDoctrine()->getManager()->persist($email);
                     $this->getDoctrine()->getManager()->flush();
+                    $this->addFlash("success", "Почта успешно привязана");
                     if($request->query->get('test') == 'on')
-                    $email = (new Email())
-                        ->from('agataviainfo@gmail.com')
-                        ->to($request->query->get('mail'))
-                        ->subject('Добро пожаловать!');
-                    $email->html('Добро пожаловать в систему рассылки информации по воздушным судам авиакомпании "Агат".<br> '.
-                    $found->getFIO().', удачного использования системы. <br>Не забудьте прочитать руководство');
-                    $mailer->send($email);
+                    {
+                        $email = (new Email())
+                            ->from('agataviainfo@gmail.com')
+                            ->to($request->query->get('mail'))
+                            ->subject('Добро пожаловать!');
+                        $email->html('Добро пожаловать в систему рассылки информации по воздушным судам авиакомпании "Агат".<br> '.
+                            $found->getFIO().', удачного использования системы. <br>Не забудьте прочитать руководство');
+                        $mailer->send($email);
+                        $this->addFlash("success", "Тестовое письмо отправлено");
+                    }
                     return $this->redirect('/employees');
                 }
                 if ($found->getEmailSubsription() == null)
@@ -202,9 +207,10 @@ class EmployeesPageController extends AbstractController
                 $email = (new Email())
                     ->from('agataviainfo@gmail.com')
                     ->to($mail->getEmail())
-                    ->subject('Добро пожаловать!');
+                    ->subject('Отписка от рассылки');
                 $email->html('Вы отписались от рассылки');
                 $mailer->send($email);
+                $this->addFlash("success", "Вы успешно отвязались от почтовой рассылки");
                 return $this->redirect('/employees');
             }
             return $this->redirect('/employees');

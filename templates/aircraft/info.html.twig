@@ -13,6 +13,7 @@
         <center>
             <h3>Информация о ВС</h3>
         </center>
+
         <button class="btn btn-primary mb-2" id="addResBtn" onclick="displaySpan()">Добавить наработку
         </button>
         <div id="form" style="display:none;">
@@ -52,6 +53,29 @@
     </span>
         </div>
 
+    </div>
+    <div class="row">
+        <button class="btn btn-primary mb-2" id="addLgBtn" onclick="displayLg()">Изменить сертификат ЛГ
+        </button>
+        <div id="form2" style="display:none;">
+            <span class=" overflow-auto col-12 mb-5" style="display: none; max-height: 400px" id='addLg'>
+        <div class="col-12 ">
+
+            <div class="col-6 ms-auto me-auto ">
+                {{ form_start(addLg) }}
+                {{ form_row(addLg.lg_sert) }}
+                {{ form_label(addLg.lg_date) }}
+                {{ form_widget(addLg.lg_date) }}<br>
+                {{ form_label(addLg.lg_exp_date) }}
+                {{ form_widget(addLg.lg_exp_date) }}
+                {{ form_row(addLg.lg_given) }}
+                {{ form_end(addLg) }}
+            </div>
+
+        </div>
+
+    </span>
+        </div>
     </div>
     <div class="row">
         <div class="col-lg-7 col-md-12">
@@ -343,27 +367,29 @@
                 <li class="list-group-item">Периодическое ТО: <b>{{ lastMaintance.MtForm }} | {{ lastMaintance.MtRes }} |
                          {{ lastMaintance.MtExpDate|date('d.m.Y') }}</b></li>
                 <li class="list-group-item">ТО выполнено: <b>{{ aircraft.getMtMadeBy }}</b></li>
-                <li class="list-group-item">Сертификат Летной годности(ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
+                <li class="list-group-item">Сертификат Летной годности (ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
                 {% if aircraft.getLgDate != null %}
                     <li class="list-group-item">Дата выдачи сертификата Летной
-                        годности(ЛГ): <b>{{ aircraft.getLgDate|date('d.m.Y') }}</b></li>
+                        годности (ЛГ): <b>{{ aircraft.getLgDate|date('d.m.Y') }}</b></li>
                 {% endif %}
                 {% if aircraft.getLgExpDate != null %}
                     {% if aircraft.getLgExpDate <= date() %}
-                        <li class="list-group-item list-group-item-danger"> Срок службы сертификата Летной годности(ЛГ)
+                        <li class="list-group-item list-group-item-danger"> Срок службы сертификата Летной годности (ЛГ)
                             до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b> | <b>Истек</b>
                         </li>
                     {% endif %}
                     {% if aircraft.getLgExpDate >= date('-30days') and aircraft.getLgExpDate <= date('+30days') and aircraft.getLgExpDate > date() %}
-                        <li class="list-group-item list-group-item-warning"> Срок службы сертификата Летной годности(ЛГ)
+                        <li class="list-group-item list-group-item-warning"> Срок службы сертификата Летной годности (ЛГ)
                             до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b> | <b>Осталось меньше 30 дней</b>
                         </li>
                     {% endif %}
                     {% if aircraft.getLgExpDate > date('+30days') %}
-                        <li class="list-group-item list-group-item-success"> Срок службы сертификата Летной годности(ЛГ)
+                        <li class="list-group-item list-group-item-success"> Срок службы сертификата Летной годности (ЛГ)
                             до: <b>{{ aircraft.getLgExpDate|date('d.m.Y') }}</b></li>
                     {% endif %}
                 {% endif %}
+                <li class="list-group-item"> Серитификат ЛГ выдан:
+                    <b>{{ aircraft.getLgGiven }}</b></li>
                 <li class="list-group-item">Сертификат о регистрации: <b>{{ aircraft.getRegSert }}</b></li>
                 {% if aircraft.getRegSertDate != null %}
                     <li class="list-group-item">Дата регистрации: <b>{{ aircraft.getRegSertDate|date('d.m.Y') }}</b>
@@ -540,6 +566,26 @@
             } else {
                 addRep.style.display = "none";
                 addRepBtn.innerHTML = "Добавить ремонт";
+                form.style.display = "none";
+
+            }
+        }
+        function displayLg() {
+            var addLg = document.getElementById("addLg");
+            var addLgBtn = document.getElementById("addLgBtn");
+            var form = document.getElementById("form2");
+            if (addLg.style.display === "none") {
+                addLg.style.display = "block";
+                addRes.style.display = "none";
+                addRep.style.display = "none";
+                addResBtn.innerHTML = "Добавить наработку";
+                addRepBtn.innerHTML = "Добавить ремонт";
+                addLgBtn.innerHTML = "Закрыть";
+                form2.style.display = "block";
+
+            } else {
+                addLg.style.display = "none";
+                addLgBtn.innerHTML = "Изменить сертификат ЛГ";
                 form.style.display = "none";
 
             }

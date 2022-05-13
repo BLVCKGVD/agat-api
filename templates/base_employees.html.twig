@@ -85,6 +85,20 @@
         background-color: #f8f9fa;
         color: black;
     }
+
+    .successes {
+        position: fixed;
+        top: 4em;
+        right: 1em;
+        z-index: 1;
+        animation: fadeOut 2s forwards;
+        animation-delay: 3s;
+    }
+
+    @keyframes fadeOut {
+        from {opacity: 1;}
+        to {opacity: 0;}
+    }
 </style>
 
     {% block body %}

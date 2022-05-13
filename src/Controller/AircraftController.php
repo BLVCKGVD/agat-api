@@ -12,6 +12,7 @@ use App\Entity\Parts;
 use App\Entity\PartsOperating;
 use App\Entity\UserLogs;
 use App\Entity\Users;
+use App\Form\addLgType;
 use App\Form\AddRepAcType;
 use App\Form\AddRepType;
 use App\Form\AddResType;
@@ -194,7 +195,7 @@ class AircraftController extends AbstractController
                 ->setDate(new \DateTime());
             $this->getDoctrine()->getManager()->persist($userLogs);
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('success',"Воздушное судно успешно создано");
             return $this->redirectToRoute('aircraft_info',[
                 'id'=>$aircraft->getId(),
             ]);
@@ -260,6 +261,9 @@ class AircraftController extends AbstractController
         $form->handleRequest($request);
         $formRep = $this->createForm(AddRepAcType::class);
         $formRep->handleRequest($request);
+
+        $formLg = $this->createForm(addLgType::class);
+        $formLg->handleRequest($request);
 
         $formEdit = $this->createForm(AircraftType::class, $aircraft);
         $formEdit->handleRequest($request);
@@ -352,6 +356,7 @@ class AircraftController extends AbstractController
                 ->setDate(new \DateTime());
             $this->getDoctrine()->getManager()->persist($userLogs);
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("success", "Воздушное судно отредактировано");
 
             return $this->redirectToRoute('aircraft_info',[
                 'id'=>$aircraft->getId(),
@@ -394,6 +399,7 @@ class AircraftController extends AbstractController
             $this->entityManager->persist($userLogs);
             $this->entityManager->persist($new_operating);
             $this->entityManager->flush();
+            $this->addFlash("success", "Наработка добавлена");
             return $this->redirect($request->getUri());
 
         }
@@ -432,8 +438,19 @@ class AircraftController extends AbstractController
             $this->entityManager->persist($aircraft);
             $this->entityManager->persist($new_operating);
             $this->entityManager->flush();
+            $this->addFlash("success", "Ремонт добавлен");
             return $this->redirect($request->getUri());
 
+        }
+        if ($formLg->isSubmitted() && $formLg->isValid())
+        {
+            $aircraft->setLgSert($formLg->get('lg_sert')->getData())
+                ->setLgDate($formLg->get('lg_date')->getData())
+                ->setLgExpDate($formLg->get('lg_exp_date')->getData())
+                ->setLgGiven($formLg->get('lg_given')->getData());
+            $this->entityManager->persist($aircraft);
+            $this->entityManager->flush();
+            $this->addFlash("success", "Сертификат летной годности обновлен");
         }
         return $this->render('aircraft/info.html.twig', [
             'controller_name' => 'AircraftController',
@@ -447,6 +464,7 @@ class AircraftController extends AbstractController
             'form'=>$formEdit->createView(),
             'addRes' => $form->createView(),
             'addRep' => $formRep->createView(),
+            'addLg'=>$formLg->createView(),
             'aircraftOperating' => $aircraft->getAircraftOperating(),
             'role' => $role,
             'added' => $this->getFav($aircraft),

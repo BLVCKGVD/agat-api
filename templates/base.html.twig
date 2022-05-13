@@ -48,6 +48,20 @@
         background-color: #f8f9fa;
         filter: none;
     }
+
+    .successes {
+        position: fixed;
+        top: 4em;
+        right: 1em;
+        z-index: 1;
+        animation: fadeOut 2s forwards;
+        animation-delay: 3s;
+    }
+
+    @keyframes fadeOut {
+        from {opacity: 1;}
+        to {opacity: 0;}
+    }
 </style>
 <body>
 <div class="row w-100 m-0" style="">
@@ -77,7 +91,13 @@
 
     </nav>
 </div>
-
+{% set top = 0 %}
+{% for message in app.flashes('success') %}
+    {% set top = top + 6 %}
+    <div class="col-4 successes alert alert-success" style="top: {{ top }}em">
+        {{ message }}
+    </div>
+{% endfor %}
 <div class="container-lg">
 {% block body %}
 

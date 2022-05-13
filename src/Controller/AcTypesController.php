@@ -41,6 +41,7 @@ class AcTypesController extends AbstractController
                 ->setDate(new \DateTime());
             $this->getDoctrine()->getManager()->persist($userLogs);
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash('success', "Тип ".$new_type->getType()." успешно создан");
             return $this->redirectToRoute('employees_page');
         }
         return $this->render('aircraft/addType.html.twig',[

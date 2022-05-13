@@ -87,7 +87,7 @@ class SubController extends AbstractController
                 }
                 $email->html($text);
                 $this->mailer->send($email);
-
+                $this->addFlash('success', "Письмо успешно отправлено");
                 return $this->redirectToRoute('subs');
 
             }
@@ -149,7 +149,7 @@ class SubController extends AbstractController
 
                 $email->html($text);
                 $this->mailer->send($email);
-
+                $this->addFlash('success', "Письмо успешно отправлено");
                 return $this->redirectToRoute('subs');
 
             }
