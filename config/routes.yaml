@@ -81,6 +81,9 @@ aircrafts_page:
 add_ac_type:
     path: /add_ac_type
     controller: App\Controller\AcTypesController::create
+del_ac_type:
+    path: /del_ac_type/{id}
+    controller: App\Controller\AcTypesController::delete
 download:
     path: /aircrafts/download/{id}/{fileName}
     controller: App\Controller\AircraftController::testWord

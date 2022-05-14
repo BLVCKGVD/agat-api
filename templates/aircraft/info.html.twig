@@ -77,6 +77,31 @@
     </span>
         </div>
     </div>
+
+    <div class="row">
+        <button class="btn btn-primary mb-2" id="addMtBtn" onclick="displayMt()">Обновить периодическое ТО
+        </button>
+        <div id="form3" style="display:none;">
+            <span class=" overflow-auto col-12 mb-5" style="display: none; max-height: 400px" id='addMt'>
+        <div class="col-12 ">
+
+            <div class="col-6 ms-auto me-auto ">
+                {{ form_start(addMt) }}
+                {{ form_row(addMt.mt_form) }}
+                {{ form_label(addMt.mt_res) }}
+                {{ form_widget(addMt.mt_res) }}
+                <div class="text-secondary">{{ form_help(addMt.mt_res) }}</div>
+                {{ form_label(addMt.mt_exp_date) }}
+                {{ form_widget(addMt.mt_exp_date) }}<br>
+                {{ form_row(addMt.mt_made_by) }}
+                {{ form_end(addMt) }}
+            </div>
+
+        </div>
+
+    </span>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-7 col-md-12">
             <ul class="list-group col-12 fs-5 mb-2">
@@ -177,10 +202,10 @@
                                             <div class="form-group row mb-4 ">
                                                 <div class="col form-control border border-primary border-2 me-3">
                                                     <div class="mb-2">{{ form_label(form.fin_periodic_mt) }}:</div>
-                                                    {{ form_row(form.fin_form, {value: lastMaintance.MtForm}) }}
-                                                    {{ form_row(form.fin_res, {value: lastMaintance.MtRes}) }}
-                                                    {{ form_row(form.fin_term, {value: lastMaintance.MtExpDate|date('Y-m-d')}) }}
-                                                    {{ form_row(form.mt_made_by) }}
+                                                    {{ form_row(form.fin_form, {value: lastMaintance.MtForm,'attr':{'disabled':'disabled'}}) }}
+                                                    {{ form_row(form.fin_res, {value: lastMaintance.MtRes,'attr':{'disabled':'disabled'}}) }}
+                                                    {{ form_row(form.fin_term, {value: lastMaintance.MtExpDate|date('Y-m-d'),'attr':{'disabled':'disabled'}}) }}
+                                                    {{ form_row(form.mt_made_by, { 'attr':{'disabled':'disabled'} }) }}
                                                 </div>
                                                 <div class="col form-control border border-primary border-2">
                                                     <div class="mb-1">{{ form_row(form.lg_sert) }}</div>
@@ -365,7 +390,31 @@
                 <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }} м</b></li>
                 <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }} кг</b></li>
                 <li class="list-group-item">Периодическое ТО: <b>{{ lastMaintance.MtForm }} | {{ lastMaintance.MtRes }} |
-                         {{ lastMaintance.MtExpDate|date('d.m.Y') }}</b></li>
+                         {{ lastMaintance.MtExpDate|date('d.m.Y') }}</b><br>
+                    <hr class="mt-1 mb-1">
+                        <em>
+                    Дейтсвует до: <b>
+                        {{ lastMaintance.MtExpDate|date_modify("+"~ type.getMrMonth ~" month")|date('d.m.Y')  }}
+                    </b><br>
+                    Осталось до следующего ТО:
+                                {% if lastMaintance.MtRes+lastMaintance.MtRes-lastOperating.OverhaulRes-(lastMaintance.MtRes-type.MrRes) > type.MrRes
+                                or lastMaintance.MtRes+lastMaintance.MtRes-lastOperating.OverhaulRes-(lastMaintance.MtRes-type.MrRes) < 0
+                                %}
+                    <div class="d-inline mb-0 text-danger">Проблема:
+                                {{ lastMaintance.MtRes+lastMaintance.MtRes-lastOperating.OverhaulRes-(lastMaintance.MtRes-type.MrRes) }} ч. <br>
+                        {% if lastMaintance.MtRes+lastMaintance.MtRes-lastOperating.OverhaulRes-(lastMaintance.MtRes-type.MrRes) > type.MrRes %}
+                            Данные о периодическом ТО введены неверно: Актуальный ППР меньше наработки формы (Макс. {{ type.MrRes }} ч.Ful)
+                        {% endif %}
+                        {% if lastMaintance.MtRes+lastMaintance.MtRes-lastOperating.OverhaulRes-(lastMaintance.MtRes-type.MrRes) < 0 %}
+                            Требуется ТО (Мин. 0 ч.)
+                        {% endif %}
+                    </div>
+                                {% else %}
+                                {{ lastMaintance.MtRes+lastMaintance.MtRes-lastOperating.OverhaulRes-(lastMaintance.MtRes-type.MrRes) }} ч.
+                                {% endif %}
+
+                        </em>
+                </li>
                 <li class="list-group-item">ТО выполнено: <b>{{ aircraft.getMtMadeBy }}</b></li>
                 <li class="list-group-item">Сертификат Летной годности (ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
                 {% if aircraft.getLgDate != null %}
@@ -541,7 +590,11 @@
                 addRes.style.display = "block";
                 addResBtn.innerHTML = "Закрыть";
                 addRep.style.display = "none";
+                addLg.style.display = "none";
+                addMt.style.display = "none";
                 addRepBtn.innerHTML = "Добавить ремонт";
+                addMtBtn.innerHTML = "Обновить периодическое ТО";
+                addLgBtn.innerHTML = "Изменить сертификат ЛГ";
                 form.style.display = "block";
 
             } else {
@@ -559,7 +612,11 @@
             if (addRep.style.display === "none") {
                 addRep.style.display = "block";
                 addRes.style.display = "none";
+                addLg.style.display = "none";
+                addMt.style.display = "none";
                 addResBtn.innerHTML = "Добавить наработку";
+                addMtBtn.innerHTML = "Обновить периодическое ТО";
+                addLgBtn.innerHTML = "Изменить сертификат ЛГ";
                 addRepBtn.innerHTML = "Закрыть";
                 form1.style.display = "block";
 
@@ -578,14 +635,39 @@
                 addLg.style.display = "block";
                 addRes.style.display = "none";
                 addRep.style.display = "none";
+                addMt.style.display = "none";
                 addResBtn.innerHTML = "Добавить наработку";
                 addRepBtn.innerHTML = "Добавить ремонт";
+                addMtBtn.innerHTML = "Обновить периодическое ТО";
                 addLgBtn.innerHTML = "Закрыть";
-                form2.style.display = "block";
+                form.style.display = "block";
 
             } else {
                 addLg.style.display = "none";
                 addLgBtn.innerHTML = "Изменить сертификат ЛГ";
+                form.style.display = "none";
+
+            }
+        }
+
+        function displayMt() {
+            var addMt = document.getElementById("addMt");
+            var addMtBtn = document.getElementById("addMtBtn");
+            var form = document.getElementById("form3");
+            if (addMt.style.display === "none") {
+                addMt.style.display = "block";
+                addRes.style.display = "none";
+                addRep.style.display = "none";
+                addLg.style.display = "none";
+                addResBtn.innerHTML = "Добавить наработку";
+                addRepBtn.innerHTML = "Добавить ремонт";
+                addLgBtn.innerHTML = "Изменить сертификат ЛГ";
+                addMtBtn.innerHTML = "Закрыть";
+                form.style.display = "block";
+
+            } else {
+                addMt.style.display = "none";
+                addMtBtn.innerHTML = "Обновить периодическое ТО";
                 form.style.display = "none";
 
             }

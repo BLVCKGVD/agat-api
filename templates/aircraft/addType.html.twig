@@ -11,6 +11,23 @@
     <div class="col-12 col-md-7 col-lg-5">
         {{ form(form) }}
     </div>
+    <ul class="list-group mt-5">
+        {% for type in types %}
+        <li class="list-group-item">
+            <div class="mt-2">Тип ВС: {{type.getType}}
+                {% if login == 'kizmin' or login == 'angen' %}
+                <a href="/del_ac_type/{{ type.getId }}" onclick="return confirm('Вы уверены,ч то хотите удалить этот тип? (Удаление типа приведет у удалению всех воздушных судов данного типа)')" class="btn btn-danger float-end">Удалить</a>
+                {% endif %}
+            </div>
+            <div class="mt-2">Категория ВС: {{type.Category}}</div>
+            <div class="mt-2">Кол-во двигателей: {{type.EngCount}}</div>
+            <div class="mt-2">Межрегламентный период наработки: {{type.MrRes}} ч.</div>
+            <div class="mt-2">Межрегламентный период в месяцах: {{type.MrMonth}}</div>
+
+
+        </li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
 

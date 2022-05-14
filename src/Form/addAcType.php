@@ -56,6 +56,22 @@ class addAcType extends AbstractType
                     'placeholder' => 'Кол-во двигателей'
                 ],
             ],)
+            ->add('mr_res', IntegerType::class,[
+                'required' => true,
+                'label'=>'Межрегламентый период наработки',
+                'attr' => [
+                    'class' =>'form-control mb-2',
+                    'placeholder' => 'Межрегламентый период наработки'
+                ],
+            ],)
+            ->add('mr_month', IntegerType::class,[
+                'required' => true,
+                'label'=>'Межрегламентый период в месяцах',
+                'attr' => [
+                    'class' =>'form-control mb-2',
+                    'placeholder' => 'Межрегламентый период в месяцах'
+                ],
+            ],)
             ->add('submit', SubmitType::class,
                 [
                     'label' => 'Создать',

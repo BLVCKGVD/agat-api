@@ -32,6 +32,16 @@ class AcTypes
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $mr_res;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $mr_month;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,5 +85,29 @@ class AcTypes
     public function __toString(): string
     {
         return $this->getType();
+    }
+
+    public function getMrRes(): ?int
+    {
+        return $this->mr_res;
+    }
+
+    public function setMrRes(int $mr_res): self
+    {
+        $this->mr_res = $mr_res;
+
+        return $this;
+    }
+
+    public function getMrMonth(): ?int
+    {
+        return $this->mr_month;
+    }
+
+    public function setMrMonth(int $mr_month): self
+    {
+        $this->mr_month = $mr_month;
+
+        return $this;
     }
 }
