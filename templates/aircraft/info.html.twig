@@ -582,6 +582,11 @@
     </div>
 
     <script type="text/javascript">
+        let first_error = document.getElementsByClassName('list-group-item-danger');
+        if (first_error != null)
+        {
+            first_error[0].scrollIntoView();
+        }
         function displaySpan() {
             var addRes = document.getElementById("addRes");
             var addResBtn = document.getElementById("addResBtn");
