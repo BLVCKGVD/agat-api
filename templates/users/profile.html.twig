@@ -15,7 +15,10 @@
         {% if user.getRole == 'admin' %}
         <li class="list-group-item">Роль: <b>Администратор</b></li>
         {% endif %}
-        {% if user.getRole != 'admin' %}
+        {% if user.getRole == 'superadmin' %}
+            <li class="list-group-item">Роль: <b>Администратор+</b></li>
+        {% endif %}
+        {% if user.getRole == 'user' %}
             <li class="list-group-item">Роль: <b>Пользователь</b></li>
         {% endif %}
     </ul>
