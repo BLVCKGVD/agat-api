@@ -583,7 +583,7 @@
 
     <script type="text/javascript">
         let first_error = document.getElementsByClassName('list-group-item-danger');
-        if (first_error != null)
+        if (first_error != null && window.screen.width >= 1200)
         {
             first_error[0].scrollIntoView();
         }
