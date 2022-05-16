@@ -15,8 +15,8 @@
             <img class="airplane2" height="25px" src="{{ asset('build/images/airplane-black.png') }}">
             <img class="airplane1" height="25px" src="{{ asset('build/images/airplane.png') }}">
         </a>
-        {% if role == 'admin' %}
-            {% if login == 'angen' or login == 'kuzmin'  %}
+        {% if role == 'admin' or role == 'superadmin' %}
+            {% if role == 'superadmin' %}
             <a class="d-none d-md-inline" href="/content" >Страницы</a>
             <a class="content d-inline d-md-none" href="/content">
                 <img  height="25px" class="content2"  src="{{ asset('build/images/pages-black.png') }}">
@@ -53,11 +53,11 @@
                         <div class="d-block d-lg-inline col-lg-auto col-12 text-center text-lg-start mb-lg-0 mb-2">
                             {{u.getFIO}}
                         </div>
-                        {% if u.getRole == 'admin' %}
+                        {% if u.getRole == 'admin' or u.getRole == 'superadmin'%}
                             <div class="d-block d-lg-inline float-lg-end bg-success rounded-2 ps-2 pe-2 mb-2 mb-lg-0">
                                 <center>
                                     <p class="m-0 text-white">
-                                        {% if u.getLogin == 'angen' or u.getLogin == 'kuzmin' %}
+                                        {% if u.getRole == 'superadmin'%}
                                         Администратор+
                                         {% else %}
                                             Администратор
@@ -67,7 +67,7 @@
 
                             </div>
                         {% endif %}
-                        {% if u.getRole != 'admin' %}
+                        {% if u.getRole != 'admin' and u.getRole != 'superadmin' %}
                             <div class="d-block d-lg-inline float-lg-end bg-success rounded-2 ps-2 pe-2 mb-2 mb-lg-0">
                                 <center>
                                     <p class="m-0 text-white">Пользователь</p>

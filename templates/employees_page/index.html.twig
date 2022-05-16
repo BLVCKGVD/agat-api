@@ -11,8 +11,8 @@
             <img class="airplane2" height="25px" src="{{ asset('build/images/airplane-black.png') }}">
             <img class="airplane1" height="25px" src="{{ asset('build/images/airplane.png') }}">
         </a>
-        {% if role == 'admin' %}
-            {% if login == 'angen' or login == 'kuzmin'  %}
+        {% if role == 'admin' or role == 'superadmin' %}
+            {% if role == 'superadmin'  %}
             <a class="d-none d-md-inline" href="/content" >Страницы</a>
             <a class="content d-inline d-md-none" href="/content" >
                 <img class="content2" height="25px" src="{{ asset('build/images/pages-black.png') }}">
@@ -71,12 +71,12 @@
                 <center>
                     <p class="fs-5">Дополнительные функции</p>
                     <ul class="list-group">
-                        {% if role == 'admin' %}
+                        {% if role == 'admin' or role == 'superadmin' %}
                         <li onclick="window.location='/add_ac_type'"
                                 class="list-group-item list-group-item-action border border-success mb-2 rounded-2">
                             Добавить тип воздушного судна
                         </li>
-                            {% if login == 'angen' or login == 'kuzmin' %}
+                            {% if role == 'superadmin' %}
                             <li onclick="window.location='/subscriptions'"
                                 class="list-group-item list-group-item-action border border-success mb-2 rounded-2">
                                 Управление почтовыми рассылками

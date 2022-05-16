@@ -22,7 +22,7 @@ class UsersController extends AbstractController
 
     public function index(Request $request): Response
     {
-        if (isset($_COOKIE['role']) && $_COOKIE['role']!= 'admin') {
+        if (isset($_COOKIE['role']) && ($_COOKIE['role']!= 'admin' && $_COOKIE['role']!= 'superadmin')) {
             return $this->redirectToRoute('employees_page');
         }
         $searchfor = $request->query->get('searchfor');
@@ -51,7 +51,7 @@ class UsersController extends AbstractController
     }
     public function get($id): Response
     {
-        if (isset($_COOKIE['role']) && $_COOKIE['role']!= 'admin') {
+        if (isset($_COOKIE['role']) && ($_COOKIE['role']!= 'admin' && $_COOKIE['role']!= 'superadmin')) {
             return $this->redirectToRoute('employees_page');
         }
         $user = $this->getDoctrine()->getRepository(Users::class)->find($id);
@@ -68,7 +68,7 @@ class UsersController extends AbstractController
     }
     public function delLogs($id)
     {
-        if (isset($_COOKIE['role']) && $_COOKIE['role']!= 'admin') {
+        if (isset($_COOKIE['role']) && ($_COOKIE['role']!= 'admin' && $_COOKIE['role']!= 'superadmin')) {
             return $this->redirectToRoute('employees_page');
         }
         $user = $this->getDoctrine()->getRepository(Users::class)->find($id);
@@ -84,7 +84,7 @@ class UsersController extends AbstractController
     }
     public function create(Request $request)
     {
-        if (isset($_COOKIE['role']) && $_COOKIE['role']!= 'admin') {
+        if (isset($_COOKIE['role']) && ($_COOKIE['role']!= 'admin' && $_COOKIE['role']!= 'superadmin')) {
             return $this->redirectToRoute('employees_page');
         }
         $user = new Users();
@@ -157,16 +157,16 @@ class UsersController extends AbstractController
     public function delete($id)
     {
         $em = $this->getDoctrine()->getManager();
-        if (isset($_COOKIE['role']) && $_COOKIE['role'] == 'admin' && isset($_COOKIE['login']))
+        if (isset($_COOKIE['role']) && ($_COOKIE['role'] == 'admin' || $_COOKIE['role']== 'superadmin') && isset($_COOKIE['login']))
         {
             $user = $em->getRepository(Users::class)->find($id);
             if ($user->getLogin() == $_COOKIE['login'])
             {
                 return $this->redirectToRoute('users');
             }
-            if($user->getRole() == 'admin' && $_COOKIE['role'] == 'admin')
+            if($user->getRole() == 'admin' && ($_COOKIE['role'] == 'admin' || $_COOKIE['role']== 'superadmin'))
             {
-                if ($_COOKIE['login'] == 'angen' || $_COOKIE['login'] == 'kuzmin')
+                if ($_COOKIE['role'] == 'superadmin')
                 {
                     $em->remove($user);
                     $userLogs = new UserLogs();

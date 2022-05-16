@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
           $user->setPassword($pass);
           $user->setLogin('angen');
           print($pass);
-          $user->setRole("admin");
+          $user->setRole("superadmin");
           $manager->persist($user);
 $user = new Users();
           $user->setFio('Шульженко Геннадий Александрович');
@@ -40,7 +40,7 @@ $user = new Users();
         $user->setPassword($pass);
         $user->setLogin('kuzmin');
         print($pass);
-        $user->setRole("admin");
+        $user->setRole("superadmin");
         $manager->persist($user);
 
      $manager->flush();

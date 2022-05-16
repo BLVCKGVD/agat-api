@@ -29,7 +29,7 @@ class SubController extends AbstractController
         if (!isset($_COOKIE['login'])) {
             return $this->redirectToRoute('employees_page');
         }
-        if ($_COOKIE['login'] == 'angen' || $_COOKIE['login'] == 'kuzmin')
+        if ($_COOKIE['role'] == 'superadmin')
         {
             $subs = $this->entityManager->getRepository(EmailSubsription::class)->findAll();
 
@@ -53,7 +53,7 @@ class SubController extends AbstractController
         if (!isset($_COOKIE['login'])) {
             return $this->redirectToRoute('employees_page');
         }
-        if ($_COOKIE['login'] == 'angen' || $_COOKIE['login'] == 'kuzmin') {
+        if ($_COOKIE['role'] == 'superadmin') {
             $form = $this->createForm(EmailForm::class);
             $form->handleRequest($request);
 
@@ -107,7 +107,7 @@ class SubController extends AbstractController
         if (!isset($_COOKIE['login'])) {
             return $this->redirectToRoute('employees_page');
         }
-        if ($_COOKIE['login'] == 'angen' || $_COOKIE['login'] == 'kuzmin') {
+        if ($_COOKIE['role'] == 'superadmin') {
             $form = $this->createForm(EmailFormMultiple::class);
             $form->handleRequest($request);
 

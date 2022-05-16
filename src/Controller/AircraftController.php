@@ -61,6 +61,9 @@ class AircraftController extends AbstractController
         } else {
             $role = 'user';
         }
+        if ($_COOKIE['role'] == 'superadmin') {
+            $role = 'superadmin';
+        }
 
         $form = $this->createForm(TableBuilderType::class);
         $form->handleRequest($request);
@@ -214,7 +217,7 @@ class AircraftController extends AbstractController
             ]);
         }
 
-        if (isset($_COOKIE['role']) && $_COOKIE['role'] == 'admin') {
+        if (isset($_COOKIE['role']) && ($_COOKIE['role'] == 'admin' || $_COOKIE['role'] == 'superadmin')) {
             return $this->render('aircraft/create.html.twig', [
                 'controller_name' => 'AircraftController',
                 'form' => $form->createView(),
@@ -245,6 +248,9 @@ class AircraftController extends AbstractController
             $role = 'admin';
         } else {
             $role = 'user';
+        }
+        if ($_COOKIE['role'] == 'superadmin') {
+            $role = 'superadmin';
         }
         $aircraft = $this->getDoctrine()->getRepository(Aircraft::class)->find($id);
         if($aircraft==null)
@@ -311,7 +317,7 @@ class AircraftController extends AbstractController
             $assigned_exp_date->modify('+' . $formEdit->get('assigned_term')->getData() . 'years');
             $overhaul_exp_date = new \DateTime();
             $overhaul_exp_date->format('YYYY-MM-DD');
-            if ($repair_date != null)
+            if (isset($repair_date))
             {
                 $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
             } else {
@@ -575,7 +581,7 @@ class AircraftController extends AbstractController
     public function delete(int $id)
     {
         session_start();
-        if ($_COOKIE['role'] == 'admin') {
+        if ($_COOKIE['role'] == 'admin' || $_COOKIE['role'] == 'superadmin') {
             $em = $this->getDoctrine()->getManager();
             $entite = $em->getRepository(Aircraft::class)->find($id);
             $em->remove($entite);

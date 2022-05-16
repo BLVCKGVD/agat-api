@@ -21,7 +21,7 @@ class ContentController extends AbstractController
 
     public function index(): Response
     {
-        if ($_COOKIE['role'] != 'admin') {
+        if ($_COOKIE['role'] != 'superadmin') {
             return $this->redirectToRoute('employees_page');
         }
         $content = $this->getDoctrine()->getRepository(Content::class)->findAll();
@@ -47,7 +47,7 @@ class ContentController extends AbstractController
 
     public function edit($page, Request $request,EntityManagerInterface $em)
     {
-        if ($_COOKIE['role'] != 'admin') {
+        if ($_COOKIE['role'] != 'superadmin') {
             return $this->redirectToRoute('employees_page');
         }
         $content = $this->getDoctrine()->getRepository(Content::class)->findOneBy(

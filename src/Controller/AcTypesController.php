@@ -17,7 +17,7 @@ class AcTypesController extends AbstractController
 
     public function create(Request $request): Response
     {
-        if (!isset($_COOKIE['role']) || $_COOKIE['role'] != 'admin')
+        if (!isset($_COOKIE['role']) || ($_COOKIE['role'] != 'admin' && $_COOKIE['role']!= 'superadmin'))
         {
             return $this->redirectToRoute('employees_page');
         }
@@ -58,7 +58,7 @@ class AcTypesController extends AbstractController
 
     }
     public function delete($id){
-        if (!isset($_COOKIE['role']) || $_COOKIE['role'] != 'admin' || $_COOKIE['login']!='angen' || $_COOKIE['login']!='kuzmin')
+        if (!isset($_COOKIE['role']) || $_COOKIE['role'] != 'admin' && $_COOKIE['role']!='superadmin')
         {
             $ac_type = $this->getDoctrine()->getManager()->getRepository(AcTypes::class)->find($id);
             $aircrafts = $this->getDoctrine()->getManager()->getRepository(Aircraft::class)->findBy([

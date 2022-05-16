@@ -119,8 +119,8 @@
         <img class="airplane2" height="25px" src="{{ asset('build/images/airplane-black.png') }}">
         <img class="airplane1" height="25px" src="{{ asset('build/images/airplane.png') }}">
     </a>
-    {% if role == 'admin' %}
-        {% if login == 'angen' or login == 'kuzmin'  %}
+    {% if role == 'admin' or role == 'superadmin' %}
+        {% if role == 'superadmin'  %}
         <a class="d-none d-md-inline" href="/content" >Страницы</a>
         <a class="content d-inline d-md-none" href="/content" >
             <img class="content2" height="25px" src="{{ asset('build/images/pages-black.png') }}">

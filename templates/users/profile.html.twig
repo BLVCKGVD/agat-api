@@ -20,8 +20,8 @@
         {% endif %}
     </ul>
         {% if login != user.getLogin %}
-            {% if role == 'admin' and (user.role == 'admin' or user.role == 'user') %}
-                {% if login == 'angen' or login == 'kuzmin' %}
+            {% if (role == 'superadmin' or role == 'admin') and (user.role == 'admin' or user.role == 'user') %}
+                {% if role == 'superadmin' %}
         <div class="float-end">
             <a class="btn btn-danger mb-2" href="/users/delete/{{user.getId}}"
                onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.getLogin }}?')">

@@ -235,7 +235,7 @@ class EmployeesPageController extends AbstractController
     }
     public function admin()
     {
-        if (isset($_COOKIE['role']) && $_COOKIE['role'] == 'admin')
+        if (isset($_COOKIE['role']) && ($_COOKIE['role'] == 'admin' || $_COOKIE['role'] == 'superadmin'))
         {
             return $this->render('instructions/admin.html.twig',
                 [

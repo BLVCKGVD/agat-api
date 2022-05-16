@@ -40,6 +40,9 @@ class PartsController extends AbstractController
         } else {
             $role = 'user';
         }
+        if ($_COOKIE['role'] == 'superadmin') {
+            $role = 'superadmin';
+        }
 
         $part = $this->entityManager->getRepository(Parts::class)->find($id);
         if($part==null)
@@ -101,7 +104,7 @@ class PartsController extends AbstractController
     public function delete($id)
     {
         $part = $this->entityManager->getRepository(Parts::class)->find($id);
-        if ($part != null && isset($_COOKIE['role']) && $_COOKIE['role'] == 'admin')
+        if ($part != null && isset($_COOKIE['role']) && ($_COOKIE['role'] == 'admin' || $_COOKIE['role']== 'superadmin'))
         {
             $aircraft = $part->getAircraft();
             $this->entityManager->remove($part);
