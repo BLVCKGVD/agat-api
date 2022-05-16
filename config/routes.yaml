@@ -21,7 +21,7 @@ users:
     controller: App\Controller\UsersController::index
 user:
     path: /users/{id}
-    controller: App\Controller\UsersController::get
+    controller: App\Controller\UsersController::profile
 user_delete:
     path: /users/delete/{id}
     controller: App\Controller\UsersController::delete

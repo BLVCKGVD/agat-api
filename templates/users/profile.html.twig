@@ -9,8 +9,64 @@
     <center>
         <h3 class="mb-4">Информация о пользователе</h3>
     </center>
+        {% if user.getLogin == login or (role == 'superadmin' and user.getRole != 'superadmin') %}
+        <div class="col-12 mb-3">
+            <button id="btn" class=" btn btn-outline-success float-end" data-bs-toggle="modal" data-bs-target="#Modal">
+                Сменить пароль
+            </button>
+            <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Редактирование
+                                <p class="fs-6 text-danger mb-0">
+                                    {% for error in errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </p>
+
+                                </h5>
+
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ form_start(form) }}
+                            {% if user.getLogin == login %}
+                            {{ form_row(form.pass_old) }}
+                            {% endif %}
+                            {{ form_row(form.pass_new) }}
+                            <p class="pt-0 mb-1 mt-1 text-secondary" id="info"></p>
+                            <script>
+                                window.addEventListener("load",function(){
+                                    document.getElementById("change_pass_pass_new").addEventListener("keyup",function(){
+                                        var info,myText=this.value;
+                                        if(/[A-Za-z]/gi.test(myText)) info = "Английский";
+                                        if(/[А-Яа-я]/gi.test(myText)) info = "Русский";
+                                        if(/[А-Яа-я]/gi.test(myText)&&/[A-Za-z]/gi.test(myText)) info = "Русский/Английский";
+                                        if(!info) info = "";
+                                        document.getElementById("info").innerHTML = info;
+                                    });
+                                });
+                            </script>
+                            {{ form_row(form.pass_new_confirm) }}
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                            {{ form_row(form.submit) }}
+                            <div class="d-none">{{ form_rest(form) }}</div>
+                            {{ form_end(form) }}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
     <ul class="list-group col-12 fs-5 mb-4">
-    <li class="list-group-item">ФИО: <b>{{ user.getFIO }}</b></li>
+    <li class="list-group-item">ФИО: <b>{{ user.getFIO }}</b>
+    </li>
         <li class="list-group-item">Логин: <b>{{ user.getLogin }}</b></li>
         {% if user.getRole == 'admin' %}
         <li class="list-group-item">Роль: <b>Администратор</b></li>
@@ -25,14 +81,14 @@
         {% if login != user.getLogin %}
             {% if (role == 'superadmin' or role == 'admin') and (user.role == 'admin' or user.role == 'user') %}
                 {% if role == 'superadmin' %}
-        <div class="float-end">
-            <a class="btn btn-danger mb-2" href="/users/delete/{{user.getId}}"
+        <div class="col-12">
+            <a class="btn btn-danger mb-2 float-end" href="/users/delete/{{user.getId}}"
                onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.getLogin }}?')">
                 Удалить пользователя</a>
         </div>
                     {% else %}
                         {% if user.role == 'user' %}
-                        <div class="float-end">
+                        <div class="float-lg-end">
                             <a class="btn btn-danger mb-2" href="/users/delete/{{user.getId}}"
                                onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.getLogin }}?')">
                                 Удалить пользователя</a>
@@ -112,7 +168,11 @@
         </div>
 
     </div>
-
+    {% if error == true %}
+        <script>
+            document.getElementById('btn').click();
+        </script>
+    {% endif %}
 
     <script type="text/javascript">
         function displaySpan() {
@@ -131,6 +191,10 @@
 
             }
         }
+
+
+
+
 
 
 

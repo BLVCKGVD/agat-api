@@ -6,6 +6,7 @@ use App\Entity\UserLogs;
 use App\Entity\Users;
 
 use App\Form\AddUserType;
+use App\Form\ChangePassType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,7 +50,7 @@ class UsersController extends AbstractController
             'searchfor' => $searchfor,
         ]);
     }
-    public function get($id): Response
+    public function profile(Request $request,$id)
     {
         if (isset($_COOKIE['role']) && ($_COOKIE['role']!= 'admin' && $_COOKIE['role']!= 'superadmin')) {
             return $this->redirectToRoute('employees_page');
@@ -58,12 +59,57 @@ class UsersController extends AbstractController
         $logs = $this->entityManager->getRepository(UserLogs::class)->findBy([
             'employee' => $user->getId()
         ]);
+        $form = $this->createForm(ChangePassType::class);
+        $form->handleRequest($request);
+        $errors = array();
+        $error = false;
+        if ($form->isSubmitted())
+        {
+            if ($form->isValid())
+            {
+                if ($_COOKIE['login'] == $user->getLogin()){
+                    if (password_verify($form->get('pass_old')->getData(), $user->getPassword()))
+                    {
+                        if ($form->get('pass_new')->getData() == $form->get('pass_new_confirm')->getData())
+                        {
+                            $user->setPassword(password_hash($form->get('pass_new')->getData(),PASSWORD_DEFAULT));
+                            $this->getDoctrine()->getManager()->persist($user);
+                            $this->getDoctrine()->getManager()->flush();
+                            $this->addFlash('success','Вы успешно сменили свой пароль');
+                            return $this->redirectToRoute('exit');
+                        } else {
+                            array_push($errors,"Повторенный пароль не совпадает с новым");
+                            $error = true;
+                        }
+                    } else{
+                        array_push($errors,"Старый пароль введен неверно");
+                        $error = true;
+                    }
+                } else {
+                    if ($form->get('pass_new')->getData() == $form->get('pass_new_confirm')->getData())
+                    {
+                        $user->setPassword(password_hash($form->get('pass_new')->getData(),PASSWORD_DEFAULT));
+                        $this->getDoctrine()->getManager()->persist($user);
+                        $this->getDoctrine()->getManager()->flush();
+                        $this->addFlash('success','Вы успешно сменили пароль пользователю '.$user->getLogin());
+                    } else {
+                        array_push($errors,"Повторенный пароль не совпадает с новым");
+                        $error = true;
+                    }
+                }
+            } else {
+                $error = true;
+            }
+        }
         return $this->render('users/profile.html.twig', [
             'controller_name' => 'UsersController',
             'user' => $user,
             'login' => $_COOKIE['login'],
             'role' => $_COOKIE['role'],
             'logs' => $logs,
+            'form'=>$form->createView(),
+            'error'=>$error,
+            'errors'=>$errors,
         ]);
     }
     public function delLogs($id)

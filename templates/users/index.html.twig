@@ -30,9 +30,18 @@
         {% endif %}
         <a class="float-end exit" href="/exit">Выйти</a>
     </div>
+
     <div class="container mt-5 pt-5">
         <div class="row">
-            <center><h3 class="mb-5">Список пользователей</h3></center>
+            <center>
+                <h3 class="mb-2">Список пользователей</h3>
+                {% for u in users %}
+                {% if u.getLogin == login %}
+                    <button class="btn btn-outline-success mb-5" onclick="window.location='users/{{ u.getId }}'">Мой профиль</button>
+                {% endif %}
+                {% endfor %}
+
+            </center>
 
             <form method="get" class="row justify-content-center mb-5" autocomplete="off">
 
