@@ -11,14 +11,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class UsersController extends AbstractController
 {
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, MailerInterface $mailer)
     {
         $this->entityManager = $em;
+        $this->mailer = $mailer;
     }
 
     public function index(Request $request): Response
@@ -92,6 +95,16 @@ class UsersController extends AbstractController
                         $this->getDoctrine()->getManager()->persist($user);
                         $this->getDoctrine()->getManager()->flush();
                         $this->addFlash('success','Вы успешно сменили пароль пользователю '.$user->getLogin());
+                        if ($user->getEmailSubsription()->getEmail())
+                        {
+                            $email = (new Email())
+                                ->from('agataviainfo@gmail.com')
+                                ->to($user->getEmailSubsription()->getEmail())
+                                ->subject("Ваш пароль был обновлен");
+                            $email->html("Ваш текущий пароль: ".$form->get('pass_new')->getData());
+                            $this->mailer->send($email);
+                        }
+
                     } else {
                         array_push($errors,"Повторенный пароль не совпадает с новым");
                         $error = true;
