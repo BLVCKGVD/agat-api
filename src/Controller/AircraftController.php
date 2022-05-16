@@ -136,14 +136,26 @@ class AircraftController extends AbstractController
             $release_date = new \DateTime;
             $release_date->format('YYYY-MM-DD');
             $release_date = $aircraft->getReleaseDate();
+            if ($form->get('last_repair_date')->getData() != null)
+            {
+                $repair_date = new \DateTime();
+                $repair_date->format('YYYY-MM-DD');
+                $repair_date = $aircraft->getLastRepairDate();
+
+                $overhaul_exp_date = new \DateTime();
+                $overhaul_exp_date->format('YYYY-MM-DD');
+                $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
+                $overhaul_exp_date->modify('+' . $form->get('overhaul_exp_date')->getData() . 'years');
+            } else {
+                $overhaul_exp_date = new \DateTime();
+                $overhaul_exp_date->format('YYYY-MM-DD');
+                $overhaul_exp_date->setTimestamp($release_date->getTimestamp());
+                $overhaul_exp_date->modify('+' . $form->get('overhaul_exp_date')->getData() . 'years');
+            }
             $assigned_exp_date = new \DateTime();
             $assigned_exp_date->format('YYYY-MM-DD');
             $assigned_exp_date->setTimestamp($release_date->getTimestamp());
             $assigned_exp_date->modify('+' . $form->get('assigned_exp_date')->getData() . 'years');
-            $overhaul_exp_date = new \DateTime();
-            $overhaul_exp_date->format('YYYY-MM-DD');
-            $overhaul_exp_date->setTimestamp($release_date->getTimestamp());
-            $overhaul_exp_date->modify('+' . $form->get('overhaul_exp_date')->getData() . 'years');
             $maintance = new Maintance();
             $maintance->setMtForm($form->get('fin_form')->getData())
                 ->setMtRes($form->get('fin_res')->getData())
