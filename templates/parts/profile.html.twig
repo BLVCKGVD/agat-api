@@ -6,7 +6,11 @@
 {% block body %}
     <div class="row">
         <center>
-            <h3>Информация о комплектующем</h3>
+            {% if part.getType == 'engine' %}
+            <h3>Информация о двигателе</h3>
+            {% else %}
+                <h3>Информация о комплектующем</h3>
+            {% endif %}
         </center>
 
 
@@ -35,7 +39,64 @@
     <div class="row">
         <div class="col-12">
             <ul class="list-group col-12 fs-5">
+                {% if role == 'admin' or role=='superadmin' %}
+                    <li class="list-group-item">
+                    <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#Modal" aria-label="Редактировать">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                        </svg>
+                    </button>
+                    <!-- Modal -->
+                    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Редактирование
+                                        <p class="fs-6 text-secondary mb-0">Данная функция доступна только администраторам, вводите данные внимательно</p></h5>
 
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row justify-content-center">
+
+                                        <div class="col-xs-12 col-md-10">
+                                            {{ form_start(form) }}
+                                            {{ form_row(form.name) }}
+                                            {{ form_row(form.marking) }}
+                                            {{ form_row(form.factory_num) }}
+                                            {{ form_row(form.document) }}
+                                            {{ form_label(form.repair_place) }}
+                                            {{ form_errors(form.repair_place) }}
+                                            {{ form_widget(form.repair_place) }}
+                                            {{ form_help(form.repair_place) }}
+                                            <div>{{ form_label(form.repair_date) }}
+                                                {{ form_errors(form.repair_date) }}</div>
+                                            {{ form_widget(form.repair_date) }}
+                                            {{ form_help(form.repair_date) }}
+                                            {{ form_row(form.assigned_res) }}
+                                            {{ form_row(form.assigned_exp,{value: part.getAssignedTerm}) }}
+                                            {{ form_row(form.overhaul_res) }}
+                                            {{ form_row(form.overhaul_exp,{value: part.getOverhaulTerm}) }}
+                                            {{ form_row(form.when_installed) }}
+                                            {{ form_row(form.sne,{value: lastOperating.getTotalRes}) }}
+                                            {{ form_row(form.ppr,{value: lastOperating.getOverhaulRes}) }}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                    <div class="d-inline">{{ form_row(form.submit,{label: "Обновить"}) }}</div>
+
+                                    <div class="d-none">{{ form_end(form) }}</div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
                 <li class="list-group-item">Наименование: <b>{{ part.getName }}</b></li>
                 <li class="list-group-item">Маркировка: <b>{{ part.getMarking }}</b></li>
                 <li class="list-group-item">Заводской номер: <b>{{ part.getFactoryNum() }}</b></li>
@@ -46,7 +107,7 @@
                 {% if lastOperating.totalRes >= part.getAssignedRes() %}
                     <li class="list-group-item list-group-item-danger">
                         Назначенный ресурс: <b>{{ part.getAssignedRes() }} ч.</b> |
-                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка (СНЭ): <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if lastOperating.totalRes/part.getAssignedRes()*100>=80.0 and lastOperating.totalRes/part.getAssignedRes()*100<100.0 %}
@@ -56,7 +117,7 @@
                         ресурс: <b>{{ part.getAssignedRes()-lastOperating.totalRes }}
                             ({{ '%0.1f'| format(100 - lastOperating.totalRes/part.getAssignedRes()*100) }}
                             %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                        Текущая наработка (СНЭ): <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if lastOperating.totalRes/part.getAssignedRes()*100<80.0 %}
@@ -66,7 +127,7 @@
                         ресурс: <b>{{ part.getAssignedRes()-lastOperating.totalRes }}
                             ({{ '%0.1f'| format(100 - lastOperating.totalRes/part.getAssignedRes()*100) }}
                             %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.totalRes }} ч.</b>
+                        Текущая наработка (СНЭ): <b>{{ lastOperating.totalRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if part.getAssignedExpDate != null %}
@@ -88,7 +149,7 @@
                 {% if lastOperating.overhaulRes >= part.getOverhaulRes() %}
                     <li class="list-group-item list-group-item-danger">
                         Межремонтый ресурс: <b>{{ part.getOverhaulRes() }} ч.</b> |
-                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка: <b>{{ lastOperating.getOverhaulRes }}
+                        ТРЕБУЕТСЯ ТЕХНИЧЕСКОЕ ОБСЛУЖИВАНИЕ | Текущая наработка (ППР): <b>{{ lastOperating.getOverhaulRes }}
                             ч.</b>
                     </li>
                 {% endif %}
@@ -99,7 +160,7 @@
                         ресурс: <b>{{ part.getOverhaulRes()-lastOperating.overhaulRes }}
                             ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/part.getOverhaulRes()*100) }}
                             %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                        Текущая наработка (ППР): <b>{{ lastOperating.overhaulRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if lastOperating.overhaulRes/part.getOverhaulRes()*100<80.0 %}
@@ -109,7 +170,7 @@
                         ресурс: <b>{{ part.getOverhaulRes()-lastOperating.overhaulRes }}
                             ({{ '%0.1f'| format(100 - lastOperating.overhaulRes/part.getOverhaulRes()*100) }}
                             %)</b> |
-                        Текущая наработка: <b>{{ lastOperating.overhaulRes }} ч.</b>
+                        Текущая наработка  (ППР): <b>{{ lastOperating.overhaulRes }} ч.</b>
                     </li>
                 {% endif %}
                 {% if part.getOverhaulExpDate != null %}
@@ -135,12 +196,16 @@
                     <li class="list-group-item">Ремонт выполнен: <b>{{ part.getRepairPlace }}</b>
                     </li>
                 {% endif %}
+                {% if part.getWhenInstalled != null %}
+                    <li class="list-group-item">Дата установки на ВС: <b>{{ part.getWhenInstalled|date('d.m.Y') }}</b>
+                    </li>
+                {% endif %}
 
             </ul>
         </div>
 
     </div>
-    {% if role=='admin' %}
+    {% if role=='admin' or role == 'superadmin' %}
         <div class="row">
             <a class="col-12 btn btn-danger mb-2" href="/aircrafts/parts/delete/{{ part.getId }}"
                onclick="return confirm('Вы уверены, что хотите удалить {{ part.getName }}?')">Удалить</a>

@@ -61,6 +61,60 @@ class PartsController extends AbstractController
         $formRep = $this->createForm(AddRepType::class);
         $formRep->handleRequest($request);
 
+        $form = $this->createForm(PartsType::class,$part);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid())
+        {
+
+                $part
+                    ->setOverhaulRes($form->get('overhaul_res')->getData())
+                    ->setAssignedRes($form->get('assigned_res')->getData())
+                    ->setFactoryNum($form->get('factory_num')->getData())
+                    ->setName($form->get('name')->getData())
+                    ->setMarking($form->get('marking')->getData())
+                    ->setDocument($form->get('document')->getData())
+                    ->setOverhaulYears($form->get('overhaul_exp')->getData())
+                    ->setReleaseDate($form->get('release_date')->getData());
+                if($form->get('repair_date')->getData()==null)
+                {
+                    $overhaul_exp_date = new \DateTime();
+                    $overhaul_exp_date->setTimestamp($part->getReleaseDate()->getTimestamp());
+                    $overhaul_exp_date->modify('+'.$form->get('overhaul_exp')->getData().'years');
+                } else {
+                    $repair_date = $form->get('repair_date')->getData();
+                    $overhaul_exp_date = new \DateTime();
+                    $overhaul_exp_date->setTimestamp($repair_date->getTimestamp());
+                    $overhaul_exp_date->modify('+'.$form->get('overhaul_exp')->getData().'years');
+                }
+                $part->setOverhaulExpDate($overhaul_exp_date);
+                $assigned_exp_date = new \DateTime();
+                $assigned_exp_date->setTimestamp($part->getReleaseDate()->getTimestamp());
+                $assigned_exp_date->modify('+'.$form->get('assigned_exp')->getData().'years');
+                $part->setAssignedExpDate($assigned_exp_date);
+                $part->setOverhaulTerm($form->get('overhaul_exp')->getData())
+                    ->setAssignedTerm($form->get('assigned_exp')->getData());
+                $operating = new PartsOperating();
+                $operating->setAddedBy($_COOKIE['FIO'])
+                    ->setCreateDate(new \DateTime());
+                if ($form->get('sne')->getData())
+                {
+                    $operating->setTotalRes($form->get('sne')->getData());
+                } else {
+                    $operating->setTotalRes(0);
+                }
+                if ($form->get('ppr')->getData())
+                {
+                    $operating->setOverhaulRes($form->get('ppr')->getData());
+                } else {
+                    $operating->setOverhaulRes(0);
+                }
+                $part->addPartsOperating($operating);
+                $this->getDoctrine()->getManager()->persist($part);
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', "Комплектующее успешно обновлено");
+                return $this->redirect('/aircrafts/parts/'.$id);
+        }
+
         if ($formRep->isSubmitted() && $formRep->isValid()) {
             $new_operating = new PartsOperating();
             $new_operating
@@ -96,6 +150,7 @@ class PartsController extends AbstractController
             'role' => $role,
             'addRep' => $formRep->createView(),
             'login' => $_COOKIE['login'],
+            'form'=>$form->createView(),
 
 
         ]);
@@ -149,11 +204,23 @@ class PartsController extends AbstractController
                 $assigned_exp_date->setTimestamp($part->getReleaseDate()->getTimestamp());
                 $assigned_exp_date->modify('+'.$form->get('assigned_exp')->getData().'years');
                 $part->setAssignedExpDate($assigned_exp_date);
+                $part->setOverhaulTerm($form->get('overhaul_exp')->getData())
+                    ->setAssignedTerm($form->get('assigned_exp')->getData());
                 $operating = new PartsOperating();
                 $operating->setAddedBy($_COOKIE['FIO'])
-                    ->setCreateDate(new \DateTime())
-                    ->setOverhaulRes(0)
-                    ->setTotalRes(0);
+                    ->setCreateDate(new \DateTime());
+                if ($form->get('sne')->getData())
+                {
+                    $operating->setTotalRes($form->get('sne')->getData());
+                } else {
+                    $operating->setTotalRes(0);
+                }
+                if ($form->get('ppr')->getData())
+                {
+                    $operating->setOverhaulRes($form->get('ppr')->getData());
+                } else {
+                    $operating->setOverhaulRes(0);
+                }
                 $part->addPartsOperating($operating);
                 $this->getDoctrine()->getManager()->persist($part);
                 $this->getDoctrine()->getManager()->flush();
@@ -204,11 +271,23 @@ class PartsController extends AbstractController
                 $assigned_exp_date->setTimestamp($part->getReleaseDate()->getTimestamp());
                 $assigned_exp_date->modify('+'.$form->get('assigned_exp')->getData().'years');
                 $part->setAssignedExpDate($assigned_exp_date);
+                $part->setOverhaulTerm($form->get('overhaul_exp')->getData())
+                    ->setAssignedTerm($form->get('assigned_exp')->getData());
                 $operating = new PartsOperating();
                 $operating->setAddedBy($_COOKIE['FIO'])
-                    ->setCreateDate(new \DateTime())
-                    ->setOverhaulRes(0)
-                    ->setTotalRes(0);
+                    ->setCreateDate(new \DateTime());
+                if ($form->get('sne')->getData())
+                {
+                    $operating->setTotalRes($form->get('sne')->getData());
+                } else {
+                    $operating->setTotalRes(0);
+                }
+                if ($form->get('ppr')->getData())
+                {
+                    $operating->setOverhaulRes($form->get('ppr')->getData());
+                } else {
+                    $operating->setOverhaulRes(0);
+                }
                 $part->addPartsOperating($operating);
                 $this->getDoctrine()->getManager()->persist($part);
                 $this->getDoctrine()->getManager()->flush();

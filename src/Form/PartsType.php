@@ -73,6 +73,10 @@ class PartsType extends AbstractType
                 'required' => false,
                 'label'=>'Укажите место последнего ремонта',
                 'help'=>"необязательно",
+                'help_attr' => [
+                    'class' =>'text-secondary fs-6'
+
+                ],
                 'attr' => [
                     'class' =>'form-control ',
                     'placeholder' => 'Место ремонта',
@@ -86,10 +90,14 @@ class PartsType extends AbstractType
                 'widget' => 'single_text',
                 'label' => 'Укажите дату последнего ремонта',
                 'help'=>"необязательно",
+                'help_attr' => [
+                    'class' =>'text-secondary fs-6'
+
+                ],
                 'attr'=>[
                     'type'=>'date',
-                    'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .5rem;',
-                    'class' =>'col-12',
+                    'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .25rem;',
+                    'class' =>'col-12 fs-6',
 
                 ]])
             ->add('assigned_res', IntegerType::class,[
@@ -97,7 +105,7 @@ class PartsType extends AbstractType
                 'label'=>'Укажите назначенный ресурс',
                 'help'=>"в часах",
                 'help_attr' => [
-                    'class' =>'text-secondary'
+                    'class' =>'text-secondary fs-6'
 
                 ],
                 'attr' => [
@@ -114,7 +122,7 @@ class PartsType extends AbstractType
                 'label'=>'Укажите назначенный срок',
                 'help'=>"лет",
                 'help_attr' => [
-                    'class' =>'text-secondary'
+                    'class' =>'text-secondary fs-6'
 
                 ],
                 'attr' => [
@@ -130,7 +138,7 @@ class PartsType extends AbstractType
                 'label'=>'Укажите межремонтный ресурс',
                 'help'=>"в часах",
                 'help_attr' => [
-                    'class' =>'text-secondary'
+                    'class' =>'text-secondary fs-6'
 
                 ],
                 'attr' => [
@@ -147,7 +155,7 @@ class PartsType extends AbstractType
                 'label'=>'Укажите межремонтный срок',
                 'help'=>"лет",
                 'help_attr' => [
-                    'class' =>'text-secondary'
+                    'class' =>'text-secondary fs-6'
 
                 ],
                 'attr' => [
@@ -162,19 +170,69 @@ class PartsType extends AbstractType
                 'required'=>true,
                 'widget' => 'single_text',
                 'label' => 'Укажите дату выпуска',
+                'help_attr' => [
+                    'class' =>'text-secondary fs-6'
+
+                ],
                 'attr'=>[
                     'type'=>'date',
-                    'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .5rem;',
-                    'class' =>'mb-2 col-12',
+                    'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .25rem;',
+                    'class' =>'mb-2 col-12 fs-6',
 
                 ]])
+            ->add('when_installed',DateType::class, [
+                'required'=>true,
+                'widget' => 'single_text',
+                'label' => 'Укажите дату установки на ВС',
+                'help_attr' => [
+                    'class' =>'text-secondary fs-6'
+
+                ],
+                'attr'=>[
+                    'type'=>'date',
+                    'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .25rem;',
+                    'class' =>'mb-2 col-12 fs-6',
+
+                ]])
+            ->add('sne', IntegerType::class,[
+                'required' => false,
+                'mapped'=>false,
+                'label'=>'Укажите наработку (СНЭ)',
+                'help'=>"в часах (необязательно)",
+                'help_attr' => [
+                    'class' =>'text-secondary fs-6'
+
+                ],
+                'attr' => [
+                    'class' =>'form-control',
+                    'placeholder' => 'Укажите наработку (СНЭ)',
+                    'autocomplete' => 'off',
+
+                ],
+            ])
+            ->add('ppr', IntegerType::class,[
+                'required' => false,
+                'mapped'=>false,
+                'label'=>'Укажите наработку (ППР)',
+                'help'=>"в часах (необязательно)",
+                'help_attr' => [
+                    'class' =>'text-secondary fs-6'
+
+                ],
+                'attr' => [
+                    'class' =>'form-control',
+                    'placeholder' => 'Укажите наработку (ППР)',
+                    'autocomplete' => 'off',
+
+                ],
+            ])
 
             ->add('submit', SubmitType::class,
                 [
 
                     'label' => 'Создать',
                     'attr'=>[
-                        'class' =>'form-control btn-primary mb-2',
+                        'class' =>'form-control btn-primary',
                     ]
                 ]
             );

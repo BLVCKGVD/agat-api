@@ -97,6 +97,21 @@ class Parts
     private $overhaul_years;
 
     /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $when_installed;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $overhaul_term;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $assigned_term;
+
+    /**
      * @return mixed
      */
     public function getStatus()
@@ -317,6 +332,42 @@ class Parts
     public function setOverhaulYears(?int $overhaul_years): self
     {
         $this->overhaul_years = $overhaul_years;
+
+        return $this;
+    }
+
+    public function getWhenInstalled(): ?\DateTimeInterface
+    {
+        return $this->when_installed;
+    }
+
+    public function setWhenInstalled(?\DateTimeInterface $when_installed): self
+    {
+        $this->when_installed = $when_installed;
+
+        return $this;
+    }
+
+    public function getOverhaulTerm(): ?int
+    {
+        return $this->overhaul_term;
+    }
+
+    public function setOverhaulTerm(?int $overhaul_term): self
+    {
+        $this->overhaul_term = $overhaul_term;
+
+        return $this;
+    }
+
+    public function getAssignedTerm(): ?int
+    {
+        return $this->assigned_term;
+    }
+
+    public function setAssignedTerm(?int $assigned_term): self
+    {
+        $this->assigned_term = $assigned_term;
 
         return $this;
     }
