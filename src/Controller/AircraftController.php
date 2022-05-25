@@ -197,7 +197,10 @@ class AircraftController extends AbstractController
                 ->setCreateDate(new \DateTime());
             $aircraft->addAircraftOperating($operating);
             $entityManager->persist($aircraft);
-            $entityManager->persist($maintance);
+            if (isset($maintance))
+            {
+                $entityManager->persist($maintance);
+            }
             $entityManager->flush();
             $userLogs = new UserLogs();
             $userLogs->setEmployee(
