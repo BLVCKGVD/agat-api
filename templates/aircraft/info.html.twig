@@ -215,6 +215,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row mb-4 ">
+                                                {% if lastMaintance is defined or lastMaintance!=null %}
                                                 <div class="col form-control border border-primary border-2 me-3">
                                                     <div class="mb-2">{{ form_label(form.fin_periodic_mt) }}:</div>
                                                     {{ form_row(form.fin_form, {value: lastMaintance.MtForm,'attr':{'disabled':'disabled'}}) }}
@@ -223,6 +224,7 @@
                                                     {{ form_row(form.fin_term, {value: lastMaintance.MtExpDate|date('Y-m-d'),'attr':{'disabled':'disabled'}}) }}
                                                     {{ form_row(form.mt_made_by, { 'attr':{'disabled':'disabled'} }) }}
                                                 </div>
+                                                {% endif %}
                                                 <div class="col form-control border border-primary border-2">
                                                     <div class="mb-1">{{ form_row(form.lg_sert) }}</div>
                                                     <br>
