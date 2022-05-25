@@ -27,8 +27,15 @@ class AddMtType extends AbstractType
                     //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
 
                 ]])
+            ->add('mt_sne',IntegerType::class, [
+                'label' => 'Наработка (СНЭ):',
+                'help'=>'в часах',
+                'attr'=>[
+                    'class' =>'form-control mb-0',
+                    //'oninvalid'=>"this.setCustomValidity('Введите тип ВС')"
+                ]])
             ->add('mt_res',IntegerType::class, [
-                'label' => 'Наработка:',
+                'label' => 'Наработка (ППР):',
                 'help'=>'в часах',
                 'attr'=>[
                     'class' =>'form-control mb-0',

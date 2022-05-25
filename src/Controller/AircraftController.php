@@ -159,23 +159,24 @@ class AircraftController extends AbstractController
             $assigned_exp_date->format('YYYY-MM-DD');
             $assigned_exp_date->setTimestamp($release_date->getTimestamp());
             $assigned_exp_date->modify('+' . $form->get('assigned_exp_date')->getData() . 'years');
-            $maintance = new Maintance();
-            $maintance->setMtForm($form->get('fin_form')->getData())
-                ->setMtRes($form->get('fin_res')->getData())
-                ->setMtExpDate($form->get('fin_term')->getData());
-            if($form->get('total_res_overhaul')->getData())
-            {
-                $maintance->setMtNar($form->get('overhaul_res_overhaul')->getData());
-            } else {
-                $maintance->setMtNar(0);
+            if ($form->get('fin_form')->getData() && $form->get('fin_res')->getData() && $form->get('fin_term')->getData()) {
+                $maintance = new Maintance();
+                $maintance->setMtForm($form->get('fin_form')->getData())
+                    ->setMtRes($form->get('fin_res')->getData())
+                    ->setMtSne($form->get('mt_sne')->getData())
+                    ->setMtExpDate($form->get('fin_term')->getData());
+                if ($form->get('total_res_overhaul')->getData()) {
+                    $maintance->setMtNar($form->get('overhaul_res_overhaul')->getData());
+                } else {
+                    $maintance->setMtNar(0);
+                }
+                $aircraft->addMaintance($maintance);
+                $aircraft
+                    ->setFinPeriodicMt
+                    ($form->get('fin_form')->getData()
+                        . " " . $form->get('fin_res')->getData()
+                        . " " . date_format($form->get('fin_term')->getData(), "Y-m-d"));
             }
-            $aircraft->addMaintance($maintance);
-            $aircraft
-                ->setFinPeriodicMt
-                ($form->get('fin_form')->getData()
-                    . " " . $form->get('fin_res')->getData()
-                    . " " . date_format($form->get('fin_term')->getData(),"Y-m-d"));
-
             $aircraft->setAssignedExpDate($assigned_exp_date);
             $aircraft->setOverhaulExpDate($overhaul_exp_date);
             $operating = new AircraftOperating();
@@ -392,12 +393,14 @@ class AircraftController extends AbstractController
             $new_maintance->setMtNar($operating->getOverhaulRes())
                 ->setMtExpDate($formMt->get('mt_exp_date')->getData())
                 ->setMtRes($formMt->get('mt_res')->getData())
+                ->setMtSne($formMt->get('mt_sne')->getData())
                 ->setMtForm($formMt->get('mt_form')->getData());
             $aircraft->setMtMadeBy($formMt->get('mt_made_by')->getData());
             $new_maintance->setAircraft($aircraft);
             $this->entityManager->persist($new_maintance);
             $this->entityManager->persist($aircraft);
             $this->entityManager->flush();
+            $this->addFlash("success", "Периодическое ТО обновлено");
             return $this->redirect($request->getUri());
 
         }
@@ -606,25 +609,34 @@ class AircraftController extends AbstractController
     public function testWord($fileName, $id)
     {
 
+        $aircraft=new Aircraft();
         $aircraft = $this->entityManager->getRepository(Aircraft::class)->find($id);
+        $operating = $this->entityManager->getRepository(AircraftOperating::class)
+            ->getLastAircraftOperating($aircraft);
         $templateProcessor = new TemplateProcessor($this->getParameter('app.templates').$fileName.'.docx');
         $templateProcessor->setValue('board_num', $aircraft->getBoardNum());
         $templateProcessor->setValue('factory_num', $aircraft->getFactoryNum());
         $templateProcessor->setValue('ac_type', $aircraft->getAcType());
-        $templateProcessor->saveAs($this->getParameter('app.results').$aircraft->getBoardNum().'-test'.'.docx');
+        $templateProcessor->setValue('release_date', date_format($aircraft->getReleaseDate(),'d.m.Y'));
+        $templateProcessor->setValue('ac_category', $aircraft->getAcCategory());
+        $templateProcessor->setValue('construction_weight', $aircraft->getConstructionWeight());
+        $templateProcessor->setValue('max_takeoff_weight', $aircraft->getMaxTakeoffWeight());
+        $templateProcessor->setValue('max_pos_weight', $aircraft->getMaxTakeoffWeight()-$aircraft->getConstructionWeight());
+        $templateProcessor->setValue('operating_overhaul', $operating->getOverhaulRes());
+        $templateProcessor->saveAs($this->getParameter('app.results').$aircraft->getBoardNum().'.docx');
 
         header("Pragma: public"); // required
         header("Expires: 0");
         header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
         header("Cache-Control: private",false);
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        header("Content-Disposition: attachment; filename=\"".$aircraft->getBoardNum().'-test'.'.docx'."\";" );
+        header("Content-Disposition: attachment; filename=\"".$aircraft->getBoardNum().'.docx'."\";" );
         header("Content-Transfer-Encoding: binary");
-        header("Content-Length: ".filesize($this->getParameter('app.results').$aircraft->getBoardNum().'-test'.'.docx'));
+        header("Content-Length: ".filesize($this->getParameter('app.results').$aircraft->getBoardNum().'.docx'));
         ob_clean();
         flush();
-        readfile($this->getParameter('app.results').$aircraft->getBoardNum().'-test'.'.docx');
-        unlink($this->getParameter('app.results').$aircraft->getBoardNum().'-test'.'.docx');
+        readfile($this->getParameter('app.results').$aircraft->getBoardNum().'.docx');
+        unlink($this->getParameter('app.results').$aircraft->getBoardNum().'.docx');
 
     }
 

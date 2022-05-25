@@ -43,6 +43,11 @@ class Maintance
      */
     private $mt_res;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $mt_sne;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +109,18 @@ class Maintance
     public function setMtRes(int $mt_res): self
     {
         $this->mt_res = $mt_res;
+
+        return $this;
+    }
+
+    public function getMtSne(): ?int
+    {
+        return $this->mt_sne;
+    }
+
+    public function setMtSne(?int $mt_sne): self
+    {
+        $this->mt_sne = $mt_sne;
 
         return $this;
     }

@@ -88,12 +88,27 @@
             <div class="col-6 ms-auto me-auto ">
                 {{ form_start(addMt) }}
                 {{ form_row(addMt.mt_form) }}
+                <div class="row">
+                    <div class="col-6">
+                {{ form_label(addMt.mt_sne) }}
+                        {{ form_widget(addMt.mt_sne) }}
+                <div class="text-secondary">{{ form_help(addMt.mt_sne) }}</div>
+                    </div>
+                    <div class="col-6">
                 {{ form_label(addMt.mt_res) }}
                 {{ form_widget(addMt.mt_res) }}
                 <div class="text-secondary">{{ form_help(addMt.mt_res) }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                <div class="col-6 pt-3">
                 {{ form_label(addMt.mt_exp_date) }}
-                {{ form_widget(addMt.mt_exp_date) }}<br>
+                {{ form_widget(addMt.mt_exp_date) }}
+                </div>
+                <div class="col-6 ">
                 {{ form_row(addMt.mt_made_by) }}
+                </div>
+                </div>
                 {{ form_end(addMt) }}
             </div>
 
@@ -203,6 +218,7 @@
                                                 <div class="col form-control border border-primary border-2 me-3">
                                                     <div class="mb-2">{{ form_label(form.fin_periodic_mt) }}:</div>
                                                     {{ form_row(form.fin_form, {value: lastMaintance.MtForm,'attr':{'disabled':'disabled'}}) }}
+                                                    {{ form_row(form.mt_sne, {value: lastMaintance.MtSne,'attr':{'disabled':'disabled'}}) }}
                                                     {{ form_row(form.fin_res, {value: lastMaintance.MtRes,'attr':{'disabled':'disabled'}}) }}
                                                     {{ form_row(form.fin_term, {value: lastMaintance.MtExpDate|date('Y-m-d'),'attr':{'disabled':'disabled'}}) }}
                                                     {{ form_row(form.mt_made_by, { 'attr':{'disabled':'disabled'} }) }}
@@ -233,13 +249,14 @@
                                             </div>
                                                 <div class="form-group row mb-4 ">
                                                     <div class="col form-control border border-primary border-2">
-                                                        {{ form_label(form.overhaul_res_overhaul) }}
-                                                        {{ form_widget(form.overhaul_res_overhaul, {value: lastOperating.overhaulRes}) }}
-                                                        <div class="text-secondary">{{ form_help(form.overhaul_res_overhaul) }}</div>
-                                                        <br>
                                                         {{ form_label(form.total_res_overhaul) }}
                                                         {{ form_widget(form.total_res_overhaul , {value: lastOperating.totalRes}) }}
                                                         <div class="text-secondary">{{ form_help(form.total_res_overhaul) }}</div>
+                                                        <br>
+                                                        {{ form_label(form.overhaul_res_overhaul) }}
+                                                        {{ form_widget(form.overhaul_res_overhaul, {value: lastOperating.overhaulRes}) }}
+                                                        <div class="text-secondary">{{ form_help(form.overhaul_res_overhaul) }}</div>
+
                                                     </div>
                                                 </div>
 
@@ -389,7 +406,7 @@
                 <li class="list-group-item">Вес конструкции: <b>{{ aircraft.getConstructionWeight }} кг</b></li>
                 <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }} м</b></li>
                 <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }} кг</b></li>
-                <li class="list-group-item">Периодическое ТО: <b>{{ lastMaintance.MtForm }} | {{ lastMaintance.MtRes }} |
+                <li class="list-group-item">Периодическое ТО: <b>{{ lastMaintance.MtForm }} | {{ lastMaintance.MtSne}} {{ lastMaintance.MtRes }} |
                          {{ lastMaintance.MtExpDate|date('d.m.Y') }}</b><br>
                     <hr class="mt-1 mb-1">
                         <em>

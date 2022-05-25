@@ -68,10 +68,20 @@ class AircraftType extends AbstractType
                 'attr'=>[
                     'class' =>'form-control',
                 ]])
-            ->add('fin_res',TextType::class, [
+            ->add('mt_sne',NumberType::class, [
                 'required' => false,
                 'mapped' => false,
-                'label'=>'Наработка',
+                'label'=>'Наработка(СНЭ)',
+                'help_attr'=>[
+                    'class'=>'text-danger mb-0'
+                ],
+                'attr'=>[
+                    'class' =>'form-control',
+                ]])
+            ->add('fin_res',NumberType::class, [
+                'required' => false,
+                'mapped' => false,
+                'label'=>'Наработка(ППР)',
                 'help_attr'=>[
                     'class'=>'text-danger mb-0'
                 ],
@@ -82,7 +92,7 @@ class AircraftType extends AbstractType
                 'required' => false,
                 'mapped' => false,
                 'widget' => 'single_text',
-                'label' => 'Дата выпуска:',
+                'label' => 'Действует проведения:',
                 'attr'=>[
                     'type'=>'date',
                     'style'=>'border: 1px solid #ced4da; border-radius: .25rem; padding: .5rem;',
