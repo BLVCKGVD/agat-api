@@ -408,7 +408,9 @@
                 <li class="list-group-item">Вес конструкции: <b>{{ aircraft.getConstructionWeight }} кг</b></li>
                 <li class="list-group-item">Центровка: <b>{{ aircraft.getCentering }} м</b></li>
                 <li class="list-group-item">Максимальный взлетный вес: <b>{{ aircraft.getMaxTakeoffWeight }} кг</b></li>
-                <li class="list-group-item">Периодическое ТО: <b>{{ lastMaintance.MtForm }} | {{ lastMaintance.MtSne}} {{ lastMaintance.MtRes }} |
+                <li class="list-group-item">Периодическое ТО:
+                    {% if lastMaintance!=null %}
+                    <b>{{ lastMaintance.MtForm }} | {{ lastMaintance.MtSne}} {{ lastMaintance.MtRes }} |
                          {{ lastMaintance.MtExpDate|date('d.m.Y') }}</b><br>
                     <hr class="mt-1 mb-1">
                         <em>
@@ -433,6 +435,9 @@
                                 {% endif %}
 
                         </em>
+                    {% else %}
+                        Периодическое ТО отсутствует
+                    {% endif %}
                 </li>
                 <li class="list-group-item">ТО выполнено: <b>{{ aircraft.getMtMadeBy }}</b></li>
                 <li class="list-group-item">Сертификат Летной годности (ЛГ): <b>{{ aircraft.getLgSert }}</b></li>
