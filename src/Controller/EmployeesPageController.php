@@ -156,7 +156,7 @@ class EmployeesPageController extends AbstractController
                     if($request->query->get('test') == 'on')
                     {
                         $email = (new Email())
-                            ->from('agataviainfo@gmail.com')
+                            ->from('avia-agat@yandex.ru')
                             ->to($request->query->get('mail'))
                             ->subject('Добро пожаловать!');
                         $email->html('Добро пожаловать в систему рассылки информации по воздушным судам авиакомпании "Агат".<br> '.
@@ -205,7 +205,7 @@ class EmployeesPageController extends AbstractController
                 $em->remove($mail);
                 $em->flush();
                 $email = (new Email())
-                    ->from('agataviainfo@gmail.com')
+                    ->from('avia-agat@yandex.ru')
                     ->to($mail->getEmail())
                     ->subject('Отписка от рассылки');
                 $email->html('Вы отписались от рассылки');

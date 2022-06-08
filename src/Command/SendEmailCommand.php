@@ -36,7 +36,7 @@ class SendEmailCommand extends Command
 
         $subscribers = $this->entityManager->getRepository(EmailSubsription::class)->findAll();
         $email = (new Email())
-            ->from('agataviainfo@gmail.com')
+            ->from('avia-agat@yandex.ru')
             ->to()
             ->subject('Проблемные воздушные суда');
         foreach ($subscribers as $m)

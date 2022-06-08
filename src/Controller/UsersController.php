@@ -98,7 +98,7 @@ class UsersController extends AbstractController
                         if ($user->getEmailSubsription()->getEmail())
                         {
                             $email = (new Email())
-                                ->from('agataviainfo@gmail.com')
+                                ->from('avia-agat@yandex.ru')
                                 ->to($user->getEmailSubsription()->getEmail())
                                 ->subject("Ваш пароль был обновлен");
                             $email->html("Ваш текущий пароль: ".$form->get('pass_new')->getData());

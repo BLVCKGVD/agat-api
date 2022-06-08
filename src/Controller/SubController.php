@@ -79,7 +79,7 @@ class SubController extends AbstractController
 
                 $subscribers = $this->entityManager->getRepository(EmailSubsription::class)->findAll();
                 $email = (new Email())
-                    ->from('agataviainfo@gmail.com')
+                    ->from('avia-agat@yandex.ru')
                     ->to()
                     ->subject($subject);
                 foreach ($subscribers as $m) {
@@ -139,7 +139,7 @@ class SubController extends AbstractController
                 }
 
                 $email = (new Email())
-                    ->from('agataviainfo@gmail.com')
+                    ->from('avia-agat@yandex.ru')
                     ->to()
                     ->subject($subject);
                     foreach ($users as $u)
