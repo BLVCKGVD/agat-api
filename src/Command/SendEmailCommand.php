@@ -57,7 +57,7 @@ class SendEmailCommand extends Command
                     '<a style="text-decoration:none; color: red; display: block;" href="https://www.agat-avia.ru/aircrafts/'.
                     $a->getId().'?ac='.
                     $a->getId().'">'.
-                    $a->getBoardNum().' </a>');
+                    $a->getBoardNum().' </a><br>');
             }
         }
         if($status == 'danger')
